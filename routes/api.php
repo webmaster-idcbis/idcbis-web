@@ -1,0 +1,35 @@
+<?php
+
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PageController;
+use App\Http\Controllers\Api\PermissionController;
+use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\UserController;
+use Illuminate\Support\Facades\Route;
+
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [AuthController::class, 'user']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    
+    // Pages
+    Route::apiResource('pages', PageController::class);
+    Route::patch('/pages/{page}/publish', [PageController::class, 'publish']);
+    
+    // Users
+    Route::apiResource('users', UserController::class);
+    Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus']);
+    
+    // Roles
+    Route::apiResource('roles', RoleController::class);
+    Route::get('/permissions-by-role', [RoleController::class, 'permissions']);
+    
+    // Permissions
+    Route::apiResource('permissions', PermissionController::class);
+    Route::get('/permissions-grouped', [PermissionController::class, 'grouped']);
+    Route::get('/permission-modules', [PermissionController::class, 'modules']);
+});
+
+// Public pages
+Route::get('/pages/slug/{slug}', [PageController::class, 'showBySlug']);
