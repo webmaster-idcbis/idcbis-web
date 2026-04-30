@@ -135,12 +135,21 @@ export const useCmsStore = defineStore('cms', () => {
   };
 
   const publishPage = async (id) => {
-    const response = await axios.patch(`/api/pages/${id}/publish`);
-    const index = pages.value.findIndex(p => p.id === id);
-    if (index !== -1) {
-      pages.value[index] = response.data.data;
+    try {
+      const response = await axios.patch(`/api/pages/${id}/publish`);
+      const index = pages.value.findIndex(p => p.id === id);
+      if (index !== -1) {
+        pages.value[index] = response.data.data;
+      }
+      return response.data.data;
+    } catch (error) {
+      if (error.response?.status === 404) {
+        // Página no existe en el servidor, eliminar del store
+        pages.value = pages.value.filter(p => p.id !== id);
+        throw new Error('La página no existe en el servidor. La lista será actualizada.');
+      }
+      throw error;
     }
-    return response.data.data;
   };
 
   return {

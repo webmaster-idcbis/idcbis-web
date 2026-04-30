@@ -35,12 +35,7 @@ export const useUsersStore = defineStore('users', () => {
       roles.value = response.data.data;
     } catch (error) {
       console.error('Error fetching roles:', error);
-      // Fallback roles if API fails
-      roles.value = [
-        { name: 'admin', description: 'Administrador' },
-        { name: 'editor', description: 'Editor' },
-        { name: 'user', description: 'Usuario' }
-      ];
+      roles.value = [];
     }
   };
 

@@ -184,13 +184,17 @@
               <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1.5">Roles</label>
                 <div class="border border-gray-300 rounded-lg p-2 sm:p-3 bg-white">
-                  <div class="max-h-32 overflow-y-auto space-y-1">
-                    <label 
-                      v-for="role in usersStore.roles" 
+                  <div v-if="usersStore.roles.length === 0" class="text-sm text-gray-500 py-2">
+                    No hay roles creados.
+                    <router-link to="/admin/roles" class="text-[#005674] hover:underline">Cree roles primero</router-link>.
+                  </div>
+                  <div v-else class="max-h-32 overflow-y-auto space-y-1">
+                    <label
+                      v-for="role in usersStore.roles"
                       :key="role.name"
                       class="flex items-center gap-2 p-1.5 hover:bg-gray-50 rounded cursor-pointer"
                     >
-                      <input 
+                      <input
                         type="checkbox"
                         :value="role.name"
                         v-model="userForm.roles"
@@ -200,7 +204,7 @@
                     </label>
                   </div>
                 </div>
-                <p class="text-xs text-gray-500 mt-1">Seleccione uno o más roles</p>
+                <p v-if="usersStore.roles.length > 0" class="text-xs text-gray-500 mt-1">Seleccione uno o más roles</p>
               </div>
               
               <!-- Estado Activo -->
@@ -252,8 +256,10 @@
 import { ref, computed, onMounted, reactive } from 'vue';
 import { Plus, Pencil, Trash2, X } from 'lucide-vue-next';
 import { useUsersStore } from '../../stores/users';
+import { useAuthStore } from '../../stores/auth';
 
 const usersStore = useUsersStore();
+const authStore = useAuthStore();
 const search = ref('');
 const roleFilter = ref('');
 const showModal = ref(false);

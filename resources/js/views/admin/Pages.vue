@@ -153,7 +153,23 @@ const formatDate = (date) => {
 
 const publishPage = async (id) => {
   console.log('Intentando publicar página con ID:', id, 'tipo:', typeof id);
-  if (!confirm('¿Estás seguro de publicar esta página?')) return;
+  
+  // Validar que el ID sea válido
+  if (!id || typeof id !== 'number') {
+    alert('ID de página inválido');
+    return;
+  }
+  
+  // Buscar la página en la lista actual
+  const page = cmsStore.pages.find(p => p.id === id);
+  if (!page) {
+    alert('La página no existe en la lista actual. Recargando...');
+    await cmsStore.fetchPages();
+    return;
+  }
+  
+  if (!confirm(`¿Estás seguro de publicar la página "${page.title}"?`)) return;
+  
   try {
     await cmsStore.publishPage(id);
     alert('Página publicada exitosamente');
@@ -161,7 +177,12 @@ const publishPage = async (id) => {
   } catch (error) {
     console.error('Error completo:', error);
     console.error('Response data:', error.response?.data);
-    alert('Error al publicar la página: ' + (error.response?.data?.message || error.message));
+    if (error.response?.status === 404) {
+      alert('La página no existe en el servidor. La lista se ha actualizada.');
+      await cmsStore.fetchPages();
+    } else {
+      alert('Error al publicar la página: ' + (error.response?.data?.message || error.message));
+    }
   }
 };
 

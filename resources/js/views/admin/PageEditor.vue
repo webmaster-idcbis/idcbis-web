@@ -67,7 +67,7 @@
       <aside v-if="sidebarOpen" class="w-72 bg-gray-50 border-r border-gray-200 flex flex-col">
         <div class="p-4 border-b border-gray-200 bg-white">
           <h2 class="font-semibold text-gray-900 text-lg">Componentes</h2>
-          <p class="text-xs text-gray-500 mt-1">Arrastra componentes al canvas</p>
+          <p class="text-xs text-gray-500 mt-1">Arrastra o haz clic para agregar</p>
         </div>
         
         <div class="flex-1 overflow-y-auto p-3">
@@ -77,6 +77,7 @@
               :key="component.type"
               draggable="true"
               @dragstart="handleDragStart($event, component)"
+              @click="addSection(component)"
               class="flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm border-2 border-gray-200 cursor-move hover:border-[#005674] hover:shadow-md transition-all group"
             >
               <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#005674] to-[#008996] flex items-center justify-center text-white group-hover:scale-110 transition-transform">
@@ -105,7 +106,15 @@
             <div v-if="sections.length === 0" class="text-center py-32 text-gray-400 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50">
               <LayoutTemplate class="w-16 h-16 mx-auto mb-4 text-gray-300" />
               <p class="text-lg font-medium text-gray-500">Arrastra componentes aquí</p>
-              <p class="text-sm text-gray-400 mt-2">Para construir tu página</p>
+              <p class="text-sm text-gray-400 mt-2">O haz clic en un componente del menú lateral</p>
+              <div class="mt-6">
+                <button
+                  @click="sidebarOpen = true"
+                  class="px-4 py-2 bg-[#005674] text-white rounded-lg hover:bg-[#003C5F] transition-colors"
+                >
+                  Ver componentes
+                </button>
+              </div>
             </div>
             
             <div v-else class="space-y-4">
@@ -317,10 +326,33 @@ const handleDragLeave = () => {
 };
 
 const handleDrop = (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  isDragging.value = false;
+  
   const componentData = event.dataTransfer.getData('component');
   if (!componentData) return;
   
-  const component = JSON.parse(componentData);
+  try {
+    const component = JSON.parse(componentData);
+    const newSection = {
+      id: Date.now(),
+      type: component.type,
+      name: component.name,
+      content: getDefaultContent(component.type),
+      settings: {},
+      styles: {}
+    };
+    
+    sections.value.push(newSection);
+    selectedSection.value = sections.value.length - 1;
+  } catch (e) {
+    console.error('Error al procesar el componente:', e);
+  }
+};
+
+// Función alternativa para agregar sección sin drag and drop
+const addSection = (component) => {
   const newSection = {
     id: Date.now(),
     type: component.type,
@@ -418,17 +450,20 @@ const selectSection = (index) => {
 };
 
 const updateSection = (index, data) => {
-  sections.value[index] = { ...sections.value[index], ...data };
+  // Usar splice para mantener la reactividad del array
+  sections.value.splice(index, 1, { ...sections.value[index], ...data });
 };
 
 const moveSection = (index, direction) => {
   const newIndex = index + direction;
   if (newIndex < 0 || newIndex >= sections.value.length) return;
   
+  // Usar splice para mantener reactividad
   const temp = sections.value[index];
-  sections.value[index] = sections.value[newIndex];
-  sections.value[newIndex] = temp;
+  sections.value.splice(index, 1);
+  sections.value.splice(newIndex, 0, temp);
   
+  // Update selected section if it was moved
   if (selectedSection.value === index) {
     selectedSection.value = newIndex;
   } else if (selectedSection.value === newIndex) {
@@ -492,7 +527,13 @@ const savePage = async () => {
     console.log('Respuesta del servidor:', result);
     
     if (result) {
-      router.push('/admin/pages');
+      if (!isEditing.value && result.id) {
+        // Si es página nueva, redirigir al editor con el ID
+        router.replace(`/admin/pages/${result.id}/edit`);
+      } else {
+        // Si es edición, volver a la lista
+        router.push('/admin/pages');
+      }
     }
   } catch (err) {
     console.error('Error completo:', err);
@@ -514,15 +555,19 @@ onMounted(async () => {
           status: page.status || 'draft',
           meta_description: page.meta_description || ''
         };
-        // Asegurar que cada sección tenga un ID único
-        sections.value = (page.sections || []).map(s => ({
-          ...s,
-          id: s.id || Date.now() + Math.random()
+        // Asegurar que cada sección tenga la estructura correcta
+        sections.value = (page.sections || []).map((s, index) => ({
+          id: s.id || Date.now() + index,
+          type: s.type,
+          name: s.name || s.type,
+          content: s.content || getDefaultContent(s.type),
+          settings: s.settings || {},
+          styles: s.styles || {}
         }));
       }
     } catch (err) {
-      error.value = 'Error al cargar la página';
-      console.error(err);
+      error.value = 'Error al cargar la página: ' + (err.message || 'Error desconocido');
+      console.error('Error cargando página:', err);
     }
   }
 });

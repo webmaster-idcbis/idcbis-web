@@ -69,15 +69,28 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
-  
+
+  // If token exists but no user data, try to fetch user
+  if (authStore.token && !authStore.user) {
+    try {
+      await authStore.fetchUser();
+    } catch (error) {
+      // If 401, token is invalid - redirect to login
+      if (error.response?.status === 401) {
+        return next('/login');
+      }
+      // For other errors, continue with cached roles/permissions from localStorage
+    }
+  }
+
   if (to.meta.requiresAuth && !authStore.token) {
     return next('/login');
   }
-  
+
   if (to.meta.requiresAdmin && !authStore.isAdmin) {
     return next('/');
   }
-  
+
   next();
 });
 

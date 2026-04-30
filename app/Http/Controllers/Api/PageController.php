@@ -23,38 +23,66 @@ class PageController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:pages,slug',
-            'meta_description' => 'nullable|string|max:500',
-            'content' => 'nullable|array',
-            'sections' => 'nullable|array',
-            'status' => 'in:draft,published,archived',
-        ]);
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'slug' => 'nullable|string|max:255|unique:pages,slug',
+                'meta_description' => 'nullable|string|max:500',
+                'content' => 'nullable|array',
+                'sections' => 'nullable|array',
+                'status' => 'in:draft,published,archived',
+            ]);
 
-        if (empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($validated['title']);
+            if (empty($validated['slug'])) {
+                $validated['slug'] = Str::slug($validated['title']);
+            }
+
+            $validated['created_by'] = Auth::id();
+            $validated['updated_by'] = Auth::id(); // Asignar updated_by también
+
+            if ($validated['status'] === 'published') {
+                $validated['published_at'] = now();
+            }
+
+            $page = Page::create($validated);
+
+            return response()->json([
+                'data' => $page->load('creator:id,name', 'updater:id,name'),
+                'message' => 'Página creada exitosamente'
+            ], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'Error de validación',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al crear la página',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $validated['created_by'] = Auth::id();
-
-        if ($validated['status'] === 'published') {
-            $validated['published_at'] = now();
-        }
-
-        $page = Page::create($validated);
-
-        return response()->json([
-            'data' => $page->load('creator:id,name'),
-            'message' => 'Página creada exitosamente'
-        ], 201);
     }
 
-    public function show(Page $page)
+    public function show($id)
     {
-        return response()->json([
-            'data' => $page->load(['creator:id,name', 'updater:id,name'])
-        ]);
+        try {
+            $page = Page::with(['creator:id,name', 'updater:id,name'])->find($id);
+            
+            if (!$page) {
+                return response()->json([
+                    'message' => 'Página no encontrada'
+                ], 404);
+            }
+            
+            return response()->json([
+                'data' => $page
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al obtener la página',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function showBySlug($slug)
@@ -68,51 +96,109 @@ class PageController extends Controller
         ]);
     }
 
-    public function update(Request $request, Page $page)
+    public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'title' => 'sometimes|string|max:255',
-            'slug' => 'sometimes|string|max:255|unique:pages,slug,' . $page->id,
-            'meta_description' => 'nullable|string|max:500',
-            'content' => 'nullable|array',
-            'sections' => 'nullable|array',
-            'status' => 'in:draft,published,archived',
-        ]);
+        try {
+            $page = Page::find($id);
+            
+            if (!$page) {
+                return response()->json([
+                    'message' => 'Página no encontrada'
+                ], 404);
+            }
+            
+            $validated = $request->validate([
+                'title' => 'sometimes|string|max:255',
+                'slug' => 'sometimes|string|max:255|unique:pages,slug,' . $page->id,
+                'meta_description' => 'nullable|string|max:500',
+                'content' => 'nullable|array',
+                'sections' => 'nullable|array',
+                'status' => 'in:draft,published,archived',
+            ]);
 
-        $validated['updated_by'] = Auth::id();
+            $validated['updated_by'] = Auth::id();
 
-        if ($validated['status'] === 'published' && $page->status !== 'published') {
-            $validated['published_at'] = now();
+            // Manejar published_at según el cambio de status
+            if (isset($validated['status'])) {
+                if ($validated['status'] === 'published' && $page->status !== 'published') {
+                    $validated['published_at'] = now();
+                } elseif ($validated['status'] !== 'published' && $page->status === 'published') {
+                    $validated['published_at'] = null; // Limpiar published_at si se despublica
+                }
+            }
+
+            $page->update($validated);
+
+            return response()->json([
+                'data' => $page->load('creator:id,name', 'updater:id,name'),
+                'message' => 'Página actualizada exitosamente'
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'Error de validación',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al actualizar la página',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $page->update($validated);
-
-        return response()->json([
-            'data' => $page->load('creator:id,name', 'updater:id,name'),
-            'message' => 'Página actualizada exitosamente'
-        ]);
     }
 
-    public function destroy(Page $page)
+    public function destroy($id)
     {
-        $page->delete();
+        try {
+            $page = Page::find($id);
+            
+            if (!$page) {
+                return response()->json([
+                    'message' => 'Página no encontrada'
+                ], 404);
+            }
+            
+            $page->delete();
 
-        return response()->json([
-            'message' => 'Página eliminada exitosamente'
-        ]);
+            return response()->json([
+                'message' => 'Página eliminada exitosamente'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al eliminar la página',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
-    public function publish(Page $page)
+    public function publish($id)
     {
-        $page->update([
-            'status' => 'published',
-            'published_at' => now(),
-            'updated_by' => Auth::id()
-        ]);
+        try {
+            $page = Page::find($id);
+            
+            if (!$page) {
+                return response()->json([
+                    'message' => 'Página no encontrada'
+                ], 404);
+            }
+            
+            // Solo actualizar si no está ya publicada
+            if ($page->status !== 'published') {
+                $page->update([
+                    'status' => 'published',
+                    'published_at' => now(),
+                    'updated_by' => Auth::id()
+                ]);
+            }
 
-        return response()->json([
-            'data' => $page->load('creator:id,name', 'updater:id,name'),
-            'message' => 'Página publicada exitosamente'
-        ]);
+            return response()->json([
+                'data' => $page->load('creator:id,name', 'updater:id,name'),
+                'message' => 'Página publicada exitosamente'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al publicar la página',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

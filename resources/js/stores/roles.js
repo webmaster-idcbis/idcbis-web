@@ -60,7 +60,16 @@ export const useRolesStore = defineStore('roles', () => {
 
   // Grouped permissions for display
   const groupedPermissions = computed(() => {
-    return permissions.value;
+    const grouped = {};
+    permissions.value.forEach(permission => {
+      const parts = permission.name.split('.');
+      const module = parts[0] || 'other';
+      if (!grouped[module]) {
+        grouped[module] = [];
+      }
+      grouped[module].push(permission);
+    });
+    return grouped;
   });
 
   const getPermissionLabel = (permissionName) => {

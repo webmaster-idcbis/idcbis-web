@@ -12,7 +12,6 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::with('permissions:id,name')
-            ->withCount('users')
             ->get()
             ->map(function ($role) {
                 return [
@@ -20,7 +19,7 @@ class RoleController extends Controller
                     'name' => $role->name,
                     'guard_name' => $role->guard_name,
                     'permissions' => $role->permissions,
-                    'users_count' => $role->users_count,
+                    'users_count' => \App\Models\User::role($role->name)->count(),
                     'created_at' => $role->created_at,
                 ];
             });
@@ -93,7 +92,7 @@ class RoleController extends Controller
         }
 
         // Check if role has users
-        if ($role->users()->count() > 0) {
+        if (\App\Models\User::role($role->name)->count() > 0) {
             return response()->json([
                 'message' => 'No se puede eliminar el rol porque tiene usuarios asignados'
             ], 403);

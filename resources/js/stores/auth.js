@@ -5,8 +5,13 @@ import axios from 'axios';
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null);
   const token = ref(localStorage.getItem('token'));
-  const permissions = ref([]);
-  const roles = ref([]);
+  const permissions = ref(JSON.parse(localStorage.getItem('permissions') || '[]'));
+  const roles = ref(JSON.parse(localStorage.getItem('roles') || '[]'));
+
+  // Configure axios header on init if token exists
+  if (token.value) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token.value}`;
+  }
 
   const isAuthenticated = computed(() => !!token.value);
   const isAdmin = computed(() => roles.value.includes('admin'));
@@ -18,6 +23,8 @@ export const useAuthStore = defineStore('auth', () => {
     roles.value = userData.roles || [];
     permissions.value = userData.permissions || [];
     localStorage.setItem('token', authToken);
+    localStorage.setItem('roles', JSON.stringify(userData.roles || []));
+    localStorage.setItem('permissions', JSON.stringify(userData.permissions || []));
     axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
   };
 
@@ -27,6 +34,8 @@ export const useAuthStore = defineStore('auth', () => {
     roles.value = [];
     permissions.value = [];
     localStorage.removeItem('token');
+    localStorage.removeItem('roles');
+    localStorage.removeItem('permissions');
     delete axios.defaults.headers.common['Authorization'];
   };
 
@@ -52,8 +61,14 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = response.data;
       roles.value = response.data.roles || [];
       permissions.value = response.data.permissions || [];
+      localStorage.setItem('roles', JSON.stringify(response.data.roles || []));
+      localStorage.setItem('permissions', JSON.stringify(response.data.permissions || []));
     } catch (error) {
-      clearAuth();
+      // Only clear auth if token is invalid (401), not for network/server errors
+      if (error.response?.status === 401) {
+        clearAuth();
+      }
+      throw error;
     }
   };
 
