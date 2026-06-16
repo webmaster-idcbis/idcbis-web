@@ -1,180 +1,254 @@
 <template>
-  <div class="h-screen flex flex-col">
-    <!-- Header -->
-    <div class="bg-white border-b border-gray-200 px-4 py-3">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-4">
-          <router-link to="/admin/pages" class="text-gray-600 hover:text-gray-900">
+  <div class="h-screen flex flex-col bg-gray-100 overflow-hidden">
+    <!-- Barra superior compacta -->
+    <header class="shrink-0 bg-white border-b border-gray-200 z-10">
+      <div class="flex items-center justify-between gap-3 px-4 py-2">
+        <div class="flex items-center gap-3 min-w-0">
+          <router-link to="/admin/pages" class="text-gray-600 hover:text-gray-900 shrink-0">
             <ArrowLeft class="w-5 h-5" />
           </router-link>
-          <h1 class="text-xl font-semibold text-gray-900">
-            {{ isEditing ? 'Editar Página' : 'Nueva Página' }}
+          <h1 class="text-base font-semibold text-gray-900 truncate">
+            {{ isEditing ? 'Editar página' : 'Nueva página' }}
           </h1>
-        </div>
-        
-        <div class="flex items-center gap-3">
-          <input 
-            v-model="pageForm.slug"
-            type="text" 
-            placeholder="slug-url"
-            class="px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-[#005674]"
+          <button
+            type="button"
+            @click="showPageSettings = !showPageSettings"
+            class="shrink-0 px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 text-gray-600"
           >
-          <select 
+            {{ showPageSettings ? 'Ocultar datos' : 'Datos de página' }}
+          </button>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button
+            type="button"
+            data-cy="btn-save-template"
+            class="px-2 py-1 text-xs border border-[#0B4F6C] text-[#0B4F6C] rounded hover:bg-slate-50"
+            @click="showSaveTemplateModal = true"
+          >
+            Guardar plantilla
+          </button>
+          <select
             v-model="pageForm.status"
-            class="px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-[#005674]"
+            data-cy="select-status"
+            class="px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
           >
             <option value="draft">Borrador</option>
-            <option value="published">Publicar</option>
+            <option value="published">Publicado</option>
           </select>
-          <button 
-            @click="toggleSidebar"
-            class="px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg flex items-center gap-2"
-            :title="sidebarOpen ? 'Ocultar menú' : 'Mostrar menú'"
-          >
-            <PanelLeftClose v-if="sidebarOpen" class="w-4 h-4" />
-            <PanelLeftOpen v-else class="w-4 h-4" />
-          </button>
-          <button 
+          <button
             @click="savePage"
             :disabled="saving"
-            class="px-4 py-2 bg-[#005674] text-white rounded-lg hover:bg-[#003C5F] disabled:opacity-50 flex items-center gap-2"
+            data-cy="btn-save"
+            class="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 flex items-center gap-1.5"
           >
-            <Save v-if="!saving" class="w-4 h-4" />
-            <span v-if="!saving">Guardar</span>
-            <span v-else>Guardando...</span>
+            <Save class="w-4 h-4" />
+            {{ saving ? 'Guardando...' : 'Guardar' }}
           </button>
         </div>
       </div>
-      
-      <div class="mt-3">
-        <input 
-          v-model="pageForm.title"
-          type="text" 
-          placeholder="Título de la página"
-          class="w-full text-2xl font-bold border-0 border-b-2 border-transparent focus:border-[#005674] focus:ring-0 px-0"
-        >
-      </div>
-      
-      <!-- Error Message -->
-      <div v-if="error" class="mt-2 p-2 bg-red-50 border border-red-200 rounded text-red-600 text-sm">
-        {{ error }}
-      </div>
-    </div>
 
-    <!-- Editor Content -->
-    <div class="flex-1 flex overflow-hidden">
-      <!-- Components Sidebar -->
-      <aside v-if="sidebarOpen" class="w-72 bg-gray-50 border-r border-gray-200 flex flex-col">
-        <div class="p-4 border-b border-gray-200 bg-white">
-          <h2 class="font-semibold text-gray-900 text-lg">Componentes</h2>
-          <p class="text-xs text-gray-500 mt-1">Arrastra o haz clic para agregar</p>
-        </div>
-        
-        <div class="flex-1 overflow-y-auto p-3">
-          <div class="grid grid-cols-1 gap-2">
-            <div
-              v-for="component in availableComponents"
-              :key="component.type"
-              draggable="true"
-              @dragstart="handleDragStart($event, component)"
-              @click="addSection(component)"
-              class="flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm border-2 border-gray-200 cursor-move hover:border-[#005674] hover:shadow-md transition-all group"
+      <!-- Campos de página: colapsable + scroll -->
+      <div
+        v-show="showPageSettings"
+        class="border-t border-gray-200 max-h-[min(28vh,220px)] overflow-y-auto"
+      >
+        <div class="px-4 py-3 space-y-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-medium text-gray-700 mb-0.5">Título</label>
+              <input
+                v-model="pageForm.title"
+                type="text"
+                data-cy="input-title"
+                placeholder="Título de la página"
+                class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500"
+              >
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-0.5">Slug (URL)</label>
+              <input
+                v-model="pageForm.slug"
+                type="text"
+                data-cy="input-slug"
+                placeholder="mi-pagina"
+                class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500"
+              >
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-0.5">Ruta alternativa</label>
+              <input
+                v-model="pageForm.route"
+                type="text"
+                placeholder="opcional"
+                class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500"
+              >
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-700 mb-0.5">Descripción breve</label>
+            <textarea
+              v-model="pageForm.description"
+              rows="1"
+              placeholder="Descripción corta"
+              class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500 resize-none"
+            ></textarea>
+          </div>
+          <div>
+            <button
+              type="button"
+              @click="showSeoFields = !showSeoFields"
+              class="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900"
             >
-              <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#005674] to-[#008996] flex items-center justify-center text-white group-hover:scale-110 transition-transform">
-                <component :is="component.icon" class="w-5 h-5" />
+              <svg
+                :class="['w-3.5 h-3.5 transition-transform', showSeoFields ? 'rotate-90' : '']"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+              SEO (opcional)
+            </button>
+            <div v-if="showSeoFields" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-2">
+              <div>
+                <label class="block text-xs text-gray-600 mb-0.5">Meta title</label>
+                <input v-model="pageForm.metaTitle" type="text" maxlength="70" data-cy="input-meta-title" class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm">
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-xs text-gray-600 mb-0.5">Meta description</label>
+                <input v-model="pageForm.metaDescription" type="text" maxlength="160" data-cy="input-meta-description" class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm">
               </div>
               <div>
-                <span class="text-sm font-semibold text-gray-800 block">{{ component.name }}</span>
-                <span class="text-xs text-gray-500">{{ component.description }}</span>
+                <label class="block text-xs text-gray-600 mb-0.5">Keywords</label>
+                <input v-model="pageForm.metaKeywords" type="text" data-cy="input-meta-keywords" class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm">
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Editor: ocupa el resto de la pantalla -->
+    <div class="flex-1 min-h-0 flex overflow-hidden">
+      <!-- Element Palette Sidebar -->
+      <aside
+        :class="['min-h-0 bg-white border-r border-gray-200 flex flex-col shrink-0 transition-all duration-300', sidebarCollapsed ? 'w-16' : 'w-80']"
+        @dragend="handleDragEnd"
+      >
+        <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+          <h3 v-if="!sidebarCollapsed" class="text-sm font-semibold text-gray-900">Elementos</h3>
+          <button
+            @click="toggleSidebar"
+            class="p-2 hover:bg-gray-100 rounded transition-colors"
+          >
+            <svg v-if="sidebarCollapsed" class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/>
+            </svg>
+            <svg v-else class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-3 space-y-3">
+          <ElementPalette
+            :collapsed="sidebarCollapsed"
+            @drag-start="handleDragStart"
+          />
+          <button
+            v-if="!sidebarCollapsed"
+            type="button"
+            class="w-full px-3 py-2 text-xs font-medium text-white bg-[#0B4F6C] rounded-lg hover:bg-[#145C7A] transition-colors"
+            data-cy="btn-template-propuesta-azul"
+            @click="loadPropuestaAzulTemplate"
+          >
+            Plantilla Propuesta Azul
+          </button>
+          <button
+            v-if="!sidebarCollapsed"
+            type="button"
+            class="w-full px-3 py-2 text-xs font-medium text-[#0B4F6C] bg-white border border-[#0B4F6C] rounded-lg hover:bg-slate-50 transition-colors"
+            data-cy="btn-template-servicios"
+            @click="loadServiciosTemplate"
+          >
+            Plantilla Servicios
+          </button>
+
+          <div v-if="!sidebarCollapsed" class="pt-2 border-t border-gray-200 space-y-2">
+            <h4 class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Mis plantillas</h4>
+            <div v-if="templatesLoading" class="text-xs text-gray-500">Cargando...</div>
+            <div v-else-if="savedTemplates.length === 0" class="text-xs text-gray-500">
+              Guarda una página como plantilla para reutilizarla.
+            </div>
+            <button
+              v-for="tpl in savedTemplates"
+              :key="tpl.id"
+              type="button"
+              class="w-full px-3 py-2 text-xs text-left border border-gray-200 rounded-lg hover:bg-gray-50"
+              :data-cy="`btn-template-${tpl.id}`"
+              @click="loadSavedTemplate(tpl)"
+            >
+              <span class="block font-medium text-gray-800">{{ tpl.name }}</span>
+              <span v-if="tpl.description" class="block text-gray-500 truncate">{{ tpl.description }}</span>
+            </button>
           </div>
         </div>
       </aside>
 
       <!-- Canvas -->
-      <main class="flex-1 bg-gray-100 overflow-y-auto">
-        <div class="max-w-5xl mx-auto p-6 min-h-full">
-          <div 
-            ref="dropZone"
-            class="bg-white rounded-xl shadow-sm min-h-[700px] p-6 transition-all"
-            :class="{ 'ring-2 ring-[#005674] ring-opacity-50': isDragging }"
-            @dragover.prevent="handleDragOver"
-            @dragleave="handleDragLeave"
-            @drop="handleDrop($event)"
-          >
-            <div v-if="sections.length === 0" class="text-center py-32 text-gray-400 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50">
-              <LayoutTemplate class="w-16 h-16 mx-auto mb-4 text-gray-300" />
-              <p class="text-lg font-medium text-gray-500">Arrastra componentes aquí</p>
-              <p class="text-sm text-gray-400 mt-2">O haz clic en un componente del menú lateral</p>
-              <div class="mt-6">
-                <button
-                  @click="sidebarOpen = true"
-                  class="px-4 py-2 bg-[#005674] text-white rounded-lg hover:bg-[#003C5F] transition-colors"
-                >
-                  Ver componentes
-                </button>
-              </div>
-            </div>
-            
-            <div v-else class="space-y-4">
+      <main class="flex-1 min-h-0 bg-gray-50 overflow-y-auto">
+        <div
+          class="max-w-6xl mx-auto p-6 min-h-full"
+          @dragover.prevent="handleDragOver"
+          @dragleave="handleDragLeave"
+          @drop="handleDrop"
+          :class="{ 'bg-blue-50': isDragging }"
+        >
+          <div v-if="elements.length === 0" class="text-center py-32 text-gray-400 border-2 border-dashed border-gray-300 rounded-xl bg-white">
+            <p class="text-lg font-medium text-gray-500">Arrastra elementos aquí</p>
+            <p class="text-sm text-gray-400 mt-2">O usa los elementos del menú lateral</p>
+          </div>
+
+          <div v-else class="space-y-4">
+            <div
+              v-for="(element, index) in elements"
+              :key="element.id"
+              class="relative group cursor-pointer hover:bg-gray-50 p-2 rounded"
+              :class="{ 'ring-2 ring-blue-500': isSelectedOrChild(element) }"
+              @click.self="selectElement(element)"
+            >
+              <component
+                :is="getComponentType(element.type)"
+                :element="element"
+                :is-selected="selectedElement?.id === element.id"
+                :selected-element-id="selectedElement?.id"
+                :preview="false"
+                @select="selectElement"
+                @click="selectElement"
+                @add-child="handleAddChild"
+                @delete-child="handleDeleteChild"
+                @duplicate-child="handleDuplicateChild"
+                @move-child="handleMoveChild"
+                class="w-full"
+              />
+
+              <!-- Controls -->
               <div
-                v-for="(section, index) in sections"
-                :key="section.id"
-                class="relative group border-2 border-transparent hover:border-[#005674] rounded-lg transition-all"
-                :class="{ 'ring-2 ring-[#005674] bg-blue-50': selectedSection === index }"
+                v-if="selectedElement?.id === element.id"
+                class="absolute -top-2 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
               >
-                <!-- Section Controls -->
-                <div class="absolute -left-12 top-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-all z-10">
-                  <button 
-                    @click="moveSection(index, -1)"
-                    :disabled="index === 0"
-                    class="p-2 bg-white rounded-lg shadow-md hover:bg-gray-50 disabled:opacity-30 border border-gray-200 transition-all"
-                    title="Mover arriba"
-                  >
-                    <ChevronUp class="w-4 h-4 text-gray-600" />
-                  </button>
-                  <button 
-                    @click="moveSection(index, 1)"
-                    :disabled="index === sections.length - 1"
-                    class="p-2 bg-white rounded-lg shadow-md hover:bg-gray-50 disabled:opacity-30 border border-gray-200 transition-all"
-                    title="Mover abajo"
-                  >
-                    <ChevronDown class="w-4 h-4 text-gray-600" />
-                  </button>
-                  <button 
-                    @click="duplicateSection(index)"
-                    class="p-2 bg-white rounded-lg shadow-md hover:bg-blue-50 border border-gray-200 transition-all"
-                    title="Duplicar"
-                  >
-                    <Copy class="w-4 h-4 text-blue-600" />
-                  </button>
-                  <button 
-                    @click="removeSection(index)"
-                    class="p-2 bg-white rounded-lg shadow-md hover:bg-red-50 border border-gray-200 transition-all"
-                    title="Eliminar"
-                  >
-                    <Trash2 class="w-4 h-4 text-red-500" />
-                  </button>
-                </div>
-                
-                <!-- Section Label -->
-                <div class="absolute -top-3 left-4 bg-[#005674] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                  {{ section.name }}
-                </div>
-                
-                <!-- Section Content -->
-                <div 
-                  @click="selectSection(index)"
-                  class="cursor-pointer p-2 rounded-lg"
+                <button
+                  @click.stop="duplicateElement(element)"
+                  class="w-6 h-6 bg-green-500 text-white rounded text-xs hover:bg-green-600"
                 >
-                  <component 
-                    :is="getSectionComponent(section.type)"
-                    :section="section"
-                    :isEditing="true"
-                    @update="updateSection(index, $event)"
-                  />
-                </div>
+                  📋
+                </button>
+                <button
+                  @click.stop="deleteElement"
+                  class="w-6 h-6 bg-red-500 text-white rounded text-xs hover:bg-red-600"
+                >
+                  🗑
+                </button>
               </div>
             </div>
           </div>
@@ -182,393 +256,757 @@
       </main>
 
       <!-- Properties Panel -->
-      <aside class="w-80 bg-white border-l border-gray-200 flex flex-col shadow-lg" v-if="selectedSection !== null">
-        <div class="p-4 border-b border-gray-200 bg-gradient-to-r from-[#005674] to-[#008996]">
-          <h2 class="font-semibold text-white">Editar {{ sections[selectedSection]?.name }}</h2>
-          <p class="text-xs text-white/80 mt-1">Tipo: {{ sections[selectedSection]?.type }}</p>
+      <aside class="w-80 min-h-0 bg-white border-l border-gray-200 flex flex-col shrink-0">
+        <div class="px-4 py-3 border-b border-gray-200 bg-gray-50">
+          <h3 class="text-sm font-semibold text-gray-900">Propiedades</h3>
+          <p v-if="selectedElement" class="text-xs text-gray-500 mt-0.5">Edita el elemento seleccionado</p>
         </div>
-        
+
         <div class="flex-1 overflow-y-auto p-4">
-          <SectionProperties 
-            :section="sections[selectedSection]"
-            @update="updateSection(selectedSection, $event)"
+          <ElementPropertiesPanel
+            v-if="selectedElement"
+            :element="selectedElement"
+            :parent-container="selectedParent"
+            :breadcrumbs="selectionBreadcrumbs"
+            @select-child="selectElement"
+            @move-child="moveContainerChild"
+            @remove-child="removeContainerChild"
+          >
+            <template #actions>
+            <div class="pt-3 mt-1 border-t border-gray-200 space-y-2">
+              <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Acciones</p>
+
+              <div class="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  @click="duplicateElement(selectedElement)"
+                  class="px-2 py-1.5 text-xs bg-white border border-gray-300 rounded hover:bg-gray-50 text-gray-700"
+                >
+                  Duplicar
+                </button>
+                <button
+                  type="button"
+                  @click="deleteElement"
+                  class="px-2 py-1.5 text-xs bg-white border border-red-200 rounded hover:bg-red-50 text-red-600"
+                >
+                  Eliminar
+                </button>
+              </div>
+
+              <button
+                type="button"
+                @click="moveElementUp"
+                class="w-full px-2 py-1.5 text-xs bg-white border border-gray-300 rounded hover:bg-gray-50 text-gray-700"
+              >
+                ↑ Subir
+              </button>
+
+              <button
+                type="button"
+                @click="moveElementDown"
+                class="w-full px-2 py-1.5 text-xs bg-white border border-gray-300 rounded hover:bg-gray-50 text-gray-700"
+              >
+                ↓ Bajar
+              </button>
+            </div>
+            </template>
+          </ElementPropertiesPanel>
+
+          <div v-else class="text-center py-8 text-gray-500">
+            <div class="mb-4">
+              <svg class="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <p class="text-sm font-medium">Selecciona un elemento para editar sus propiedades</p>
+            <p class="text-xs text-gray-400 mt-1">Haz clic en cualquier elemento del canvas para ver sus propiedades aquí</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Modal guardar plantilla -->
+    <div
+      v-if="showSaveTemplateModal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+      @click.self="showSaveTemplateModal = false"
+    >
+      <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-5 space-y-4" data-cy="modal-save-template">
+        <h3 class="text-lg font-semibold text-gray-900">Guardar como plantilla</h3>
+        <p class="text-sm text-gray-600">
+          Se guardará el contenido actual de la página (elementos y bloques) para reutilizarlo al crear nuevas páginas.
+        </p>
+        <div>
+          <label class="block text-xs text-gray-600 mb-1">Nombre de la plantilla</label>
+          <input
+            v-model="templateForm.name"
+            type="text"
+            data-cy="input-template-name"
+            class="editor-field-input"
+            placeholder="Ej: Página de servicios clínicos"
+          >
+        </div>
+        <div>
+          <label class="block text-xs text-gray-600 mb-1">Descripción (opcional)</label>
+          <textarea
+            v-model="templateForm.description"
+            rows="2"
+            data-cy="input-template-description"
+            class="editor-field-input"
+            placeholder="Para qué sirve esta plantilla"
           />
         </div>
-        
-        <div class="p-4 border-t border-gray-200 bg-gray-50">
-          <button 
-            @click="selectedSection = null"
-            class="w-full py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+        <p v-if="templateError" class="text-sm text-red-600">{{ templateError }}</p>
+        <div class="flex gap-2 justify-end">
+          <button
+            type="button"
+            class="px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50"
+            @click="showSaveTemplateModal = false"
           >
-            Cerrar panel
+            Cancelar
+          </button>
+          <button
+            type="button"
+            data-cy="btn-confirm-save-template"
+            class="px-4 py-2 text-sm bg-[#0B4F6C] text-white rounded-lg hover:bg-[#145C7A] disabled:opacity-50"
+            :disabled="savingTemplate"
+            @click="saveAsTemplate"
+          >
+            {{ savingTemplate ? 'Guardando...' : 'Guardar plantilla' }}
           </button>
         </div>
-      </aside>
-      
-      <!-- Empty state when no section selected -->
-      <aside v-else class="w-80 bg-gray-50 border-l border-gray-200 flex flex-col items-center justify-center p-6">
-        <MousePointer class="w-12 h-12 text-gray-300 mb-3" />
-        <p class="text-gray-500 text-center text-sm">Haz clic en una sección para editar sus propiedades</p>
-      </aside>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, markRaw } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { 
-  ArrowLeft, 
-  Save, 
-  ChevronUp, 
-  ChevronDown, 
-  X,
-  Layout,
-  Type,
-  Image as ImageIcon,
-  Grid3X3,
-  LayoutTemplate,
-  MousePointer,
-  FileText,
-  BarChart3,
-  Users,
-  Contact,
-  Quote,
-  Video,
-  Table2,
-  List,
-  Star,
-  PanelLeftClose,
-  PanelLeftOpen
-} from 'lucide-vue-next';
-import { useCmsStore } from '../../stores/cms';
+import { ref, computed, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { ArrowLeft, Save } from 'lucide-vue-next'
 
-// Import section components
-import HeroSection from '../../components/sections/HeroSection.vue';
-import TextSection from '../../components/sections/TextSection.vue';
-import CardsSection from '../../components/sections/CardsSection.vue';
-import ImageSection from '../../components/sections/ImageSection.vue';
-import GallerySection from '../../components/sections/GallerySection.vue';
-import ButtonSection from '../../components/sections/ButtonSection.vue';
-import FeaturesSection from '../../components/sections/FeaturesSection.vue';
-import StatsSection from '../../components/sections/StatsSection.vue';
-import TeamSection from '../../components/sections/TeamSection.vue';
-import ContactSection from '../../components/sections/ContactSection.vue';
-import SectionProperties from '../../components/editor/SectionProperties.vue';
+import { useAuthStore } from '../../stores/auth'
+import { usePageElements } from '../../composables/usePageElements'
+import { usePageTemplates } from '../../composables/usePageTemplates'
+import { createElement, generateId } from '../../utils/pageElementFactory'
+import ElementPropertiesPanel from '../../components/editor/ElementPropertiesPanel.vue'
+import ElementPalette from '../../components/editor/ElementPalette.vue'
+import { buildPropuestaAzulPage, PROPUESTA_AZUL_PAGE_META } from '../../config/pageTemplates/propuestaAzulIdcbis'
+import { buildServiciosPage, SERVICIOS_PAGE_META } from '../../config/pageTemplates/servicios'
+import { paletteTypeLabels } from '../../config/pageElementPalette'
 
-const route = useRoute();
-const router = useRouter();
-const cmsStore = useCmsStore();
+const router = useRouter()
+const route = useRoute()
+const authStore = useAuthStore()
+const { getComponentType } = usePageElements()
+const {
+  templates: savedTemplates,
+  loading: templatesLoading,
+  fetchTemplates,
+  saveTemplate,
+} = usePageTemplates()
 
-const isEditing = computed(() => !!route.params.id);
-const saving = ref(false);
-const selectedSection = ref(null);
-const error = ref(null);
+// Estado
+const sidebarCollapsed = ref(false)
+const isDragging = ref(false)
+const saving = ref(false)
+const selectedElement = ref(null)
+const elements = ref([])
+const showPageSettings = ref(false)
+const showSeoFields = ref(false)
+const showSaveTemplateModal = ref(false)
+const savingTemplate = ref(false)
+const templateError = ref('')
+const templateForm = ref({ name: '', description: '' })
 
-const sidebarOpen = ref(true);
-
+// Formulario de página
 const pageForm = ref({
   title: '',
   slug: '',
+  description: '',
+  metaTitle: '',
+  metaDescription: '',
+  metaKeywords: '',
+  route: '',
   status: 'draft',
-  meta_description: ''
-});
+  publishedAt: null
+})
 
+// Computed
+const isEditing = computed(() => !!route.params.id)
+
+// Métodos
 const toggleSidebar = () => {
-  sidebarOpen.value = !sidebarOpen.value;
-};
+  sidebarCollapsed.value = !sidebarCollapsed.value
+}
 
-const sections = ref([]);
+const loadPropuestaAzulTemplate = () => {
+  if (elements.value.length > 0 && !window.confirm('¿Reemplazar el contenido actual con la plantilla Propuesta Azul?')) {
+    return
+  }
+  elements.value = buildPropuestaAzulPage()
+  pageForm.value.title = PROPUESTA_AZUL_PAGE_META.title
+  pageForm.value.slug = PROPUESTA_AZUL_PAGE_META.slug
+  pageForm.value.description = PROPUESTA_AZUL_PAGE_META.description
+  pageForm.value.metaTitle = PROPUESTA_AZUL_PAGE_META.metaTitle
+  pageForm.value.metaDescription = PROPUESTA_AZUL_PAGE_META.metaDescription
+  selectedElement.value = elements.value[0] || null
+}
 
-const availableComponents = [
-  { type: 'hero', name: 'Hero Section', icon: markRaw(LayoutTemplate), description: 'Banner principal con título y CTA' },
-  { type: 'text', name: 'Bloque de Texto', icon: markRaw(Type), description: 'Contenido de texto enriquecido' },
-  { type: 'cards', name: 'Tarjetas', icon: markRaw(Grid3X3), description: 'Grid de tarjetas con imagen y texto' },
-  { type: 'image', name: 'Imagen', icon: markRaw(ImageIcon), description: 'Imagen individual con pie de foto' },
-  { type: 'gallery', name: 'Galería', icon: markRaw(Layout), description: 'Galería de múltiples imágenes' },
-  { type: 'button', name: 'Botón', icon: markRaw(MousePointer), description: 'Botón con enlace personalizable' },
-  { type: 'features', name: 'Características', icon: markRaw(Star), description: 'Grid de características o servicios' },
-  { type: 'quote', name: 'Cita', icon: markRaw(FileText), description: 'Bloque de cita o testimonio' },
-  { type: 'stats', name: 'Estadísticas', icon: markRaw(BarChart3), description: 'Números y estadísticas destacados' },
-  { type: 'team', name: 'Equipo', icon: markRaw(Users), description: 'Perfiles de miembros del equipo' },
-  { type: 'contact', name: 'Contacto', icon: markRaw(Contact), description: 'Formulario de contacto' },
-];
+const loadServiciosTemplate = () => {
+  if (elements.value.length > 0 && !window.confirm('¿Reemplazar el contenido con la plantilla Servicios?')) {
+    return
+  }
+  elements.value = buildServiciosPage()
+  pageForm.value.title = SERVICIOS_PAGE_META.title
+  pageForm.value.slug = SERVICIOS_PAGE_META.slug
+  pageForm.value.description = SERVICIOS_PAGE_META.description
+  pageForm.value.metaTitle = SERVICIOS_PAGE_META.metaTitle
+  pageForm.value.metaDescription = SERVICIOS_PAGE_META.metaDescription
+  selectedElement.value = elements.value[0] || null
+}
 
-const sectionComponents = {
-  hero: markRaw(HeroSection),
-  text: markRaw(TextSection),
-  cards: markRaw(CardsSection),
-  image: markRaw(ImageSection),
-  gallery: markRaw(GallerySection),
-  button: markRaw(ButtonSection),
-  features: markRaw(FeaturesSection),
-  stats: markRaw(StatsSection),
-  team: markRaw(TeamSection),
-  contact: markRaw(ContactSection),
-};
+const loadSavedTemplate = (tpl) => {
+  if (elements.value.length > 0 && !window.confirm(`¿Reemplazar el contenido con la plantilla «${tpl.name}»?`)) {
+    return
+  }
+  elements.value = normalizeLoadedElements(JSON.parse(JSON.stringify(tpl.content || [])))
+  if (tpl.meta_title) pageForm.value.metaTitle = tpl.meta_title
+  if (tpl.meta_description) pageForm.value.metaDescription = tpl.meta_description
+  selectedElement.value = elements.value[0] || null
+}
 
-const getSectionComponent = (type) => {
-  return sectionComponents[type] || 'div';
-};
+const saveAsTemplate = async () => {
+  templateError.value = ''
+  if (!templateForm.value.name.trim()) {
+    templateError.value = 'El nombre de la plantilla es obligatorio'
+    return
+  }
+  if (elements.value.length === 0) {
+    templateError.value = 'Agrega al menos un elemento antes de guardar la plantilla'
+    return
+  }
 
-const isDragging = ref(false);
+  savingTemplate.value = true
+  try {
+    await saveTemplate({
+      name: templateForm.value.name.trim(),
+      description: templateForm.value.description.trim() || null,
+      content: elements.value,
+      metaTitle: pageForm.value.metaTitle,
+      metaDescription: pageForm.value.metaDescription,
+    })
+    showSaveTemplateModal.value = false
+    templateForm.value = { name: '', description: '' }
+    alert('Plantilla guardada correctamente')
+  } catch (e) {
+    templateError.value = e.message
+  } finally {
+    savingTemplate.value = false
+  }
+}
 
-const handleDragStart = (event, component) => {
-  event.dataTransfer.setData('component', JSON.stringify(component));
-};
+// Funciones para manejar contenedores
+const handleAddChild = ({ type, containerId }) => {
+  const newElement = createElement(type)
 
-const handleDragOver = () => {
-  isDragging.value = true;
-};
+  // Encontrar el contenedor y agregar el elemento hijo
+  const container = findElementById(containerId)
+  if (container) {
+    if (!container.children) container.children = []
+    container.children.push(newElement)
+    selectElement(newElement)
+  }
+}
+
+const handleDeleteChild = ({ containerId, index }) => {
+  const container = findElementById(containerId)
+  if (container?.children) {
+    const removed = container.children[index]
+    container.children.splice(index, 1)
+    if (selectedElement.value?.id === removed?.id) {
+      selectedElement.value = container
+    }
+  }
+}
+
+const handleDuplicateChild = ({ containerId, child }) => {
+  const container = findElementById(containerId)
+  if (container?.children && child) {
+    container.children.push({
+      ...JSON.parse(JSON.stringify(child)),
+      id: generateId(),
+    })
+  }
+}
+
+const handleMoveChild = ({ containerId, index, direction }) => {
+  const container = findElementById(containerId)
+  if (!container?.children) return
+  const newIndex = index + direction
+  if (newIndex < 0 || newIndex >= container.children.length) return
+  const [item] = container.children.splice(index, 1)
+  container.children.splice(newIndex, 0, item)
+}
+
+const moveContainerChild = ({ index, direction }) => {
+  if (selectedElement.value?.type !== 'container') return
+  const list = selectedElement.value.children
+  const newIndex = index + direction
+  if (!list || newIndex < 0 || newIndex >= list.length) return
+  const [item] = list.splice(index, 1)
+  list.splice(newIndex, 0, item)
+}
+
+const removeContainerChild = (index) => {
+  if (selectedElement.value?.type !== 'container') return
+  selectedElement.value.children.splice(index, 1)
+}
+
+const findElementById = (id, elementList = elements.value) => {
+  for (const element of elementList) {
+    if (element.id === id) {
+      return element
+    }
+    if (element.children) {
+      const found = findElementById(id, element.children)
+      if (found) return found
+    }
+  }
+  return null
+}
+
+const findElementContext = (id, list = elements.value, parent = null) => {
+  for (let i = 0; i < list.length; i++) {
+    if (list[i].id === id) {
+      return { parent, list, index: i, element: list[i] }
+    }
+    if (list[i].children?.length) {
+      const found = findElementContext(id, list[i].children, list[i])
+      if (found) return found
+    }
+  }
+  return null
+}
+
+const selectedParent = computed(() => {
+  if (!selectedElement.value) return null
+  const ctx = findElementContext(selectedElement.value.id)
+  return ctx?.parent || null
+})
+
+const buildBreadcrumbPath = (id, list = elements.value, path = []) => {
+  for (const el of list) {
+    const label = paletteTypeLabels[el.type] || el.type
+    if (el.id === id) {
+      return [...path, label]
+    }
+    if (el.children?.length) {
+      const childPath = buildBreadcrumbPath(id, el.children, [...path, label])
+      if (childPath) return childPath
+    }
+  }
+  return null
+}
+
+const selectionBreadcrumbs = computed(() => {
+  if (!selectedElement.value) return []
+  return buildBreadcrumbPath(selectedElement.value.id) || []
+})
+
+const isSelectedOrChild = (element) => {
+  if (!selectedElement.value) return false
+  if (selectedElement.value.id === element.id) return true
+  const findInChildren = (children) => {
+    if (!children) return false
+    return children.some((c) => c.id === selectedElement.value.id || findInChildren(c.children))
+  }
+  return findInChildren(element.children)
+}
+
+const normalizeLoadedElements = (list) => {
+  return list.map((el) => {
+    const normalized = { ...el }
+    if (el.type === 'html' && el.htmlCode == null && el.content) {
+      normalized.htmlCode = el.content
+    }
+    if (el.type === 'list' && !Array.isArray(el.items)) {
+      normalized.items = []
+    }
+    if (el.type === 'carousel' && el.slides) {
+      normalized.slides = el.slides.map((slide, i) => ({
+        buttonText: '',
+        buttonUrl: '',
+        link: '',
+        ...slide,
+        id: slide.id || `slide_${i}_${Date.now()}`,
+      }))
+    }
+    if (el.children?.length) {
+      normalized.children = normalizeLoadedElements(el.children)
+    }
+    return normalized
+  })
+}
+
+const normalizeSlug = (value) => {
+  if (!value) return ''
+  return value
+    .trim()
+    .replace(/^\/+/, '')
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+}
+
+// Drag & Drop
+const handleDragStart = (event, elementType) => {
+  if (!event?.dataTransfer || !elementType) return
+  isDragging.value = true
+  event.dataTransfer.setData('elementType', elementType)
+  event.dataTransfer.setData('text/plain', elementType)
+  event.dataTransfer.effectAllowed = 'copy'
+}
+
+const handleDragEnd = () => {
+  isDragging.value = false
+}
+
+const handleDragOver = (event) => {
+  event.preventDefault()
+}
 
 const handleDragLeave = () => {
-  isDragging.value = false;
-};
+  isDragging.value = false
+}
 
 const handleDrop = (event) => {
-  event.preventDefault();
-  event.stopPropagation();
-  isDragging.value = false;
-  
-  const componentData = event.dataTransfer.getData('component');
-  if (!componentData) return;
-  
-  try {
-    const component = JSON.parse(componentData);
-    const newSection = {
-      id: Date.now(),
-      type: component.type,
-      name: component.name,
-      content: getDefaultContent(component.type),
-      settings: {},
-      styles: {}
-    };
-    
-    sections.value.push(newSection);
-    selectedSection.value = sections.value.length - 1;
-  } catch (e) {
-    console.error('Error al procesar el componente:', e);
+  event.preventDefault()
+  isDragging.value = false
+
+  const elementType = event.dataTransfer.getData('elementType') || event.dataTransfer.getData('text/plain')
+  if (elementType) {
+    const newElement = createElement(elementType)
+    elements.value.push(newElement)
   }
-};
+}
 
-// Función alternativa para agregar sección sin drag and drop
-const addSection = (component) => {
-  const newSection = {
-    id: Date.now(),
-    type: component.type,
-    name: component.name,
-    content: getDefaultContent(component.type),
-    settings: {},
-    styles: {}
-  };
-  
-  sections.value.push(newSection);
-  selectedSection.value = sections.value.length - 1;
-};
+// Selección
+const selectElement = (element) => {
+  if (!element || typeof element !== 'object' || !element.id) return
+  selectedElement.value = element
+}
 
-const getDefaultContent = (type) => {
-  const defaults = {
-    hero: {
-      title: 'Título Principal',
-      subtitle: 'Subtítulo descriptivo',
-      backgroundImage: '',
-      ctaText: 'Ver más',
-      ctaLink: '#'
-    },
-    text: {
-      content: '<p>Escribe tu contenido aquí...</p>',
-      alignment: 'left'
-    },
-    cards: {
-      columns: 3,
-      items: [
-        { title: 'Card 1', description: 'Descripción de la tarjeta 1', image: '', link: '#' },
-        { title: 'Card 2', description: 'Descripción de la tarjeta 2', image: '', link: '#' },
-        { title: 'Card 3', description: 'Descripción de la tarjeta 3', image: '', link: '#' }
-      ]
-    },
-    image: {
-      src: '',
-      alt: 'Descripción de la imagen',
-      caption: ''
-    },
-    gallery: {
-      images: [
-        { src: '', alt: 'Imagen 1' },
-        { src: '', alt: 'Imagen 2' },
-        { src: '', alt: 'Imagen 3' }
-      ]
-    },
-    button: {
-      text: 'Click aquí',
-      link: '#',
-      style: 'primary'
-    },
-    features: {
-      columns: 3,
-      items: [
-        { title: 'Característica 1', description: 'Descripción de la característica', icon: 'star' },
-        { title: 'Característica 2', description: 'Descripción de la característica', icon: 'star' },
-        { title: 'Característica 3', description: 'Descripción de la característica', icon: 'star' }
-      ]
-    },
-    quote: {
-      content: 'Tu cita o testimonio aquí...',
-      author: 'Autor',
-      role: 'Cargo o empresa'
-    },
-    stats: {
-      columns: 4,
-      items: [
-        { number: '100+', label: 'Proyectos completados' },
-        { number: '50+', label: 'Clientes satisfechos' },
-        { number: '10', label: 'Años de experiencia' },
-        { number: '99%', label: 'Satisfacción' }
-      ]
-    },
-    team: {
-      columns: 3,
-      items: [
-        { name: 'Nombre 1', role: 'Cargo', image: '', bio: 'Breve descripción' },
-        { name: 'Nombre 2', role: 'Cargo', image: '', bio: 'Breve descripción' },
-        { name: 'Nombre 3', role: 'Cargo', image: '', bio: 'Breve descripción' }
-      ]
-    },
-    contact: {
-      title: 'Contáctanos',
-      subtitle: 'Estamos aquí para ayudarte',
-      email: 'contacto@ejemplo.com',
-      phone: '+57 300 000 0000',
-      address: 'Dirección de la oficina'
+const updateElement = () => {
+  // La reactividad de Vue se encarga de actualizar
+}
+
+const deleteElement = () => {
+  if (!selectedElement.value) return
+  const ctx = findElementContext(selectedElement.value.id)
+  if (ctx) {
+    ctx.list.splice(ctx.index, 1)
+    selectedElement.value = null
+  }
+}
+
+const duplicateElement = (element) => {
+  if (!element?.id) return
+  const ctx = findElementContext(element.id)
+  if (!ctx) return
+
+  const clone = JSON.parse(JSON.stringify(element))
+  clone.id = generateId()
+
+  const reassignIds = (el) => {
+    if (el.children?.length) {
+      el.children = el.children.map((child) => {
+        const next = { ...child, id: generateId() }
+        reassignIds(next)
+        return next
+      })
     }
-  };
-  return defaults[type] || {};
-};
-
-const selectSection = (index) => {
-  selectedSection.value = index;
-};
-
-const updateSection = (index, data) => {
-  // Usar splice para mantener la reactividad del array
-  sections.value.splice(index, 1, { ...sections.value[index], ...data });
-};
-
-const moveSection = (index, direction) => {
-  const newIndex = index + direction;
-  if (newIndex < 0 || newIndex >= sections.value.length) return;
-  
-  // Usar splice para mantener reactividad
-  const temp = sections.value[index];
-  sections.value.splice(index, 1);
-  sections.value.splice(newIndex, 0, temp);
-  
-  // Update selected section if it was moved
-  if (selectedSection.value === index) {
-    selectedSection.value = newIndex;
-  } else if (selectedSection.value === newIndex) {
-    selectedSection.value = index;
+    if (el.slides?.length) {
+      el.slides = el.slides.map((s) => ({ ...s, id: generateId() }))
+    }
+    if (el.items?.length) {
+      el.items = el.items.map((i) => ({ ...i, id: generateId() }))
+    }
+    if (el.steps?.length) {
+      el.steps = el.steps.map((s) => ({ ...s, id: generateId() }))
+    }
+    if (el.buttons?.length) {
+      el.buttons = el.buttons.map((b) => ({ ...b, id: generateId() }))
+    }
+    if (el.panels?.length) {
+      el.panels = el.panels.map((p) => ({ ...p, id: generateId() }))
+    }
+    if (el.cards?.length) {
+      el.cards = el.cards.map((c) => ({ ...c, id: generateId() }))
+    }
   }
-};
+  reassignIds(clone)
 
-const removeSection = (index) => {
-  sections.value.splice(index, 1);
-  if (selectedSection.value === index) {
-    selectedSection.value = null;
-  } else if (selectedSection.value > index) {
-    selectedSection.value--;
-  }
-};
+  ctx.list.splice(ctx.index + 1, 0, clone)
+  selectedElement.value = clone
+}
 
-const duplicateSection = (index) => {
-  const sectionToClone = sections.value[index];
-  const clonedSection = {
-    ...sectionToClone,
-    id: Date.now() + Math.random()
-  };
-  sections.value.splice(index + 1, 0, clonedSection);
-};
+const moveElementInList = (direction) => {
+  if (!selectedElement.value) return
+  const ctx = findElementContext(selectedElement.value.id)
+  if (!ctx) return
+  const newIndex = ctx.index + direction
+  if (newIndex < 0 || newIndex >= ctx.list.length) return
+  const [item] = ctx.list.splice(ctx.index, 1)
+  ctx.list.splice(newIndex, 0, item)
+}
 
+const moveElementUp = () => moveElementInList(-1)
+const moveElementDown = () => moveElementInList(1)
+
+// Guardar página - VERSIÓN BASE DE DATOS CON TOKEN SANCTUM
 const savePage = async () => {
-  saving.value = true;
-  error.value = null;
-  
+  console.log('=== GUARDANDO EN BASE DE DATOS ===')
+
+  saving.value = true
+
   try {
-    // Validación básica
-    if (!pageForm.value.title.trim()) {
-      throw new Error('El título es obligatorio');
+    // 1. Verificar autenticación
+    console.log('1. Verificando autenticación...')
+    if (!authStore.token) {
+      console.log('ERROR: No hay token de autenticación')
+      alert('No estás autenticado. Por favor inicia sesión nuevamente.')
+      window.location.href = '/login'
+      return
     }
-    
-    // Limpiar las secciones antes de enviar (remover propiedades internas de Vue)
-    const cleanSections = sections.value.map(s => ({
-      id: s.id,
-      type: s.type,
-      name: s.name,
-      content: s.content
-    }));
-    
-    const pageData = {
+
+    console.log('Token disponible:', !!authStore.token)
+
+    // 2. Validación básica
+    console.log('2. Validando...')
+    if (!pageForm.value.title) {
+      console.log('ERROR: Falta título')
+      alert('El título es obligatorio')
+      saving.value = false
+      return
+    }
+
+    // 3. Preparar datos para la API
+    console.log('3. Preparando datos...')
+    const slug = normalizeSlug(pageForm.value.slug)
+      || normalizeSlug(pageForm.value.route)
+      || null
+
+    const apiData = {
       title: pageForm.value.title,
-      slug: pageForm.value.slug,
-      status: pageForm.value.status,
-      meta_description: pageForm.value.meta_description,
-      sections: cleanSections
-    };
-    
-    console.log('Enviando datos:', JSON.stringify(pageData, null, 2));
-    
-    let result;
-    if (isEditing.value) {
-      result = await cmsStore.updatePage(route.params.id, pageData);
-    } else {
-      result = await cmsStore.createPage(pageData);
+      slug,
+      meta_description: pageForm.value.metaDescription || pageForm.value.description || null,
+      meta_title: pageForm.value.metaTitle || null,
+      meta_keywords: pageForm.value.metaKeywords || null,
+      content: elements.value,
+      status: pageForm.value.status || 'draft',
+      no_index: false,
     }
-    
-    console.log('Respuesta del servidor:', result);
-    
-    if (result) {
-      if (!isEditing.value && result.id) {
-        // Si es página nueva, redirigir al editor con el ID
-        router.replace(`/admin/pages/${result.id}/edit`);
+
+    console.log('DATOS PARA API:', apiData)
+
+    // 4. Determinar si es creación o actualización
+    const isEditing = !!route.params.id
+    const url = isEditing
+      ? `/api/pages/${route.params.id}`
+      : '/api/pages'
+    const method = isEditing ? 'PUT' : 'POST'
+
+    console.log('4. Enviando a API:', url, method)
+
+    // 5. Preparar headers con token Sanctum
+    const headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${authStore.token}`
+    }
+
+    console.log('Headers:', headers)
+
+    // 6. Llamada a la API
+    const response = await fetch(url, {
+      method: method,
+      headers: headers,
+      body: JSON.stringify(apiData)
+    })
+
+    console.log('5. Respuesta recibida:', response.status)
+
+    // 7. Procesar respuesta
+    const result = await response.json()
+    console.log('6. Resultado:', result)
+
+    if (response.ok) {
+      alert(`Página guardada: ${pageForm.value.title}`)
+      router.push('/admin/pages')
+    } else {
+      console.log('❌ ERROR EN API:', result)
+
+      if (result.message === 'Unauthenticated') {
+        alert('❌ Error de autenticación. Tu sesión ha expirado. Por favor inicia sesión nuevamente.')
+        authStore.clearAuth()
+        window.location.href = '/login'
+      } else if (result.errors) {
+        const errores = Object.values(result.errors).flat().join('\n')
+        alert('Errores de validación:\n' + errores)
       } else {
-        // Si es edición, volver a la lista
-        router.push('/admin/pages');
+        alert('Error: ' + (result.message || 'Error desconocido'))
       }
     }
-  } catch (err) {
-    console.error('Error completo:', err);
-    error.value = err.response?.data?.message || err.message || 'Error al guardar la página';
-    alert(error.value);
-  } finally {
-    saving.value = false;
-  }
-};
 
-onMounted(async () => {
+  } catch (error) {
+    console.log('❌ ERROR GENERAL:', error)
+    alert('Error de conexión: ' + error.message)
+  } finally {
+    saving.value = false
+    console.log('=== GUARDADO FINALIZADO ===')
+  }
+}
+
+// Verificar estado del almacenamiento
+const checkStorageStatus = () => {
+  try {
+    const testKey = 'test_storage'
+    localStorage.setItem(testKey, 'test')
+    localStorage.removeItem(testKey)
+
+    console.log('✅ localStorage está disponible')
+
+    // Mostrar claves existentes
+    const keys = Object.keys(localStorage)
+    console.log('📁 Claves en localStorage:', keys)
+
+    // Mostrar páginas guardadas
+    const allPages = JSON.parse(localStorage.getItem('all_pages') || '[]')
+    console.log('📄 Páginas guardadas:', allPages.length)
+
+    return true
+  } catch (error) {
+    console.error('❌ localStorage no disponible:', error)
+    return false
+  }
+}
+
+// Cargar página desde base de datos con token Sanctum
+const loadPage = async () => {
+  console.log('=== CARGANDO PÁGINA DESDE BD ===')
+
   if (isEditing.value) {
     try {
-      const page = await cmsStore.fetchPage(route.params.id);
-      if (page) {
-        pageForm.value = {
-          title: page.title || '',
-          slug: page.slug || '',
-          status: page.status || 'draft',
-          meta_description: page.meta_description || ''
-        };
-        // Asegurar que cada sección tenga la estructura correcta
-        sections.value = (page.sections || []).map((s, index) => ({
-          id: s.id || Date.now() + index,
-          type: s.type,
-          name: s.name || s.type,
-          content: s.content || getDefaultContent(s.type),
-          settings: s.settings || {},
-          styles: s.styles || {}
-        }));
+      console.log('Cargando página ID:', route.params.id)
+
+      // Verificar autenticación
+      if (!authStore.token) {
+        console.log('ERROR: No hay token de autenticación')
+        alert('No estás autenticado. Por favor inicia sesión nuevamente.')
+        window.location.href = '/login'
+        resetToDefaults()
+        return
       }
-    } catch (err) {
-      error.value = 'Error al cargar la página: ' + (err.message || 'Error desconocido');
-      console.error('Error cargando página:', err);
+
+      console.log('Token disponible:', !!authStore.token)
+
+      // Preparar headers con token Sanctum
+      const headers = {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${authStore.token}`
+      }
+
+      console.log('Headers para carga:', headers)
+
+      const response = await fetch(`/api/pages/${route.params.id}`, {
+        headers: headers
+      })
+
+      console.log('Respuesta status:', response.status)
+
+      if (response.ok) {
+        const result = await response.json()
+        console.log('Datos recibidos:', result)
+
+        const pageData = result.data
+
+        // Cargar datos del formulario
+        pageForm.value = {
+          title: pageData.title || '',
+          slug: pageData.slug || '',
+          description: pageData.meta_description || '',
+          metaTitle: pageData.meta_title || '',
+          metaDescription: pageData.meta_description || '',
+          metaKeywords: pageData.meta_keywords || '',
+          route: pageData.slug || '',
+          status: pageData.status || 'draft',
+          publishedAt: pageData.published_at || null
+        }
+
+        elements.value = normalizeLoadedElements(pageData.content || [])
+
+        console.log('✅ Página cargada exitosamente')
+      } else {
+        const error = await response.json()
+        console.log('❌ Error al cargar:', error)
+
+        if (error.message === 'Unauthenticated') {
+          alert('❌ Error de autenticación. Tu sesión ha expirado. Por favor inicia sesión nuevamente.')
+          authStore.clearAuth()
+          window.location.href = '/login'
+        } else {
+          alert('Error al cargar la página: ' + (error.message || 'No encontrada'))
+        }
+
+        // Valores por defecto
+        resetToDefaults()
+      }
+
+    } catch (error) {
+      console.error('❌ Error de conexión:', error)
+      alert('Error de conexión al cargar la página')
+      resetToDefaults()
     }
+  } else {
+    console.log('Nueva página - usando valores por defecto')
+    resetToDefaults()
   }
-});
+}
+
+// Función para establecer valores por defecto
+const resetToDefaults = () => {
+  pageForm.value = {
+    title: '',
+    slug: '',
+    description: '',
+    metaTitle: '',
+    metaDescription: '',
+    metaKeywords: '',
+    route: '',
+    status: 'draft',
+    publishedAt: null
+  }
+  elements.value = []
+}
+
+// Lifecycle
+onMounted(() => {
+  fetchTemplates()
+})
+loadPage()
 </script>
+
+<style scoped>
+.group:hover .group-hover\:opacity-100 {
+  opacity: 1;
+}
+
+.opacity-0 {
+  opacity: 0;
+}
+
+.transition-opacity {
+  transition: opacity 0.2s ease;
+}
+</style>

@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold text-gray-900">Gestión de Roles</h1>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-[#e6edf3]">Gestión de Roles</h1>
       <button
         v-if="authStore.hasPermission('roles.create')"
         @click="openModal()"
-        class="px-4 py-2 bg-[#005674] text-white rounded-lg hover:bg-[#003C5F] transition-colors flex items-center gap-2"
+        class="px-4 py-2 bg-[#005674] dark:bg-[#58a6ff] text-white rounded-lg hover:bg-[#003C5F] dark:hover:bg-[#79c0ff] transition-colors flex items-center gap-2"
       >
         <Plus class="w-5 h-5" />
         Nuevo Rol
@@ -13,23 +13,23 @@
     </div>
 
     <!-- Filters -->
-    <div class="bg-white rounded-lg shadow p-4 mb-6">
+    <div class="bg-white dark:bg-[#161b22] rounded-lg shadow-sm dark:shadow-none dark:border dark:border-[#30363d] p-4 mb-6">
       <div class="flex flex-wrap gap-4">
         <div class="flex-1 min-w-[200px]">
           <input
             v-model="search"
             type="text"
             placeholder="Buscar roles..."
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005674] focus:border-transparent"
+            class="w-full px-4 py-2 border border-gray-300 dark:border-[#30363d] rounded-lg focus:ring-2 focus:ring-[#005674] dark:focus:ring-[#58a6ff] focus:border-transparent bg-white dark:bg-[#0f1419] text-gray-900 dark:text-[#e6edf3]"
           >
         </div>
       </div>
     </div>
 
     <!-- Roles Table -->
-    <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="bg-white dark:bg-[#161b22] rounded-lg shadow-sm dark:shadow-none dark:border dark:border-[#30363d] overflow-hidden">
       <table class="w-full text-sm text-left">
-        <thead class="text-xs text-gray-500 uppercase bg-gray-50">
+        <thead class="text-xs text-gray-500 dark:text-[#8b949e] uppercase bg-gray-50 dark:bg-[#21262d]">
           <tr>
             <th class="px-6 py-3">Nombre</th>
             <th class="px-6 py-3">Permisos</th>
@@ -39,15 +39,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="role in filteredRoles" :key="role.id" class="border-b hover:bg-gray-50">
+          <tr v-for="role in filteredRoles" :key="role.id" class="border-b border-gray-200 dark:border-[#30363d] hover:bg-gray-50 dark:hover:bg-[#21262d]">
             <td class="px-6 py-4">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-[#005674]/10 flex items-center justify-center">
-                  <Shield class="w-5 h-5 text-[#005674]" />
+                <div class="w-10 h-10 rounded-full bg-[#005674]/10 dark:bg-[#58a6ff]/20 flex items-center justify-center">
+                  <Shield class="w-5 h-5 text-[#005674] dark:text-[#58a6ff]" />
                 </div>
                 <div>
-                  <p class="font-medium text-gray-900 capitalize">{{ role.name }}</p>
-                  <p class="text-xs text-gray-500">{{ role.guard_name }}</p>
+                  <p class="font-medium text-gray-900 dark:text-[#e6edf3] capitalize">{{ role.name }}</p>
+                  <p class="text-xs text-gray-500 dark:text-[#8b949e]">{{ role.guard_name }}</p>
                 </div>
               </div>
             </td>
@@ -56,26 +56,26 @@
                 <span
                   v-for="permission in role.permissions.slice(0, 3)"
                   :key="permission.id"
-                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700"
+                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400"
                 >
                   {{ getPermissionShortLabel(permission.name) }}
                 </span>
                 <span
                   v-if="role.permissions.length > 3"
-                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600"
+                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
                 >
                   +{{ role.permissions.length - 3 }}
                 </span>
                 <span
                   v-if="role.permissions.length === 0"
-                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500"
+                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"
                 >
                   Sin permisos
                 </span>
               </div>
             </td>
             <td class="px-6 py-4">
-              <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700">
+              <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400">
                 <Users class="w-3 h-3" />
                 {{ role.users_count || 0 }} usuario{{ role.users_count !== 1 ? 's' : '' }}
               </span>
@@ -86,7 +86,7 @@
                 <button
                   v-if="authStore.hasPermission('roles.edit')"
                   @click="openModal(role)"
-                  class="p-2 text-[#005674] hover:bg-[#005674]/10 rounded"
+                  class="p-2 text-[#005674] dark:text-[#58a6ff] hover:bg-[#005674]/10 dark:hover:bg-[#58a6ff]/10 rounded"
                   title="Editar"
                 >
                   <Pencil class="w-4 h-4" />
@@ -94,7 +94,7 @@
                 <button
                   v-if="authStore.hasPermission('roles.delete')"
                   @click="confirmDelete(role)"
-                  class="p-2 text-red-600 hover:bg-red-50 rounded"
+                  class="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
                   :disabled="role.name === 'admin' || role.users_count > 0"
                   :class="{ 'opacity-50 cursor-not-allowed': role.name === 'admin' || role.users_count > 0 }"
                   :title="role.name === 'admin' ? 'No se puede eliminar el rol admin' : role.users_count > 0 ? 'Tiene usuarios asignados' : 'Eliminar'"
@@ -107,8 +107,8 @@
         </tbody>
       </table>
 
-      <div v-if="filteredRoles.length === 0" class="text-center py-12 text-gray-500">
-        <Shield class="w-12 h-12 mx-auto mb-3 text-gray-300" />
+      <div v-if="filteredRoles.length === 0" class="text-center py-12 text-gray-500 dark:text-[#8b949e]">
+        <Shield class="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-[#30363d]" />
         <p>No se encontraron roles</p>
       </div>
     </div>
@@ -148,7 +148,7 @@
             >
               <div
                 v-if="showModal"
-                class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-auto overflow-hidden transform transition-all"
+                class="relative bg-white dark:bg-[#161b22] rounded-2xl shadow-2xl w-full max-w-2xl mx-auto overflow-hidden transform transition-all"
               >
                 <!-- Header Mejorado -->
                 <div class="bg-gradient-to-r from-[#005674] via-[#004a5f] to-[#003C5F] px-6 py-5">
@@ -179,8 +179,8 @@
                 <div class="max-h-[calc(100vh-280px)] overflow-y-auto">
                   <form @submit.prevent="saveRole" class="p-6 space-y-6">
                     <!-- Nombre del Rol -->
-                    <div class="bg-gray-50 rounded-xl p-4">
-                      <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <div class="bg-gray-50 dark:bg-[#0f1419] rounded-xl p-4">
+                      <label class="block text-sm font-semibold text-gray-700 dark:text-[#8b949e] mb-2">
                         Nombre del Rol <span class="text-red-500">*</span>
                       </label>
                       <input
@@ -188,9 +188,9 @@
                         type="text"
                         required
                         placeholder="Ej: editor, moderador, analista"
-                        class="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005674] focus:border-[#005674] transition-colors"
+                        class="w-full px-4 py-3 bg-white dark:bg-[#161b22] border border-gray-300 dark:border-[#30363d] rounded-lg focus:ring-2 focus:ring-[#005674] dark:focus:ring-[#58a6ff] focus:border-transparent text-gray-900 dark:text-[#e6edf3] transition-colors"
                       >
-                      <p class="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                      <p class="text-xs text-gray-500 dark:text-[#8b949e] mt-2 flex items-center gap-1">
                         <Info class="w-3 h-3" />
                         Use nombres descriptivos en minúsculas sin espacios
                       </p>
@@ -199,21 +199,21 @@
                     <!-- Permisos por Categoría -->
                     <div>
                       <div class="flex items-center justify-between mb-4">
-                        <label class="block text-sm font-semibold text-gray-700">
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-[#8b949e]">
                           Permisos asignados
                         </label>
                         <div class="flex gap-2">
                           <button
                             type="button"
                             @click="selectAllPermissions"
-                            class="text-xs px-3 py-1.5 bg-[#005674]/10 text-[#005674] rounded-full hover:bg-[#005674]/20 transition-colors font-medium"
+                            class="text-xs px-3 py-1.5 bg-[#005674]/10 dark:bg-[#58a6ff]/20 text-[#005674] dark:text-[#58a6ff] rounded-full hover:bg-[#005674]/20 dark:hover:bg-[#58a6ff]/30 transition-colors font-medium"
                           >
                             Seleccionar todos
                           </button>
                           <button
                             type="button"
                             @click="deselectAllPermissions"
-                            class="text-xs px-3 py-1.5 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors font-medium"
+                            class="text-xs px-3 py-1.5 bg-gray-100 dark:bg-[#21262d] text-gray-600 dark:text-[#8b949e] rounded-full hover:bg-gray-200 dark:hover:bg-[#30363d] transition-colors font-medium"
                           >
                             Deseleccionar
                           </button>
@@ -224,17 +224,17 @@
                         <div
                           v-for="(perms, module) in rolesStore.groupedPermissions"
                           :key="module"
-                          class="border border-gray-200 rounded-xl overflow-hidden"
+                          class="border border-gray-200 dark:border-[#30363d] rounded-xl overflow-hidden"
                         >
                           <!-- Module Header -->
                           <button
                             type="button"
                             @click="toggleModule(module)"
-                            class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
+                            class="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-[#21262d] hover:bg-gray-100 dark:hover:bg-[#30363d] transition-colors"
                           >
                             <div class="flex items-center gap-3">
-                              <component :is="getModuleIcon(module)" class="w-5 h-5 text-[#005674]" />
-                              <span class="font-semibold text-gray-800 capitalize">{{ getModuleLabel(module) }}</span>
+                              <component :is="getModuleIcon(module)" class="w-5 h-5 text-[#005674] dark:text-[#58a6ff]" />
+                              <span class="font-semibold text-gray-800 dark:text-[#e6edf3] capitalize">{{ getModuleLabel(module) }}</span>
                               <span class="text-xs px-2 py-0.5 bg-[#005674]/10 text-[#005674] rounded-full">
                                 {{ roleForm.permissions.filter(p => perms.some(perm => perm.name === p)).length }}/{{ perms.length }}
                               </span>

@@ -1,6 +1,17 @@
 export { default as HeroSection } from './HeroSection.vue';
+export { default as HeroSliderSection } from './HeroSliderSection.vue';
 export { default as TextSection } from './TextSection.vue';
 export { default as CardsSection } from './CardsSection.vue';
 export { default as ImageSection } from './ImageSection.vue';
 export { default as GallerySection } from './GallerySection.vue';
 export { default as ButtonSection } from './ButtonSection.vue';
+export { default as HTMLSection } from './HTMLSection.vue';
+export { default as VideoSection } from './VideoSection.vue';
+export { default as FAQSection } from './FAQSection.vue';
+export { default as TestimonialsSection } from './TestimonialsSection.vue';
+export { default as DividerSection } from './DividerSection.vue';
+export { default as SpacerSection } from './SpacerSection.vue';
+export { default as IconsRowSection } from './IconsRowSection.vue';
+export { default as BubblesSection } from './BubblesSection.vue';
+export { default as ProcessSection } from './ProcessSection.vue';
+export { default as NewsletterSection } from './NewsletterSection.vue';

@@ -1,10 +1,24 @@
 <template>
-  <section class="py-12 bg-white">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section 
+    class="relative"
+    :class="section.styles?.className || ''"
+    :style="sectionStyles"
+  >
+    <!-- Overlay -->
+    <div 
+      v-if="overlayOpacity > 0"
+      class="absolute inset-0 pointer-events-none"
+      :style="{ backgroundColor: `rgba(0,0,0,${overlayOpacity / 100})` }"
+    ></div>
+    
+    <div 
+      class="relative max-w-4xl mx-auto"
+      :class="containerPadding"
+    >
       <div 
         v-if="!isEditing"
         class="prose max-w-none"
-        :class="`text-${section.content?.alignment || 'left'}`"
+        :style="contentStyles"
         v-html="renderedContent"
       ></div>
       <div v-else class="space-y-4">
@@ -64,6 +78,79 @@ watch(() => props.section, (newSection) => {
     alignment: newSection.content?.alignment || 'left'
   };
 }, { deep: true });
+
+// Estilos de la sección
+const sectionStyles = computed(() => {
+  const styles = {};
+  const s = props.section.styles || {};
+  
+  // Background
+  if (s.backgroundColor) {
+    styles.backgroundColor = s.backgroundColor;
+  }
+  if (s.backgroundImage) {
+    styles.backgroundImage = `url(${s.backgroundImage})`;
+    styles.backgroundPosition = s.backgroundPosition || 'center';
+    styles.backgroundSize = s.backgroundSize || 'cover';
+    styles.backgroundRepeat = s.backgroundRepeat || 'no-repeat';
+  }
+  
+  // Box Shadow
+  if (s.boxShadow && s.boxShadow !== 'none') {
+    styles.boxShadow = s.boxShadow;
+  }
+  
+  // Border
+  if (s.borderWidth) {
+    styles.borderWidth = `${s.borderWidth}px`;
+    styles.borderStyle = s.borderStyle || 'solid';
+    styles.borderColor = s.borderColor || '#e5e7eb';
+  }
+  if (s.borderRadius) {
+    styles.borderRadius = `${s.borderRadius}px`;
+  }
+  
+  return styles;
+});
+
+const containerPadding = computed(() => {
+  const s = props.section.styles || {};
+  const classes = [];
+  
+  // Convertir padding a clases de tailwind dinámicas
+  if (s.paddingTop || s.paddingTop === 0) {
+    classes.push(`pt-[${s.paddingTop}px]`);
+  } else {
+    classes.push('pt-12');
+  }
+  if (s.paddingBottom || s.paddingBottom === 0) {
+    classes.push(`pb-[${s.paddingBottom}px]`);
+  } else {
+    classes.push('pb-12');
+  }
+  
+  classes.push('px-4', 'sm:px-6', 'lg:px-8');
+  
+  return classes.join(' ');
+});
+
+const overlayOpacity = computed(() => {
+  return props.section.styles?.overlayOpacity || 0;
+});
+
+const contentStyles = computed(() => {
+  const s = props.section.styles || {};
+  const styles = {};
+  
+  if (s.color) {
+    styles.color = s.color;
+  }
+  if (s.textAlign) {
+    styles.textAlign = s.textAlign;
+  }
+  
+  return styles;
+});
 
 const renderedContent = computed(() => {
   return editableContent.value.content;

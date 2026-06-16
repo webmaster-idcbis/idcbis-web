@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold text-gray-900">Gestión de Páginas</h1>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-[#e6edf3]">Gestión de Páginas</h1>
       <router-link
         v-if="authStore.hasPermission('pages.create')"
         to="/admin/pages/create"
-        class="px-4 py-2 bg-[#005674] text-white rounded-lg hover:bg-[#003C5F] transition-colors flex items-center gap-2"
+        class="px-4 py-2 bg-[#005674] dark:bg-[#58a6ff] text-white rounded-lg hover:bg-[#003C5F] dark:hover:bg-[#79c0ff] transition-colors flex items-center gap-2"
       >
         <Plus class="w-5 h-5" />
         Nueva Página
@@ -13,19 +13,19 @@
     </div>
 
     <!-- Filters -->
-    <div class="bg-white rounded-lg shadow p-4 mb-6">
+    <div class="bg-white dark:bg-[#161b22] rounded-lg shadow-sm dark:shadow-none dark:border dark:border-[#30363d] p-4 mb-6">
       <div class="flex flex-wrap gap-4">
         <div class="flex-1 min-w-[200px]">
           <input 
             v-model="search"
             type="text" 
             placeholder="Buscar páginas..."
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005674] focus:border-transparent"
+            class="w-full px-4 py-2 border border-gray-300 dark:border-[#30363d] rounded-lg focus:ring-2 focus:ring-[#005674] dark:focus:ring-[#58a6ff] focus:border-transparent bg-white dark:bg-[#0f1419] text-gray-900 dark:text-[#e6edf3]"
           >
         </div>
         <select 
           v-model="statusFilter"
-          class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005674]"
+          class="px-4 py-2 border border-gray-300 dark:border-[#30363d] rounded-lg focus:ring-2 focus:ring-[#005674] dark:focus:ring-[#58a6ff] focus:border-transparent bg-white dark:bg-[#0f1419] text-gray-900 dark:text-[#e6edf3]"
         >
           <option value="">Todos los estados</option>
           <option value="published">Publicadas</option>
@@ -36,9 +36,9 @@
     </div>
 
     <!-- Pages Table -->
-    <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="bg-white dark:bg-[#161b22] rounded-lg shadow-sm dark:shadow-none dark:border dark:border-[#30363d] overflow-hidden">
       <table class="w-full text-sm text-left">
-        <thead class="text-xs text-gray-500 uppercase bg-gray-50">
+        <thead class="text-xs text-gray-500 dark:text-[#8b949e] uppercase bg-gray-50 dark:bg-[#21262d]">
           <tr>
             <th class="px-6 py-3">Título</th>
             <th class="px-6 py-3">Slug</th>
@@ -49,28 +49,28 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="page in filteredPages" :key="page.id" class="border-b hover:bg-gray-50">
-            <td class="px-6 py-4 font-medium text-gray-900">{{ page.title }}</td>
-            <td class="px-6 py-4 text-gray-500">/{{ page.slug }}</td>
+          <tr v-for="page in filteredPages" :key="page.id" class="border-b border-gray-200 dark:border-[#30363d] hover:bg-gray-50 dark:hover:bg-[#21262d]">
+            <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#e6edf3]">{{ page.title }}</td>
+            <td class="px-6 py-4 text-gray-500 dark:text-[#8b949e]">/{{ page.slug }}</td>
             <td class="px-6 py-4">
               <span :class="[
                 'px-2 py-1 rounded-full text-xs font-medium',
-                page.status === 'published' ? 'bg-green-100 text-green-800' :
-                page.status === 'draft' ? 'bg-yellow-100 text-yellow-800' :
-                'bg-gray-100 text-gray-800'
+                page.status === 'published' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400' :
+                page.status === 'draft' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400' :
+                'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-400'
               ]">
                 {{ page.status === 'published' ? 'Publicada' : 
                    page.status === 'draft' ? 'Borrador' : 'Archivada' }}
               </span>
             </td>
-            <td class="px-6 py-4">{{ page.creator?.name }}</td>
-            <td class="px-6 py-4">{{ formatDate(page.updated_at) }}</td>
+            <td class="px-6 py-4 text-gray-500 dark:text-[#8b949e]">{{ page.creator?.name }}</td>
+            <td class="px-6 py-4 text-gray-500 dark:text-[#8b949e]">{{ formatDate(page.updated_at) }}</td>
             <td class="px-6 py-4 text-right">
               <div class="flex items-center justify-end gap-2">
                 <button
                   v-if="page.status !== 'published' && authStore.hasPermission('pages.publish')"
                   @click="publishPage(page.id)"
-                  class="p-2 text-green-600 hover:bg-green-50 rounded"
+                  class="p-2 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded"
                   title="Publicar"
                 >
                   <CheckCircle class="w-4 h-4" />
@@ -78,7 +78,7 @@
                 <router-link
                   :to="`/${page.slug}`"
                   target="_blank"
-                  class="p-2 text-gray-600 hover:bg-gray-100 rounded"
+                  class="p-2 text-gray-600 dark:text-[#8b949e] hover:bg-gray-100 dark:hover:bg-[#21262d] rounded"
                   title="Ver"
                 >
                   <Eye class="w-4 h-4" />
@@ -86,7 +86,7 @@
                 <router-link
                   v-if="authStore.hasPermission('pages.edit')"
                   :to="`/admin/pages/${page.id}/edit`"
-                  class="p-2 text-[#005674] hover:bg-[#005674]/10 rounded"
+                  class="p-2 text-[#005674] dark:text-[#58a6ff] hover:bg-[#005674]/10 dark:hover:bg-[#58a6ff]/10 rounded"
                   title="Editar"
                 >
                   <Pencil class="w-4 h-4" />
@@ -94,7 +94,7 @@
                 <button
                   v-if="authStore.hasPermission('pages.delete')"
                   @click="deletePage(page.id)"
-                  class="p-2 text-red-600 hover:bg-red-50 rounded"
+                  class="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
                   title="Eliminar"
                 >
                   <Trash2 class="w-4 h-4" />

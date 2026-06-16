@@ -1,18 +1,16 @@
 <template>
   <footer class="bg-[#003C5F] text-white">
-    <!-- Main Footer Content -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        
-        <!-- Información Pública -->
+
         <div>
           <h3 class="text-yellow-400 font-semibold text-sm uppercase tracking-wider mb-4">
             Información Pública
           </h3>
           <ul class="space-y-2">
             <li v-for="item in infoPublica" :key="item.name">
-              <a 
-                :href="item.href" 
+              <a
+                :href="item.href"
                 class="text-sm text-white/80 hover:text-white transition-colors"
               >
                 {{ item.name }}
@@ -21,15 +19,14 @@
           </ul>
         </div>
 
-        <!-- Infórmate -->
         <div>
           <h3 class="text-yellow-400 font-semibold text-sm uppercase tracking-wider mb-4">
             Infórmate
           </h3>
           <ul class="space-y-2">
             <li v-for="item in informate" :key="item.name">
-              <a 
-                :href="item.href" 
+              <a
+                :href="item.href"
                 class="text-sm text-white/80 hover:text-white transition-colors"
               >
                 {{ item.name }}
@@ -38,42 +35,32 @@
           </ul>
         </div>
 
-        <!-- Logos Column -->
-        <div class="flex flex-col gap-6">
-          <!-- INS Logo -->
-          <div class="bg-white p-3 rounded">
-            <div class="flex items-center gap-2">
-              <div class="w-8 h-8 bg-[#E31937] rounded-full flex items-center justify-center">
-                <span class="text-white text-xs font-bold">INS</span>
-              </div>
-              <div class="text-[#003C5F] text-xs leading-tight">
-                <p class="font-semibold">INSTITUTO</p>
-                <p class="font-semibold">NACIONAL DE</p>
-                <p class="font-semibold">SALUD</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Colombia Logo -->
-          <div class="flex items-center gap-2">
-            <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
-              <span class="text-[#E31937] text-xl font-bold">CO</span>
-            </div>
-            <span class="text-sm font-semibold">COLOMBIA</span>
-          </div>
-
-          <!-- Ministerio de Salud -->
-          <div class="flex items-center gap-3">
-            <div class="w-12 h-12 bg-white/10 rounded flex items-center justify-center">
-              <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-              </svg>
-            </div>
-            <span class="text-2xl font-light text-white/90">Salud</span>
-          </div>
+        <!-- Logos institucionales -->
+        <div class="flex flex-col gap-5 items-start">
+          <router-link to="/" class="block">
+            <img
+              :src="siteLogos.footer.src"
+              :alt="siteLogos.footer.alt"
+              :class="siteLogos.footer.class"
+            >
+          </router-link>
+          <img
+            :src="institutional.idcbisInstitute.src"
+            :alt="institutional.idcbisInstitute.alt"
+            :class="institutional.idcbisInstitute.class"
+          >
+          <img
+            :src="institutional.colombia.src"
+            :alt="institutional.colombia.alt"
+            :class="institutional.colombia.class"
+          >
+          <img
+            :src="institutional.ministerioSalud.src"
+            :alt="institutional.ministerioSalud.alt"
+            :class="institutional.ministerioSalud.class"
+          >
         </div>
 
-        <!-- Contact Info -->
         <div>
           <h3 class="text-yellow-400 font-semibold text-sm uppercase tracking-wider mb-4">
             Contáctenos
@@ -88,7 +75,6 @@
       </div>
     </div>
 
-    <!-- Bottom Bar -->
     <div class="border-t border-white/10">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div class="flex flex-col md:flex-row justify-between items-center gap-4">
@@ -107,9 +93,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { SITE_LOGOS, INSTITUTIONAL_LOGOS } from '../../config/siteLogos';
 
-const hasColombiaLogo = ref(false);
+const siteLogos = SITE_LOGOS;
+const institutional = INSTITUTIONAL_LOGOS;
 
 const infoPublica = [
   { name: 'Programa de Transparencia y Ética Pública', href: '#' },

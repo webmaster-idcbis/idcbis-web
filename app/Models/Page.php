@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\PageSearchIndexer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,6 +21,12 @@ class Page extends Model
         'content',
         'sections',
         'status',
+        'meta_title',
+        'meta_keywords',
+        'search_text',
+        'og_image',
+        'no_index',
+        'canonical_url',
         'created_by',
         'updated_by',
         'published_at'
@@ -39,6 +46,10 @@ class Page extends Model
             if (empty($page->slug)) {
                 $page->slug = Str::slug($page->title);
             }
+        });
+
+        static::saving(function (Page $page) {
+            $page->search_text = PageSearchIndexer::buildSearchText($page);
         });
     }
 

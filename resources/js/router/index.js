@@ -5,7 +5,8 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('../views/Home.vue')
+    component: () => import('../views/Page.vue'),
+    meta: { homePage: true },
   },
   {
     path: '/admin',
@@ -47,6 +48,16 @@ const routes = [
         path: 'permissions',
         name: 'Permissions',
         component: () => import('../views/admin/Permissions.vue')
+      },
+      {
+        path: 'menus',
+        name: 'Menus',
+        component: () => import('../views/admin/Menus.vue')
+      },
+      {
+        path: 'profile',
+        name: 'Profile',
+        component: () => import('../views/admin/UserProfile.vue')
       }
     ]
   },
@@ -54,6 +65,15 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import('../views/auth/Login.vue')
+  },
+  {
+    path: '/buscar',
+    name: 'Search',
+    component: () => import('../views/SearchResults.vue')
+  },
+  {
+    path: '/inicio',
+    redirect: '/',
   },
   {
     path: '/:slug',

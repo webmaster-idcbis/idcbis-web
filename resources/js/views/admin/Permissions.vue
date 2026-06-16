@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold text-gray-900">Gestión de Permisos</h1>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-[#e6edf3]">Gestión de Permisos</h1>
       <button
         v-if="authStore.hasPermission('permissions.create')"
         @click="openModal()"
-        class="px-4 py-2 bg-[#005674] text-white rounded-lg hover:bg-[#003C5F] transition-colors flex items-center gap-2"
+        class="px-4 py-2 bg-[#005674] dark:bg-[#58a6ff] text-white rounded-lg hover:bg-[#003C5F] dark:hover:bg-[#79c0ff] transition-colors flex items-center gap-2"
       >
         <Plus class="w-5 h-5" />
         Nuevo Permiso
@@ -13,19 +13,19 @@
     </div>
 
     <!-- Filters -->
-    <div class="bg-white rounded-lg shadow p-4 mb-6">
+    <div class="bg-white dark:bg-[#161b22] rounded-lg shadow-sm dark:shadow-none dark:border dark:border-[#30363d] p-4 mb-6">
       <div class="flex flex-wrap gap-4">
         <div class="flex-1 min-w-[200px]">
           <input
             v-model="search"
             type="text"
             placeholder="Buscar permisos..."
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005674] focus:border-transparent"
+            class="w-full px-4 py-2 border border-gray-300 dark:border-[#30363d] rounded-lg focus:ring-2 focus:ring-[#005674] dark:focus:ring-[#58a6ff] focus:border-transparent bg-white dark:bg-[#0f1419] text-gray-900 dark:text-[#e6edf3]"
           >
         </div>
         <select
           v-model="moduleFilter"
-          class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005674]"
+          class="px-4 py-2 border border-gray-300 dark:border-[#30363d] rounded-lg focus:ring-2 focus:ring-[#005674] dark:focus:ring-[#58a6ff] focus:border-transparent bg-white dark:bg-[#0f1419] text-gray-900 dark:text-[#e6edf3]"
         >
           <option value="">Todos los módulos</option>
           <option v-for="module in permissionsStore.modules" :key="module" :value="module">
@@ -36,9 +36,9 @@
     </div>
 
     <!-- Permissions Table -->
-    <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="bg-white dark:bg-[#161b22] rounded-lg shadow-sm dark:shadow-none dark:border dark:border-[#30363d] overflow-hidden">
       <table class="w-full text-sm text-left">
-        <thead class="text-xs text-gray-500 uppercase bg-gray-50">
+        <thead class="text-xs text-gray-500 dark:text-[#8b949e] uppercase bg-gray-50 dark:bg-[#21262d]">
           <tr>
             <th class="px-6 py-3">Nombre</th>
             <th class="px-6 py-3">Módulo</th>
@@ -49,31 +49,31 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="permission in filteredPermissions" :key="permission.id" class="border-b hover:bg-gray-50">
+          <tr v-for="permission in filteredPermissions" :key="permission.id" class="border-b border-gray-200 dark:border-[#30363d] hover:bg-gray-50 dark:hover:bg-[#21262d]">
             <td class="px-6 py-4">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center">
-                  <Key class="w-5 h-5 text-blue-600" />
+                <div class="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center">
+                  <Key class="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div>
-                  <p class="font-medium text-gray-900 font-mono text-sm">{{ permission.name }}</p>
-                  <p class="text-xs text-gray-500">{{ permission.guard_name }}</p>
+                  <p class="font-medium text-gray-900 dark:text-[#e6edf3] font-mono text-sm">{{ permission.name }}</p>
+                  <p class="text-xs text-gray-500 dark:text-[#8b949e]">{{ permission.guard_name }}</p>
                 </div>
               </div>
             </td>
             <td class="px-6 py-4">
-              <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-50 text-purple-700 capitalize">
+              <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 capitalize">
                 <component :is="getModuleIcon(permission.module)" class="w-3 h-3 mr-1" />
                 {{ permissionsStore.getModuleLabel(permission.module) }}
               </span>
             </td>
             <td class="px-6 py-4">
-              <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 capitalize">
+              <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400 capitalize">
                 {{ permissionsStore.getActionLabel(permission.action) }}
               </span>
             </td>
             <td class="px-6 py-4">
-              <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700">
+              <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400">
                 <Shield class="w-3 h-3" />
                 {{ permission.roles_count || 0 }} rol{{ permission.roles_count !== 1 ? 'es' : '' }}
               </span>
@@ -84,7 +84,7 @@
                 <button
                   v-if="authStore.hasPermission('permissions.edit')"
                   @click="openModal(permission)"
-                  class="p-2 text-[#005674] hover:bg-[#005674]/10 rounded"
+                  class="p-2 text-[#005674] dark:text-[#58a6ff] hover:bg-[#005674]/10 dark:hover:bg-[#58a6ff]/10 rounded"
                   title="Editar"
                 >
                   <Pencil class="w-4 h-4" />
@@ -92,7 +92,7 @@
                 <button
                   v-if="authStore.hasPermission('permissions.delete')"
                   @click="confirmDelete(permission)"
-                  class="p-2 text-red-600 hover:bg-red-50 rounded"
+                  class="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
                   :disabled="permission.roles_count > 0 || isCriticalPermission(permission.name)"
                   :class="{ 'opacity-50 cursor-not-allowed': permission.roles_count > 0 || isCriticalPermission(permission.name) }"
                   :title="getDeleteTooltip(permission)"
@@ -105,25 +105,25 @@
         </tbody>
       </table>
 
-      <div v-if="filteredPermissions.length === 0" class="text-center py-12 text-gray-500">
-        <Key class="w-12 h-12 mx-auto mb-3 text-gray-300" />
+      <div v-if="filteredPermissions.length === 0" class="text-center py-12 text-gray-500 dark:text-[#8b949e]">
+        <Key class="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-[#30363d]" />
         <p>No se encontraron permisos</p>
       </div>
     </div>
 
     <!-- Permissions by Module Cards -->
     <div class="mt-8">
-      <h2 class="text-lg font-bold text-gray-900 mb-4">Permisos por Módulo</h2>
+      <h2 class="text-lg font-bold text-gray-900 dark:text-[#e6edf3] mb-4">Permisos por Módulo</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div
           v-for="(perms, module) in permissionsStore.permissionsByModule"
           :key="module"
-          class="bg-white rounded-lg shadow p-4 border border-gray-200"
+          class="bg-white dark:bg-[#161b22] rounded-lg shadow-sm dark:shadow-none p-4 border border-gray-200 dark:border-[#30363d]"
         >
           <div class="flex items-center gap-2 mb-3">
-            <component :is="getModuleIcon(module)" class="w-5 h-5 text-[#005674]" />
-            <h3 class="font-semibold text-gray-800 capitalize">{{ permissionsStore.getModuleLabel(module) }}</h3>
-            <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full">
+            <component :is="getModuleIcon(module)" class="w-5 h-5 text-[#005674] dark:text-[#58a6ff]" />
+            <h3 class="font-semibold text-gray-800 dark:text-[#e6edf3] capitalize">{{ permissionsStore.getModuleLabel(module) }}</h3>
+            <span class="text-xs px-2 py-0.5 bg-gray-100 dark:bg-[#30363d] text-gray-600 dark:text-[#8b949e] rounded-full">
               {{ perms.length }}
             </span>
           </div>
@@ -131,13 +131,13 @@
             <span
               v-for="perm in perms.slice(0, 5)"
               :key="perm.id"
-              class="text-xs px-2 py-1 bg-blue-50 text-blue-700 rounded"
+              class="text-xs px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded"
             >
               {{ permissionsStore.getActionLabel(perm.action) }}
             </span>
             <span
               v-if="perms.length > 5"
-              class="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded"
+              class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded"
             >
               +{{ perms.length - 5 }}
             </span>
@@ -179,7 +179,7 @@
             >
               <div
                 v-if="showModal"
-                class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-auto overflow-hidden transform transition-all"
+                class="relative bg-white dark:bg-[#161b22] rounded-2xl shadow-2xl w-full max-w-lg mx-auto overflow-hidden transform transition-all"
               >
                 <!-- Header -->
                 <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-5">
@@ -211,7 +211,7 @@
                   <form @submit.prevent="savePermission" class="p-6 space-y-5">
                     <!-- Nombre del Permiso -->
                     <div>
-                      <label class="block text-sm font-semibold text-gray-700 mb-2">
+                      <label class="block text-sm font-semibold text-gray-700 dark:text-[#8b949e] mb-2">
                         Nombre del Permiso <span class="text-red-500">*</span>
                       </label>
                       <input
@@ -219,10 +219,10 @@
                         type="text"
                         required
                         placeholder="Ej: pages.create, users.edit, roles.delete"
-                        class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-mono text-sm"
+                        class="w-full px-4 py-3 bg-gray-50 dark:bg-[#0f1419] border border-gray-300 dark:border-[#30363d] rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-[#58a6ff] focus:border-transparent text-gray-900 dark:text-[#e6edf3] transition-colors font-mono text-sm"
                         :disabled="editingPermission && isCriticalPermission(permissionForm.name)"
                       >
-                      <p class="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                      <p class="text-xs text-gray-500 dark:text-[#8b949e] mt-2 flex items-center gap-1">
                         <Info class="w-3 h-3" />
                         Formato: modulo.accion (ej: pages.view, users.create)
                       </p>
@@ -234,17 +234,17 @@
 
                     <!-- Guard -->
                     <div>
-                      <label class="block text-sm font-semibold text-gray-700 mb-2">
+                      <label class="block text-sm font-semibold text-gray-700 dark:text-[#8b949e] mb-2">
                         Guard
                       </label>
                       <select
                         v-model="permissionForm.guard_name"
-                        class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                        class="w-full px-4 py-3 bg-gray-50 dark:bg-[#0f1419] border border-gray-300 dark:border-[#30363d] rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-[#58a6ff] focus:border-transparent text-gray-900 dark:text-[#e6edf3] transition-colors"
                       >
                         <option value="web">web</option>
                         <option value="api">api</option>
                       </select>
-                      <p class="text-xs text-gray-500 mt-1">Normalmente "web" para aplicaciones web</p>
+                      <p class="text-xs text-gray-500 dark:text-[#8b949e] mt-1">Normalmente "web" para aplicaciones web</p>
                     </div>
 
                     <!-- Preview -->

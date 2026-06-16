@@ -1,0 +1,95 @@
+/* Fuentes IDCBIS — public/fonts/ */
+
+@font-face {
+  font-family: 'Museo Sans Condensed';
+  src: url('/fonts/MuseoSansCondensed-100.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Museo Sans Condensed';
+  src: url('/fonts/MuseoSansCondensed-100Italic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Museo Sans Condensed';
+  src: url('/fonts/MuseoSansCondensed-300.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Museo Sans Condensed';
+  src: url('/fonts/MuseoSansCondensed-300Italic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Museo Sans Condensed';
+  src: url('/fonts/MuseoSansCondensed-500.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Museo Sans Condensed';
+  src: url('/fonts/MuseoSansCondensed-500Italic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Museo Sans Condensed';
+  src: url('/fonts/MuseoSansCondensed-700.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Museo Sans Condensed';
+  src: url('/fonts/MuseoSansCondensed-700Italic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Museo Sans Condensed';
+  src: url('/fonts/MuseoSansCondensed-900.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Museo Sans Condensed';
+  src: url('/fonts/MuseoSansCondensed-900Italic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Museo Sans';
+  src: url('/fonts/MuseoSans-100.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-idcbis: 'Museo Sans Condensed', 'Segoe UI', system-ui, sans-serif;
+  --font-idcbis-display: 'Museo Sans Condensed', 'Segoe UI', system-ui, sans-serif;
+  --font-idcbis-alt: 'Museo Sans', 'Museo Sans Condensed', system-ui, sans-serif;
+}
