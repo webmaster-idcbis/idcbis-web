@@ -1,7 +1,16 @@
 <template>
   <div class="space-y-3">
     <h4 class="text-sm font-semibold text-gray-900">Contacto IDCBIS</h4>
-    <div v-for="(item, i) in element.items" :key="item.id || i" class="border rounded p-2 space-y-2">
+    <p class="text-xs text-indigo-700 bg-indigo-50 border border-indigo-100 rounded-lg px-3 py-2">
+      Haz clic en un bloque de contacto del lienzo para editarlo aquí.
+    </p>
+    <div
+      v-for="(item, i) in element.items"
+      :key="item.id || i"
+      :data-editor-focus="contactAnchor(item, i)"
+      class="border rounded p-2 space-y-2"
+      :class="{ 'ring-2 ring-[#0B4F6C]': activeFocus === contactAnchor(item, i) }"
+    >
       <input v-model="item.icon" type="text" class="field-input" placeholder="📍">
       <input v-model="item.title" type="text" class="field-input" placeholder="Sede">
       <input v-model="item.text" type="text" class="field-input" placeholder="Dirección o teléfono">
@@ -12,9 +21,21 @@
 </template>
 
 <script setup>
+import { computed, watch } from 'vue'
 import { generateId } from '../../../utils/pageElementFactory'
+import { scrollToEditorFocus, buildContactFocusAnchor } from '../../../utils/editorPartFocus'
 
-const props = defineProps({ element: { type: Object, required: true } })
+const props = defineProps({
+  element: { type: Object, required: true },
+  partFocus: { type: Object, default: null },
+})
+
+const activeFocus = computed(() => props.partFocus?.anchor || '')
+const contactAnchor = (item, index) => buildContactFocusAnchor(item.id || `index-${index}`)
+
+watch(() => props.partFocus?.anchor, (anchor) => {
+  if (anchor) scrollToEditorFocus(anchor)
+}, { immediate: true })
 
 const addItem = () => {
   if (!props.element.items) props.element.items = []

@@ -17,6 +17,7 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Pages
     Route::apiResource('pages', PageController::class);
+    Route::post('/pages/{id}/save', [PageController::class, 'update']);
     Route::patch('/pages/{page}/publish', [PageController::class, 'publish']);
     Route::get('/page-templates', [PageTemplateController::class, 'index']);
     Route::post('/page-templates', [PageTemplateController::class, 'store']);

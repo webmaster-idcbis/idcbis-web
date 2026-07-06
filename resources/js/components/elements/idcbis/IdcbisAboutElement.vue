@@ -1,7 +1,11 @@
 <template>
   <section class="idcbis-about" @click.stop="$emit('click', element)">
     <div class="idcbis-about__flex">
-      <div class="idcbis-about__text">
+      <div
+        class="idcbis-about__text"
+        :class="partClasses('about:text')"
+        @click.stop="focusPart('about:text', 'Texto Somos IDCBIS', $event)"
+      >
         <div v-if="element.leaderName" class="idcbis-about__leader">
           <span class="idcbis-about__leader-label">Línea de servicio</span>
           <strong>{{ element.leaderName }}</strong>
@@ -10,7 +14,12 @@
         <h2>{{ element.title || 'Somos IDCBIS' }}</h2>
         <p>{{ element.content }}</p>
       </div>
-      <div v-if="element.image" class="idcbis-about__image-wrap" :class="{ 'idcbis-about__image-wrap--logo': isLogoImage }">
+      <div
+        v-if="element.image"
+        class="idcbis-about__image-wrap"
+        :class="[isLogoImage ? 'idcbis-about__image-wrap--logo' : '', partClasses('about:image')]"
+        @click.stop="focusPart('about:image', 'Imagen Somos IDCBIS', $event)"
+      >
         <img :src="element.image" :alt="element.imageAlt || 'IDCBIS'" class="idcbis-about__image" :class="{ 'idcbis-about__image--logo': isLogoImage }">
       </div>
     </div>
@@ -19,17 +28,20 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useIdcbisEditorParts } from '../../../composables/useIdcbisEditorParts'
 
 const props = defineProps({
   element: { type: Object, required: true },
   preview: { type: Boolean, default: false },
+  focusedPart: { type: String, default: null },
 })
 
-defineEmits(['click'])
+const emit = defineEmits(['click', 'focus-part'])
+const { partClasses, focusPart } = useIdcbisEditorParts(props, emit)
 
 const isLogoImage = computed(() => {
   const src = props.element.image || ''
-  return src.includes('/images/logo/') || src.includes('logo-IDCBIS')
+  return src.includes('/images/logo/') || src.includes('logo-IDCBIS') || src.includes('Logo%20IDCBIS') || src.includes('Logo IDCBIS')
 })
 </script>
 

@@ -29,6 +29,7 @@ export const paletteCategories = [
       { type: 'video', icon: '▶', iconClass: 'text-red-500', label: 'Video', description: 'YouTube o enlace' },
       { type: 'spacer', icon: '↕', iconClass: 'text-gray-400', label: 'Espacio', description: 'Separación vertical' },
       { type: 'divider', icon: '—', iconClass: 'text-gray-500', label: 'Línea', description: 'Separador horizontal' },
+      { type: 'sitemap', icon: '🗺', iconClass: 'text-[#005674]', label: 'Mapa del sitio', description: 'Índice de secciones' },
     ],
   },
   {
@@ -57,6 +58,10 @@ export const paletteCategories = [
       { type: 'idcbis-faq', icon: '?', iconClass: 'text-amber-600', label: 'FAQ IDCBIS', description: 'Preguntas frecuentes' },
       { type: 'idcbis-links', icon: '🔗', iconClass: 'text-blue-600', label: 'Grid enlaces', description: 'Enlaces destacados' },
       { type: 'idcbis-highlights', icon: '✦', iconClass: 'text-purple-600', label: 'Diferenciales', description: 'Puntos destacados' },
+      { type: 'idcbis-quienes-somos', icon: '🏛️', iconClass: 'text-[#0B4F6C]', label: 'Quiénes Somos (página)', description: 'Página institucional completa' },
+      { type: 'idcbis-documents-page', icon: '📁', iconClass: 'text-[#0B4F6C]', label: 'Página de documentos', description: 'Página completa con hero y listado' },
+      { type: 'idcbis-documents-list', icon: '📄', iconClass: 'text-[#0B4F6C]', label: 'Listado de documentos', description: 'Secciones y documentos descargables' },
+      { type: 'idcbis-team-grid', icon: '👥', iconClass: 'text-[#0B4F6C]', label: 'Equipo con fotos', description: 'Tarjetas de miembros del equipo' },
     ],
   },
   {

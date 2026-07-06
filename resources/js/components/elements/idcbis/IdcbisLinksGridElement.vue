@@ -65,7 +65,7 @@ const links = computed(() => props.element.links || [])
 }
 
 .idcbis-links__header h2 span {
-  color: #ffd166;
+  color: #C4A140;
 }
 
 .idcbis-links__header p {

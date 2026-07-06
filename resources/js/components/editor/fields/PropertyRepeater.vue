@@ -4,6 +4,8 @@
       v-for="(item, index) in items"
       :key="item.id || index"
       class="editor-repeater-item space-y-2"
+      :class="{ 'editor-repeater-item--focused': isFocused(item, index) }"
+      :data-editor-focus="focusId(item, index) || undefined"
     >
       <div class="flex justify-between items-center gap-2">
         <span class="text-xs font-medium text-gray-600">{{ itemLabel }} {{ index + 1 }}</span>
@@ -38,13 +40,24 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   items: { type: Array, default: () => [] },
   itemLabel: { type: String, default: 'Elemento' },
   addLabel: { type: String, default: 'Agregar' },
+  /** Ancla activa desde el lienzo (ej. team:m01) */
+  activeFocus: { type: String, default: '' },
+  /** (item, index) => string | null */
+  getFocusId: { type: Function, default: null },
 })
 
 defineEmits(['add', 'remove', 'move'])
+
+const focusId = (item, index) => props.getFocusId?.(item, index) ?? item?.id ?? null
+
+const isFocused = (item, index) => {
+  const id = focusId(item, index)
+  return id && props.activeFocus === id
+}
 </script>
 
 <style scoped>

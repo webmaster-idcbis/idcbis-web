@@ -30,11 +30,16 @@ import IdcbisServiceDetailElement from '../components/elements/idcbis/IdcbisServ
 import IdcbisFaqElement from '../components/elements/idcbis/IdcbisFaqElement.vue'
 import IdcbisLinksGridElement from '../components/elements/idcbis/IdcbisLinksGridElement.vue'
 import IdcbisHighlightsElement from '../components/elements/idcbis/IdcbisHighlightsElement.vue'
+import IdcbisQuienesSomosElement from '../components/elements/idcbis/IdcbisQuienesSomosElement.vue'
+import IdcbisDocumentsPageElement from '../components/elements/idcbis/IdcbisDocumentsPageElement.vue'
+import IdcbisDocumentsListElement from '../components/elements/idcbis/IdcbisDocumentsListElement.vue'
+import IdcbisTeamGridElement from '../components/elements/idcbis/IdcbisTeamGridElement.vue'
 import StatsGridElement from '../components/elements/StatsGridElement.vue'
 import ProcessTimelineElement from '../components/elements/ProcessTimelineElement.vue'
 import AccordionElement from '../components/elements/AccordionElement.vue'
 import CtaBannerElement from '../components/elements/CtaBannerElement.vue'
 import DualPanelElement from '../components/elements/DualPanelElement.vue'
+import SitemapElement from '../components/elements/SitemapElement.vue'
 
 const elementComponents = {
   text: markRaw(TextElement),
@@ -68,11 +73,16 @@ const elementComponents = {
   'idcbis-faq': markRaw(IdcbisFaqElement),
   'idcbis-links': markRaw(IdcbisLinksGridElement),
   'idcbis-highlights': markRaw(IdcbisHighlightsElement),
+  'idcbis-quienes-somos': markRaw(IdcbisQuienesSomosElement),
+  'idcbis-documents-page': markRaw(IdcbisDocumentsPageElement),
+  'idcbis-documents-list': markRaw(IdcbisDocumentsListElement),
+  'idcbis-team-grid': markRaw(IdcbisTeamGridElement),
   'stats-grid': markRaw(StatsGridElement),
   'process-timeline': markRaw(ProcessTimelineElement),
   accordion: markRaw(AccordionElement),
   'cta-banner': markRaw(CtaBannerElement),
   'dual-panel': markRaw(DualPanelElement),
+  sitemap: markRaw(SitemapElement),
 }
 
 const IDCBIS_BLOCK_TYPES = [
@@ -87,6 +97,10 @@ const IDCBIS_BLOCK_TYPES = [
   'idcbis-faq',
   'idcbis-links',
   'idcbis-highlights',
+  'idcbis-quienes-somos',
+  'idcbis-documents-page',
+  'idcbis-documents-list',
+  'idcbis-team-grid',
 ]
 
 export function usePageElements() {

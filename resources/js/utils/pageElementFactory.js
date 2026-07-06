@@ -290,7 +290,7 @@ export const createElement = (type) => {
       return {
         ...baseElement,
         fullBleed: true,
-        backgroundColor: '#FFD166',
+        backgroundColor: '#C4A140',
         items: [{ value: '100', label: 'métrica', id: generateId() }],
       }
     case 'idcbis-bubbles':
@@ -360,6 +360,78 @@ export const createElement = (type) => {
         sectionHighlight: 'diferencia',
         items: [{ id: generateId(), text: 'Diferencial del área' }],
       }
+    case 'idcbis-quienes-somos':
+      return {
+        ...baseElement,
+        fullBleed: true,
+        heroTitle: 'Quiénes Somos',
+        heroSubtitle: 'Ciencia, biotecnología e innovación en salud',
+        heroEyebrow: 'Instituto IDCBIS',
+        heroImage: '/img/Quienes-Somos-l-IDCBIS-2020.png',
+        intro: ['Texto introductorio del instituto.'],
+        mission: 'Misión del IDCBIS.',
+        vision: 'Visión del IDCBIS.',
+        purpose: 'Propósito superior.',
+        principles: [{ id: generateId(), icon: '⭐', title: 'Excelencia' }],
+        director: null,
+        sections: [],
+      }
+    case 'idcbis-documents-page':
+      return {
+        ...baseElement,
+        fullBleed: true,
+        eyebrow: 'Transparencia',
+        heroTitle: 'Documentos',
+        heroSubtitle: 'Consulta los documentos publicados por sección.',
+        intro: '',
+        layout: 'sidebar',
+        documentColumns: 2,
+        showSearch: true,
+        groups: [
+          {
+            id: generateId(),
+            label: String(new Date().getFullYear()),
+            documents: [
+              { id: generateId(), title: 'Documento de ejemplo', publishedAt: '', url: '' },
+            ],
+          },
+        ],
+      }
+    case 'idcbis-documents-list':
+      return {
+        ...baseElement,
+        fullBleed: true,
+        layout: 'sidebar',
+        documentColumns: 1,
+        showSearch: true,
+        groups: [
+          {
+            id: generateId(),
+            label: String(new Date().getFullYear()),
+            documents: [
+              { id: generateId(), title: 'Documento de ejemplo', publishedAt: '', url: '' },
+            ],
+          },
+        ],
+      }
+    case 'idcbis-team-grid':
+      return {
+        ...baseElement,
+        fullBleed: true,
+        sectionTitle: 'Nuestro equipo',
+        sectionIcon: '👥',
+        members: [
+          {
+            id: generateId(),
+            name: 'Nombre del miembro',
+            role: 'Cargo',
+            email: '',
+            credentials: '',
+            photoSlug: '',
+            image: '',
+          },
+        ],
+      }
     case 'stats-grid':
       return {
         ...baseElement,
@@ -407,6 +479,15 @@ export const createElement = (type) => {
           { id: generateId(), title: 'Panel A', icon: '✓', listStyle: 'check', items: ['Item 1'] },
           { id: generateId(), title: 'Panel B', icon: '•', listStyle: 'bullet', items: ['Item 1'] },
         ],
+      }
+    case 'sitemap':
+      return {
+        ...baseElement,
+        fullBleed: true,
+        title: 'Mapa del sitio',
+        subtitle: 'Navega por todas las secciones del sitio.',
+        showHero: true,
+        showNote: true,
       }
     default:
       return baseElement

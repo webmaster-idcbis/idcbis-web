@@ -103,6 +103,10 @@
       Reproducción automática
     </label>
 
+    <p class="text-xs text-indigo-700 bg-indigo-50 border border-indigo-100 rounded-lg px-3 py-2">
+      Haz clic en un slide del lienzo para editarlo aquí.
+    </p>
+
     <div class="flex items-center justify-between pt-2 border-t border-gray-200">
       <span class="text-xs font-medium text-gray-700">Diapositivas ({{ slides.length }})</span>
       <button
@@ -117,7 +121,9 @@
     <div
       v-for="(slide, index) in slides"
       :key="slide.id || index"
+      :data-editor-focus="buildCarouselSlideFocusAnchor(slide.id || `index-${index}`)"
       class="border border-gray-200 rounded-lg p-3 space-y-3 bg-gray-50"
+      :class="{ 'ring-2 ring-[#0B4F6C]': activeFocus === buildCarouselSlideFocusAnchor(slide.id || `index-${index}`) }"
     >
       <div class="flex items-center justify-between">
         <span class="text-xs font-semibold text-gray-700">Slide {{ index + 1 }}</span>
@@ -239,12 +245,19 @@
 <script setup>
 import { computed, watch } from 'vue'
 import { createSlide } from '../../../utils/pageElementFactory'
+import { scrollToEditorFocus, buildCarouselSlideFocusAnchor } from '../../../utils/editorPartFocus'
 
 const props = defineProps({
   element: { type: Object, required: true },
+  partFocus: { type: Object, default: null },
 })
 
 const slides = computed(() => props.element.slides || [])
+const activeFocus = computed(() => props.partFocus?.anchor || '')
+
+watch(() => props.partFocus?.anchor, (anchor) => {
+  if (anchor?.startsWith('slide:')) scrollToEditorFocus(anchor)
+}, { immediate: true })
 
 const ensureSlideIds = () => {
   if (!props.element.slides) return

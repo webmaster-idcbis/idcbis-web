@@ -38,9 +38,10 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch, markRaw } from 'vue';
+import { ref, computed, onMounted, watch, markRaw, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import { useCmsStore } from '../stores/cms';
+import { scrollToTop } from '../utils/scrollToTop';
 import MainLayout from '../components/layout/MainLayout.vue';
 import PageContentRenderer from '../components/PageContentRenderer.vue';
 
@@ -117,6 +118,9 @@ const pageTheme = computed(() => {
 
 const loadPage = async () => {
   loading.value = true;
+  page.value = null;
+  scrollToTop();
+
   const slug = route.params.slug || 'inicio';
   try {
     page.value = await cmsStore.fetchPageBySlug(slug);
@@ -124,9 +128,11 @@ const loadPage = async () => {
     page.value = null;
   } finally {
     loading.value = false;
+    await nextTick();
+    scrollToTop();
   }
 };
 
 onMounted(loadPage);
-watch(() => route.params.slug, loadPage);
+watch(() => route.fullPath, loadPage);
 </script>

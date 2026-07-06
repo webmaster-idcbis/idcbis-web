@@ -1,7 +1,7 @@
 <template>
   <section
     class="idcbis-stats"
-    :style="{ backgroundColor: resolveBackgroundColor(element.backgroundColor, '#FFD166') }"
+    :style="{ backgroundColor: resolveBackgroundColor(element.backgroundColor, '#C4A140') }"
     @click.stop="$emit('click', element)"
   >
     <div class="idcbis-stats__container">
@@ -10,6 +10,8 @@
           v-for="(item, index) in items"
           :key="item.id || index"
           class="idcbis-stats__item"
+          :class="partClasses(statAnchor(item, index))"
+          @click.stop="onItemClick(item, index, $event)"
         >
           <div class="big-number">{{ item.value }}</div>
           <div class="label">{{ item.label }}</div>
@@ -22,15 +24,26 @@
 <script setup>
 import { computed } from 'vue'
 import { resolveBackgroundColor } from '../../../composables/useElementStyles'
+import { useIdcbisEditorParts } from '../../../composables/useIdcbisEditorParts'
+import { buildStatFocusAnchor } from '../../../utils/editorPartFocus'
 
 const props = defineProps({
   element: { type: Object, required: true },
   preview: { type: Boolean, default: false },
+  focusedPart: { type: String, default: null },
 })
 
-defineEmits(['click'])
+const emit = defineEmits(['click', 'focus-part'])
+const { partClasses, focusPart } = useIdcbisEditorParts(props, emit)
 
 const items = computed(() => props.element.items || [])
+
+const statAnchor = (item, index) => buildStatFocusAnchor(item.id || `index-${index}`)
+
+const onItemClick = (item, index, event) => {
+  focusPart(statAnchor(item, index), item.label || `Cifra ${index + 1}`, event)
+  if (!props.preview) emit('click', props.element)
+}
 </script>
 
 <style scoped>

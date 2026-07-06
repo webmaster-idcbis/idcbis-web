@@ -1,7 +1,11 @@
 <template>
   <section class="idcbis-services" @click.stop="$emit('click', element)">
     <div class="idcbis-services__container">
-      <div class="idcbis-services__header">
+      <div
+        class="idcbis-services__header"
+        :class="partClasses('services:header')"
+        @click.stop="focusPart('services:header', 'Título de servicios', $event)"
+      >
         <h2>
           {{ element.sectionTitle || 'Nuestros' }}
           <span>{{ element.sectionHighlight || 'servicios' }}</span>
@@ -15,7 +19,9 @@
           :key="card.id || index"
           :href="preview ? (card.url || '#') : undefined"
           class="service-card"
+          :class="partClasses(cardAnchor(card, index))"
           :style="{ backgroundColor: card.bgColor || cardBgs[index % cardBgs.length] }"
+          @click.stop="onCardClick(card, index, $event)"
         >
           <div
             class="service-card__image"
@@ -35,17 +41,27 @@
 <script setup>
 import { computed } from 'vue'
 import { IDCBIS_THEME } from '../../../config/idcbisTheme'
+import { useIdcbisEditorParts } from '../../../composables/useIdcbisEditorParts'
+import { buildServiceCardFocusAnchor } from '../../../utils/editorPartFocus'
 
 const props = defineProps({
   element: { type: Object, required: true },
   preview: { type: Boolean, default: false },
+  focusedPart: { type: String, default: null },
 })
 
-defineEmits(['click'])
+const emit = defineEmits(['click', 'focus-part'])
+const { partClasses, focusPart } = useIdcbisEditorParts(props, emit)
 
 const cardBgs = IDCBIS_THEME.cardBgs
-
 const cards = computed(() => props.element.cards || [])
+
+const cardAnchor = (card, index) => buildServiceCardFocusAnchor(card.id || `index-${index}`)
+
+const onCardClick = (card, index, event) => {
+  focusPart(cardAnchor(card, index), card.title || `Tarjeta ${index + 1}`, event)
+  if (!props.preview) emit('click', props.element)
+}
 </script>
 
 <style scoped>

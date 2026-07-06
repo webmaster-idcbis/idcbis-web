@@ -109,9 +109,9 @@ const logos = SITE_LOGOS;
 
 const fallbackMenuItems = [
   { name: 'Inicio', href: '/' },
+  { name: 'Quiénes Somos', href: '/quienes-somos' },
   { name: 'Servicios', href: '/servicios' },
   { name: 'Investigación', href: '/investigacion' },
-  { name: 'El Instituto', href: '/el-instituto' },
   { name: 'Contacto', href: '/contacto' },
 ];
 

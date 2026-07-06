@@ -13,11 +13,13 @@ export const PROPUESTA_AZUL_PAGE_META = {
 export function buildPropuestaAzulPage() {
   const heroCarousel = createElement('idcbis-hero-carousel')
   Object.assign(heroCarousel, {
+    blockLabel: 'Hero principal (carrusel)',
     fullBleed: true,
-    autoPlay: true,
+    autoPlay: false,
     interval: 5000,
-    showArrows: true,
-    showIndicators: true,
+    showArrows: false,
+    showIndicators: false,
+    backgroundImage: '/img/Banners WEB/Baner-Pagina-WEB-1920x700-HOME.jpg',
     slides: [
       createIdcbisHeroSlide({
         titleLight: 'Tú puedes',
@@ -27,36 +29,16 @@ export function buildPropuestaAzulPage() {
         button1Url: '/servicios',
         button2Text: 'Conocer servicios',
         button2Url: '/servicios',
-        image: IMG.hero,
-        imageBadge: '🔬',
-      }),
-      createIdcbisHeroSlide({
-        titleLight: 'Conoce',
-        titleBold: 'nuestros servicios',
-        subtitle: 'Atención especializada, innovación en salud y programas para transformar vidas.',
-        button1Text: 'Ver servicios',
-        button1Url: '/servicios',
-        button2Text: 'Contacto',
-        button2Url: '/contacto',
-        image: IMG.services[0],
-        imageBadge: '❤️',
-      }),
-      createIdcbisHeroSlide({
-        titleLight: 'Somos',
-        titleBold: 'IDCBIS',
-        subtitle: 'Investigación, biotecnología e innovación para Bogotá y Colombia.',
-        button1Text: 'El instituto',
-        button1Url: '/el-instituto',
-        button2Text: 'Investigación',
-        button2Url: '#investigacion',
-        image: IMG.about,
-        imageBadge: '🔬',
+        image: '',
+        imageAlt: '',
+        imageBadge: '',
       }),
     ],
   })
 
   const services = createElement('idcbis-services')
   Object.assign(services, {
+    blockLabel: 'Grid de servicios',
     fullBleed: true,
     sectionTitle: 'Nuestros',
     sectionHighlight: 'servicios',
@@ -73,8 +55,9 @@ export function buildPropuestaAzulPage() {
 
   const stats = createElement('idcbis-stats')
   Object.assign(stats, {
+    blockLabel: 'Cifras destacadas',
     fullBleed: true,
-    backgroundColor: '#FFD166',
+    backgroundColor: '#C4A140',
     items: [
       { value: '+3.000', label: 'donaciones/año' },
       { value: '150', label: 'investigadores' },
@@ -85,6 +68,7 @@ export function buildPropuestaAzulPage() {
 
   const bubbles = createElement('idcbis-bubbles')
   Object.assign(bubbles, {
+    blockLabel: 'Programas de investigación',
     fullBleed: true,
     sectionTitle: 'Programas de',
     sectionHighlight: 'investigación',
@@ -98,6 +82,7 @@ export function buildPropuestaAzulPage() {
 
   const about = createElement('idcbis-about')
   Object.assign(about, {
+    blockLabel: 'Somos IDCBIS',
     fullBleed: true,
     title: 'Somos IDCBIS',
     content: 'El Instituto Distrital de Ciencia, Biotecnología e Innovación en Salud es un centro de investigación líder en Colombia, comprometido con el avance científico y la mejora de la calidad de vida de los ciudadanos. Contamos con equipamiento de última generación, talento humano de excelencia y una trayectoria reconocida por MinCiencias. Nuestro trabajo se enfoca en tres pilares fundamentales: investigación, innovación y transferencia de conocimiento.',
@@ -107,6 +92,7 @@ export function buildPropuestaAzulPage() {
 
   const contact = createElement('idcbis-contact')
   Object.assign(contact, {
+    blockLabel: 'Contacto',
     fullBleed: true,
     items: [
       { icon: '📍', title: 'Sede', text: 'Carrera 32 #12-81, Bogotá' },

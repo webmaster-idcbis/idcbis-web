@@ -1,7 +1,11 @@
 <template>
   <section class="idcbis-bubbles" @click.stop="$emit('click', element)">
     <div class="idcbis-bubbles__container">
-      <div class="idcbis-bubbles__header">
+      <div
+        class="idcbis-bubbles__header"
+        :class="partClasses('bubbles:header')"
+        @click.stop="focusPart('bubbles:header', 'Título de investigación', $event)"
+      >
         <h2>
           {{ element.sectionTitle || 'Programas de' }}
           <span>{{ element.sectionHighlight || 'investigación' }}</span>
@@ -12,7 +16,9 @@
           v-for="(item, index) in items"
           :key="item.id || index"
           class="bubble-item"
+          :class="partClasses(bubbleAnchor(item, index))"
           :style="{ background: item.color || bubbleColors[index % bubbleColors.length] }"
+          @click.stop="onItemClick(item, index, $event)"
         >
           <h4>{{ item.title }}</h4>
           <p>{{ item.description }}</p>
@@ -25,16 +31,27 @@
 <script setup>
 import { computed } from 'vue'
 import { IDCBIS_THEME } from '../../../config/idcbisTheme'
+import { useIdcbisEditorParts } from '../../../composables/useIdcbisEditorParts'
+import { buildBubbleFocusAnchor } from '../../../utils/editorPartFocus'
 
 const props = defineProps({
   element: { type: Object, required: true },
   preview: { type: Boolean, default: false },
+  focusedPart: { type: String, default: null },
 })
 
-defineEmits(['click'])
+const emit = defineEmits(['click', 'focus-part'])
+const { partClasses, focusPart } = useIdcbisEditorParts(props, emit)
 
 const bubbleColors = IDCBIS_THEME.bubbleColors
 const items = computed(() => props.element.items || [])
+
+const bubbleAnchor = (item, index) => buildBubbleFocusAnchor(item.id || `index-${index}`)
+
+const onItemClick = (item, index, event) => {
+  focusPart(bubbleAnchor(item, index), item.title || `Programa ${index + 1}`, event)
+  if (!props.preview) emit('click', props.element)
+}
 </script>
 
 <style scoped>

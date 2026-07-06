@@ -6,6 +6,9 @@ use App\Models\Page;
 
 class PageSearchIndexer
 {
+    /** MySQL TEXT ≈ 65 535 bytes; reservamos margen UTF-8 */
+    private const SEARCH_TEXT_MAX_BYTES = 60000;
+
     private const SKIP_KEYS = [
         'id', 'type', 'href', 'url', 'image', 'og_image', 'backgroundImage',
         'background', 'icon', 'slug', 'className', 'fontFamily', 'fontSize',
@@ -28,8 +31,14 @@ class PageSearchIndexer
             $parts[] = self::extractFromArray($page->content);
         }
 
-        if (is_array($page->sections)) {
-            $parts[] = self::extractFromArray($page->sections);
+        $sectionsJson = $page->getRawOriginal('sections');
+        if (is_string($sectionsJson) && $sectionsJson !== '') {
+            $decoded = json_decode($sectionsJson, true);
+            if (is_array($decoded)) {
+                $parts[] = self::extractFromArray($decoded);
+            }
+        } elseif (is_array($sectionsJson)) {
+            $parts[] = self::extractFromArray($sectionsJson);
         }
 
         $text = implode(' ', $parts);
@@ -37,7 +46,20 @@ class PageSearchIndexer
         $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $text = preg_replace('/\s+/u', ' ', $text);
 
-        return trim(mb_substr($text, 0, 65000));
+        return self::truncateForStorage(trim($text));
+    }
+
+    public static function truncateForStorage(string $text): string
+    {
+        if ($text === '') {
+            return '';
+        }
+
+        if (strlen($text) <= self::SEARCH_TEXT_MAX_BYTES) {
+            return $text;
+        }
+
+        return mb_strcut($text, 0, self::SEARCH_TEXT_MAX_BYTES, 'UTF-8');
     }
 
     public static function excerpt(string $searchText, string $query, int $length = 180): string

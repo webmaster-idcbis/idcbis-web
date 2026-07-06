@@ -49,7 +49,14 @@ class Page extends Model
         });
 
         static::saving(function (Page $page) {
-            $page->search_text = PageSearchIndexer::buildSearchText($page);
+            try {
+                $page->search_text = PageSearchIndexer::buildSearchText($page);
+            } catch (\Throwable $e) {
+                report($e);
+                $page->search_text = PageSearchIndexer::truncateForStorage(
+                    (string) ($page->title ?? '')
+                );
+            }
         });
     }
 
@@ -63,7 +70,7 @@ class Page extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-    public function sections(): HasMany
+    public function legacySections(): HasMany
     {
         return $this->hasMany(Section::class)->orderBy('order');
     }

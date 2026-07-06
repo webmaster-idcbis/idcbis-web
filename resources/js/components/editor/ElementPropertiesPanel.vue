@@ -17,9 +17,9 @@
         @remove-child="$emit('remove-child', $event)"
       />
 
-      <CarouselProperties v-else-if="element.type === 'carousel'" :element="element" />
+      <CarouselProperties v-else-if="element.type === 'carousel'" :element="element" :part-focus="partFocus" />
 
-      <component :is="contentPanel" v-else-if="contentPanel" :element="element" />
+      <component :is="contentPanel" v-else-if="contentPanel" :element="element" :part-focus="partFocus" />
 
       <p v-else class="text-xs text-gray-500 italic">
         Sin opciones de contenido para este elemento.
@@ -84,12 +84,18 @@ import IdcbisServiceDetailContentProperties from './properties/IdcbisServiceDeta
 import IdcbisFaqContentProperties from './properties/IdcbisFaqContentProperties.vue'
 import IdcbisLinksGridContentProperties from './properties/IdcbisLinksGridContentProperties.vue'
 import IdcbisHighlightsContentProperties from './properties/IdcbisHighlightsContentProperties.vue'
+import IdcbisQuienesSomosContentProperties from './properties/IdcbisQuienesSomosContentProperties.vue'
+import IdcbisDocumentsPageContentProperties from './properties/IdcbisDocumentsPageContentProperties.vue'
+import IdcbisDocumentsListContentProperties from './properties/IdcbisDocumentsListContentProperties.vue'
+import IdcbisTeamGridContentProperties from './properties/IdcbisTeamGridContentProperties.vue'
+import SitemapContentProperties from './properties/SitemapContentProperties.vue'
 import { paletteCategories } from '../../config/pageElementPalette'
 
 const props = defineProps({
   element: { type: Object, required: true },
   parentContainer: { type: Object, default: null },
   breadcrumbs: { type: Array, default: () => [] },
+  partFocus: { type: Object, default: null },
 })
 
 defineEmits(['select-child', 'move-child', 'remove-child'])
@@ -129,6 +135,11 @@ const panels = {
   'idcbis-faq': IdcbisFaqContentProperties,
   'idcbis-links': IdcbisLinksGridContentProperties,
   'idcbis-highlights': IdcbisHighlightsContentProperties,
+  'idcbis-quienes-somos': IdcbisQuienesSomosContentProperties,
+  'idcbis-documents-page': IdcbisDocumentsPageContentProperties,
+  'idcbis-documents-list': IdcbisDocumentsListContentProperties,
+  'idcbis-team-grid': IdcbisTeamGridContentProperties,
+  sitemap: SitemapContentProperties,
 }
 
 const typeLabelMap = Object.fromEntries(
@@ -202,8 +213,11 @@ const showVisualStyle = computed(() => !['spacer', 'divider'].includes(props.ele
 .props-details summary::before {
   content: '▸';
   display: inline-block;
-  width: 0.875rem;
-  font-size: 0.625rem;
+  width: 0.75rem;
+  margin-right: 0.25rem;
+  font-size: 0.5625rem;
+  line-height: 1;
+  vertical-align: middle;
   color: #9ca3af;
   transition: transform 0.15s ease;
 }

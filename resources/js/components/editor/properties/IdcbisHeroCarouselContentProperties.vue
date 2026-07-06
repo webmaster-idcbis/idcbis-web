@@ -2,7 +2,7 @@
   <div class="space-y-3">
     <h4 class="text-sm font-semibold text-gray-900">Carrusel Hero IDCBIS</h4>
     <p class="text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded p-2">
-      Mismo diseño de la propuesta azul: texto a la izquierda, imagen orgánica a la derecha y dos botones por slide.
+      Haz clic en un slide del lienzo para editarlo aquí. Mismo diseño de la propuesta azul: texto a la izquierda, imagen orgánica a la derecha y dos botones por slide.
     </p>
 
     <div class="grid grid-cols-2 gap-2">
@@ -37,7 +37,9 @@
     <div
       v-for="(slide, index) in slides"
       :key="slide.id || index"
+      :data-editor-focus="slideAnchor(slide, index)"
       class="border rounded-lg p-3 space-y-2 bg-gray-50"
+      :class="{ 'ring-2 ring-[#0B4F6C]': activeFocus === slideAnchor(slide, index) }"
     >
       <div class="flex justify-between items-center">
         <span class="text-xs font-semibold">Slide {{ index + 1 }}</span>
@@ -60,18 +62,30 @@
       </div>
 
       <input v-model="slide.image" type="text" placeholder="/img/foto.jpg" class="field-input">
+      <input v-model="slide.imageAlt" type="text" placeholder="Texto alternativo de la imagen" class="field-input">
       <input v-model="slide.imageBadge" type="text" placeholder="Emoji decorativo (ej. 🔬)" class="field-input">
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { createIdcbisHeroSlide } from '../../../utils/pageElementFactory'
+import { scrollToEditorFocus, buildHeroSlideFocusAnchor } from '../../../utils/editorPartFocus'
 
-const props = defineProps({ element: { type: Object, required: true } })
+const props = defineProps({
+  element: { type: Object, required: true },
+  partFocus: { type: Object, default: null },
+})
 
 const slides = computed(() => props.element.slides || [])
+const activeFocus = computed(() => props.partFocus?.anchor || '')
+
+const slideAnchor = (slide, index) => buildHeroSlideFocusAnchor(slide.id || `index-${index}`)
+
+watch(() => props.partFocus?.anchor, (anchor) => {
+  if (anchor?.startsWith('slide:')) scrollToEditorFocus(anchor)
+}, { immediate: true })
 
 const addSlide = () => {
   if (!props.element.slides) props.element.slides = []

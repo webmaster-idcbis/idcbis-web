@@ -144,7 +144,7 @@ const items = computed(() => props.element.items || [])
 }
 
 .detail-block--access {
-  border-left-color: #ffd166;
+  border-left-color: #C4A140;
 }
 
 .detail-block strong {

@@ -4,33 +4,33 @@
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
 
         <div>
-          <h3 class="text-yellow-400 font-semibold text-sm uppercase tracking-wider mb-4">
+          <h3 class="text-[#C4A140] font-semibold text-sm uppercase tracking-wider mb-4">
             Información Pública
           </h3>
           <ul class="space-y-2">
-            <li v-for="item in infoPublica" :key="item.name">
-              <a
-                :href="item.href"
+            <li v-for="item in infoPublica" :key="item.href">
+              <router-link
+                :to="item.href"
                 class="text-sm text-white/80 hover:text-white transition-colors"
               >
                 {{ item.name }}
-              </a>
+              </router-link>
             </li>
           </ul>
         </div>
 
         <div>
-          <h3 class="text-yellow-400 font-semibold text-sm uppercase tracking-wider mb-4">
+          <h3 class="text-[#C4A140] font-semibold text-sm uppercase tracking-wider mb-4">
             Infórmate
           </h3>
           <ul class="space-y-2">
-            <li v-for="item in informate" :key="item.name">
-              <a
-                :href="item.href"
+            <li v-for="item in informate" :key="item.href">
+              <router-link
+                :to="item.href"
                 class="text-sm text-white/80 hover:text-white transition-colors"
               >
                 {{ item.name }}
-              </a>
+              </router-link>
             </li>
           </ul>
         </div>
@@ -62,7 +62,7 @@
         </div>
 
         <div>
-          <h3 class="text-yellow-400 font-semibold text-sm uppercase tracking-wider mb-4">
+          <h3 class="text-[#C4A140] font-semibold text-sm uppercase tracking-wider mb-4">
             Contáctenos
           </h3>
           <div class="space-y-3 text-sm text-white/80">
@@ -71,6 +71,12 @@
             <p>Teléfono: (601) 364 9624</p>
             <p>Email: contacto@idcbis.org.co</p>
           </div>
+          <router-link
+            to="/contacto"
+            class="inline-block mt-4 text-sm text-[#C4A140] hover:text-[#D9B85A]"
+          >
+            Formulario de contacto →
+          </router-link>
         </div>
       </div>
     </div>
@@ -82,9 +88,12 @@
             © Copyright Instituto Distrital de Ciencia, Biotecnología e Innovación en Salud IDCBIS 2026. Todos los derechos reservados.
           </p>
           <div class="flex items-center gap-6">
-            <a href="#" class="text-sm text-yellow-400 hover:text-yellow-300">Accesibilidad</a>
-            <a href="#" class="text-sm text-yellow-400 hover:text-yellow-300">Sitemap</a>
-            <a href="#" class="text-sm text-yellow-400 hover:text-yellow-300">Contacto de Privacidad</a>
+            <router-link to="/mapa-del-sitio" class="text-sm text-[#C4A140] hover:text-[#D9B85A]">
+              Mapa del sitio
+            </router-link>
+            <router-link to="/contacto" class="text-sm text-[#C4A140] hover:text-[#D9B85A]">
+              Contáctenos
+            </router-link>
           </div>
         </div>
       </div>
@@ -99,28 +108,23 @@ const siteLogos = SITE_LOGOS;
 const institutional = INSTITUTIONAL_LOGOS;
 
 const infoPublica = [
-  { name: 'Programa de Transparencia y Ética Pública', href: '#' },
-  { name: 'Plan anticorrupción y atención al ciudadano', href: '#' },
-  { name: 'Mapa de riesgos asociados a actos de corrupción', href: '#' },
-  { name: 'Matriz de riesgos de lavado de activos', href: '#' },
-  { name: 'Estados financieros', href: '#' },
-  { name: 'Ejecución presupuestal', href: '#' },
-  { name: 'Contratación bienes y servicios', href: '#' },
-  { name: 'Invitación abierta', href: '#' },
-  { name: 'Rendición de Cuentas', href: '#' },
-  { name: 'Mapa del sitio', href: '#' },
+  { name: 'Programa de Transparencia y Ética Pública', href: '/programa-transparencia-etica-publica' },
+  { name: 'Plan anticorrupción y atención al ciudadano', href: '/plan-anticorrupcion' },
+  { name: 'Estados financieros', href: '/estados-financieros' },
+  { name: 'Ejecución presupuestal', href: '/ejecucion-presupuestal' },
+  { name: 'Contratación bienes y servicios', href: '/contratacion-bienes-servicios' },
+  { name: 'Rendición de Cuentas', href: '/rendicion-de-cuentas' },
+  { name: 'Transparencia', href: '/transparencia' },
+  { name: 'Mapa del sitio', href: '/mapa-del-sitio' },
 ];
 
 const informate = [
-  { name: 'Trabaje con nosotros', href: '#' },
-  { name: 'Apoyo financiero', href: '#' },
-  { name: 'Noticias', href: '#' },
-  { name: 'Publicaciones científicas', href: '#' },
-  { name: 'Atención a usuarios', href: '#' },
-  { name: 'Política de protección de datos', href: '#' },
-  { name: 'Política seguridad de la información', href: '#' },
-  { name: 'Términos y condiciones', href: '#' },
-  { name: 'Información a proveedores', href: '#' },
+  { name: 'Trabaje con nosotros', href: '/trabaje-con-nosotros' },
+  { name: 'Apoyo financiero', href: '/apoyo-financiero' },
+  { name: 'Noticias', href: '/noticias' },
+  { name: 'Publicaciones científicas', href: '/publicaciones-cientificas' },
+  { name: 'Atención a usuarios', href: '/atencion-a-usuarios' },
+  { name: 'Información a proveedores', href: '/informacion-a-proveedores' },
   { name: 'Contáctenos', href: '/contacto' },
 ];
 </script>

@@ -217,14 +217,26 @@
               :class="{ 'ring-2 ring-blue-500': isSelectedOrChild(element) }"
               @click.self="selectElement(element)"
             >
+              <button
+                type="button"
+                class="absolute top-3 left-3 z-20 flex items-center gap-1.5 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide bg-[#0B4F6C] text-white rounded shadow pointer-events-auto hover:bg-[#145C7A]"
+                :title="`Seleccionar: ${elementLabel(element)}`"
+                @click.stop="selectElement(element)"
+              >
+                <span class="opacity-80">{{ index + 1 }}.</span>
+                <span>{{ elementLabel(element) }}</span>
+              </button>
+
               <component
                 :is="getComponentType(element.type)"
                 :element="element"
                 :is-selected="selectedElement?.id === element.id"
                 :selected-element-id="selectedElement?.id"
+                :focused-part="focusedPartFor(element)"
                 :preview="false"
                 @select="selectElement"
                 @click="selectElement"
+                @focus-part="onFocusPart(element, $event)"
                 @add-child="handleAddChild"
                 @delete-child="handleDeleteChild"
                 @duplicate-child="handleDuplicateChild"
@@ -259,15 +271,40 @@
       <aside class="w-80 min-h-0 bg-white border-l border-gray-200 flex flex-col shrink-0">
         <div class="px-4 py-3 border-b border-gray-200 bg-gray-50">
           <h3 class="text-sm font-semibold text-gray-900">Propiedades</h3>
-          <p v-if="selectedElement" class="text-xs text-gray-500 mt-0.5">Edita el elemento seleccionado</p>
+          <p v-if="selectedElement" class="text-xs text-gray-500 mt-0.5">
+            <template v-if="activePartFocus?.label">
+              Editando: <span class="text-blue-600 font-medium">{{ activePartFocus.label }}</span>
+            </template>
+            <template v-else>Edita el elemento seleccionado</template>
+          </p>
         </div>
 
         <div class="flex-1 overflow-y-auto p-4">
+          <div v-if="elements.length > 1" class="mb-4 pb-4 border-b border-gray-200">
+            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Estructura</p>
+            <ul class="space-y-1">
+              <li v-for="(element, index) in elements" :key="`outline-${element.id}`">
+                <button
+                  type="button"
+                  class="w-full text-left px-2 py-1.5 text-xs rounded transition-colors"
+                  :class="selectedElement?.id === element.id
+                    ? 'bg-blue-50 text-blue-700 font-medium'
+                    : 'text-gray-600 hover:bg-gray-50'"
+                  @click="selectElement(element)"
+                >
+                  <span class="text-gray-400 mr-1">{{ index + 1 }}.</span>
+                  {{ elementLabel(element) }}
+                </button>
+              </li>
+            </ul>
+          </div>
+
           <ElementPropertiesPanel
             v-if="selectedElement"
             :element="selectedElement"
             :parent-container="selectedParent"
             :breadcrumbs="selectionBreadcrumbs"
+            :part-focus="activePartFocus"
             @select-child="selectElement"
             @move-child="moveContainerChild"
             @remove-child="removeContainerChild"
@@ -381,7 +418,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, toRaw } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ArrowLeft, Save } from 'lucide-vue-next'
 
@@ -394,6 +431,8 @@ import ElementPalette from '../../components/editor/ElementPalette.vue'
 import { buildPropuestaAzulPage, PROPUESTA_AZUL_PAGE_META } from '../../config/pageTemplates/propuestaAzulIdcbis'
 import { buildServiciosPage, SERVICIOS_PAGE_META } from '../../config/pageTemplates/servicios'
 import { paletteTypeLabels } from '../../config/pageElementPalette'
+import { preparePageContentForSave } from '../../utils/preparePageContent'
+import { postPageSave } from '../../utils/pageSaveRequest'
 
 const router = useRouter()
 const route = useRoute()
@@ -411,6 +450,7 @@ const sidebarCollapsed = ref(false)
 const isDragging = ref(false)
 const saving = ref(false)
 const selectedElement = ref(null)
+const partFocus = ref(null)
 const elements = ref([])
 const showPageSettings = ref(false)
 const showSeoFields = ref(false)
@@ -438,6 +478,11 @@ const isEditing = computed(() => !!route.params.id)
 // Métodos
 const toggleSidebar = () => {
   sidebarCollapsed.value = !sidebarCollapsed.value
+}
+
+const elementLabel = (element) => {
+  if (!element) return ''
+  return element.blockLabel || paletteTypeLabels[element.type] || element.type
 }
 
 const loadPropuestaAzulTemplate = () => {
@@ -692,8 +737,29 @@ const handleDrop = (event) => {
 }
 
 // Selección
+const activePartFocus = computed(() => {
+  if (!partFocus.value || !selectedElement.value) return null
+  if (partFocus.value.elementId !== selectedElement.value.id) return null
+  return partFocus.value
+})
+
+const focusedPartFor = (element) => activePartFocus.value?.anchor ?? null
+
+const onFocusPart = (element, payload) => {
+  if (!element?.id || !payload?.anchor) return
+  selectElement(element)
+  partFocus.value = {
+    elementId: element.id,
+    anchor: payload.anchor,
+    label: payload.label || '',
+  }
+}
+
 const selectElement = (element) => {
   if (!element || typeof element !== 'object' || !element.id) return
+  if (selectedElement.value?.id !== element.id) {
+    partFocus.value = null
+  }
   selectedElement.value = element
 }
 
@@ -744,6 +810,13 @@ const duplicateElement = (element) => {
     if (el.cards?.length) {
       el.cards = el.cards.map((c) => ({ ...c, id: generateId() }))
     }
+    if (el.groups?.length) {
+      el.groups = el.groups.map((g) => ({
+        ...g,
+        id: generateId(),
+        documents: (g.documents || []).map((d) => ({ ...d, id: generateId() })),
+      }))
+    }
   }
   reassignIds(clone)
 
@@ -763,6 +836,34 @@ const moveElementInList = (direction) => {
 
 const moveElementUp = () => moveElementInList(-1)
 const moveElementDown = () => moveElementInList(1)
+
+/** Sincroniza el elemento seleccionado en el árbol antes de guardar */
+const flushSelectedElementToTree = () => {
+  if (!selectedElement.value) return
+  const ctx = findElementContext(selectedElement.value.id)
+  if (!ctx) return
+  const snapshot = JSON.parse(JSON.stringify(toRaw(selectedElement.value)))
+  ctx.list[ctx.index] = snapshot
+  selectedElement.value = ctx.list[ctx.index]
+}
+
+const contentFingerprint = (content) => JSON.stringify(content ?? [])
+
+/** Parsea JSON aunque PHP haya emitido warnings HTML antes del cuerpo */
+const parseApiJson = (raw) => {
+  if (!raw?.trim()) return {}
+  try {
+    return JSON.parse(raw)
+  } catch {
+    const start = raw.indexOf('{')
+    const end = raw.lastIndexOf('}')
+    if (start !== -1 && end > start) {
+      return JSON.parse(raw.slice(start, end + 1))
+    }
+    console.log('❌ Respuesta no JSON:', raw.slice(0, 500))
+    throw new Error('Respuesta inválida del servidor')
+  }
+}
 
 // Guardar página - VERSIÓN BASE DE DATOS CON TOKEN SANCTUM
 const savePage = async () => {
@@ -793,9 +894,14 @@ const savePage = async () => {
 
     // 3. Preparar datos para la API
     console.log('3. Preparando datos...')
+    flushSelectedElementToTree()
+
     const slug = normalizeSlug(pageForm.value.slug)
       || normalizeSlug(pageForm.value.route)
       || null
+
+    const contentPayload = preparePageContentForSave(elements.value)
+    const sentFingerprint = contentFingerprint(contentPayload)
 
     const apiData = {
       title: pageForm.value.title,
@@ -803,47 +909,59 @@ const savePage = async () => {
       meta_description: pageForm.value.metaDescription || pageForm.value.description || null,
       meta_title: pageForm.value.metaTitle || null,
       meta_keywords: pageForm.value.metaKeywords || null,
-      content: elements.value,
+      content: contentPayload,
+      sections: [],
       status: pageForm.value.status || 'draft',
       no_index: false,
     }
 
-    console.log('DATOS PARA API:', apiData)
+    console.log('DATOS PARA API (content bytes):', sentFingerprint.length)
 
-    // 4. Determinar si es creación o actualización
+    // 4. POST en edición (PUT pierde el body en muchos entornos Windows/Laragon)
     const isEditing = !!route.params.id
     const url = isEditing
-      ? `/api/pages/${route.params.id}`
+      ? `/api/pages/${route.params.id}/save`
       : '/api/pages'
-    const method = isEditing ? 'PUT' : 'POST'
 
-    console.log('4. Enviando a API:', url, method)
+    console.log('4. Enviando a API:', url)
 
-    // 5. Preparar headers con token Sanctum
-    const headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${authStore.token}`
-    }
-
-    console.log('Headers:', headers)
-
-    // 6. Llamada a la API
-    const response = await fetch(url, {
-      method: method,
-      headers: headers,
-      body: JSON.stringify(apiData)
-    })
+    const response = await postPageSave(url, apiData, authStore.token)
 
     console.log('5. Respuesta recibida:', response.status)
 
-    // 7. Procesar respuesta
-    const result = await response.json()
+    const raw = await response.text()
+    const result = parseApiJson(raw)
+
     console.log('6. Resultado:', result)
 
     if (response.ok) {
-      alert(`Página guardada: ${pageForm.value.title}`)
-      router.push('/admin/pages')
+      if (result.content_saved === false) {
+        const dbg = result.debug
+          ? `\n\nDiagnóstico:\n${JSON.stringify(result.debug, null, 2)}`
+          : ''
+        alert(
+          'Error: el servidor no recibió el contenido.'
+          + '\n\nPrueba: reinicia Laragon y ejecuta "npm run build".'
+          + dbg
+        )
+        return
+      }
+
+      const saved = result.data
+      const savedFingerprint = contentFingerprint(saved?.content)
+
+      if (savedFingerprint !== sentFingerprint) {
+        console.warn('Verificación de contenido: diferencia menor o reordenamiento JSON', {
+          sent: sentFingerprint.length,
+          saved: savedFingerprint.length,
+        })
+      }
+
+      if (saved?.id && !route.params.id) {
+        router.replace(`/admin/pages/${saved.id}/edit`)
+      }
+
+      alert(`Página guardada correctamente: ${pageForm.value.title}`)
     } else {
       console.log('❌ ERROR EN API:', result)
 
@@ -926,9 +1044,7 @@ const loadPage = async () => {
       console.log('Respuesta status:', response.status)
 
       if (response.ok) {
-        const result = await response.json()
-        console.log('Datos recibidos:', result)
-
+        const result = parseApiJson(await response.text())
         const pageData = result.data
 
         // Cargar datos del formulario
@@ -945,6 +1061,7 @@ const loadPage = async () => {
         }
 
         elements.value = normalizeLoadedElements(pageData.content || [])
+        selectedElement.value = elements.value[0] || null
 
         console.log('✅ Página cargada exitosamente')
       } else {

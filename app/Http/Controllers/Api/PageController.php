@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Page;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class PageController extends Controller
@@ -15,15 +16,17 @@ class PageController extends Controller
         $pages = Page::with('creator:id,name', 'updater:id,name')
             ->latest()
             ->get();
-        
+
         return response()->json([
-            'data' => $pages
+            'data' => $pages,
         ]);
     }
 
     public function store(Request $request)
     {
         try {
+            $this->ensureJsonPayloadMerged($request);
+
             $validated = $request->validate([
                 'title' => 'required|string|max:255',
                 'slug' => 'nullable|string|max:255|unique:pages,slug',
@@ -43,27 +46,31 @@ class PageController extends Controller
             }
 
             $validated['created_by'] = Auth::id();
-            $validated['updated_by'] = Auth::id(); // Asignar updated_by también
+            $validated['updated_by'] = Auth::id();
 
-            if ($validated['status'] === 'published') {
+            if (($validated['status'] ?? 'draft') === 'published') {
                 $validated['published_at'] = now();
             }
 
-            $page = Page::create($validated);
+            $page = new Page(collect($validated)->except(['content', 'sections'])->all());
+            $this->assignPageContentFromRequest($page, $request);
+            $page->save();
+            $page->refresh();
 
-            return response()->json([
-                'data' => $page->load('creator:id,name', 'updater:id,name'),
-                'message' => 'Página creada exitosamente'
-            ], 201);
+            return response()->json($this->buildSaveResponse(
+                $page->load('creator:id,name', 'updater:id,name'),
+                'Página creada exitosamente',
+                $request,
+            ), 201)->header('Cache-Control', 'no-store, no-cache, must-revalidate');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'message' => 'Error de validación',
-                'errors' => $e->errors()
+                'errors' => $e->errors(),
             ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error al crear la página',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -72,20 +79,20 @@ class PageController extends Controller
     {
         try {
             $page = Page::with(['creator:id,name', 'updater:id,name'])->find($id);
-            
-            if (!$page) {
+
+            if (! $page) {
                 return response()->json([
-                    'message' => 'Página no encontrada'
+                    'message' => 'Página no encontrada',
                 ], 404);
             }
-            
+
             return response()->json([
-                'data' => $page
+                'data' => $page,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error al obtener la página',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -95,26 +102,28 @@ class PageController extends Controller
         $page = Page::where('slug', $slug)
             ->where('status', 'published')
             ->firstOrFail();
-        
+
         return response()->json([
-            'data' => $page->load(['creator:id,name', 'updater:id,name'])
-        ]);
+            'data' => $page->load(['creator:id,name', 'updater:id,name']),
+        ])->header('Cache-Control', 'no-store, no-cache, must-revalidate');
     }
 
     public function update(Request $request, $id)
     {
         try {
+            $this->ensureJsonPayloadMerged($request);
+
             $page = Page::find($id);
-            
-            if (!$page) {
+
+            if (! $page) {
                 return response()->json([
-                    'message' => 'Página no encontrada'
+                    'message' => 'Página no encontrada',
                 ], 404);
             }
-            
+
             $validated = $request->validate([
                 'title' => 'sometimes|string|max:255',
-                'slug' => 'sometimes|string|max:255|unique:pages,slug,' . $page->id,
+                'slug' => 'sometimes|string|max:255|unique:pages,slug,'.$page->id,
                 'meta_description' => 'nullable|string|max:160',
                 'meta_title' => 'nullable|string|max:70',
                 'meta_keywords' => 'nullable|string|max:255',
@@ -128,31 +137,135 @@ class PageController extends Controller
 
             $validated['updated_by'] = Auth::id();
 
-            // Manejar published_at según el cambio de status
             if (isset($validated['status'])) {
                 if ($validated['status'] === 'published' && $page->status !== 'published') {
                     $validated['published_at'] = now();
                 } elseif ($validated['status'] !== 'published' && $page->status === 'published') {
-                    $validated['published_at'] = null; // Limpiar published_at si se despublica
+                    $validated['published_at'] = null;
                 }
             }
 
-            $page->update($validated);
+            $page->fill(collect($validated)->except(['content', 'sections'])->all());
+            $this->assignPageContentFromRequest($page, $request);
+            $page->save();
+            $this->forcePersistContent($page, $request);
+            $page->refresh();
 
-            return response()->json([
-                'data' => $page->load('creator:id,name', 'updater:id,name'),
-                'message' => 'Página actualizada exitosamente'
-            ]);
+            return response()->json($this->buildSaveResponse(
+                $page->load('creator:id,name', 'updater:id,name'),
+                'Página actualizada exitosamente',
+                $request,
+            ))->header('Cache-Control', 'no-store, no-cache, must-revalidate');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'message' => 'Error de validación',
-                'errors' => $e->errors()
+                'errors' => $e->errors(),
             ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error al actualizar la página',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
+        }
+    }
+
+    private function ensureJsonPayloadMerged(Request $request): void
+    {
+        if (array_key_exists('content', $request->all())) {
+            return;
+        }
+
+        $candidates = [];
+
+        if ($request->has('payload')) {
+            $candidates[] = $request->input('payload');
+        }
+
+        $raw = $GLOBALS['laravel_raw_input'] ?? '';
+        if ($raw !== '') {
+            $candidates[] = $raw;
+        }
+
+        foreach ($candidates as $rawJson) {
+            if (! is_string($rawJson) || $rawJson === '') {
+                continue;
+            }
+
+            $decoded = json_decode($rawJson, true);
+
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                $request->merge($decoded);
+                return;
+            }
+        }
+    }
+
+    private function contentWasReceived(Request $request): bool
+    {
+        return array_key_exists('content', $request->all());
+    }
+
+    private function buildSaveResponse(Page $page, string $message, Request $request): array
+    {
+        $contentSaved = $this->contentWasReceived($request);
+
+        $response = [
+            'data' => $page,
+            'message' => $message,
+            'content_saved' => $contentSaved,
+        ];
+
+        if (config('app.debug') && ! $contentSaved) {
+            $response['debug'] = [
+                'content_type' => $request->header('Content-Type'),
+                'input_keys' => array_keys($request->all()),
+                'raw_len' => strlen($GLOBALS['laravel_raw_input'] ?? ''),
+                'has_payload' => $request->has('payload'),
+                'payload_len' => $request->has('payload')
+                    ? strlen((string) $request->input('payload'))
+                    : 0,
+            ];
+        }
+
+        return $response;
+    }
+
+    private function assignPageContentFromRequest(Page $page, Request $request): void
+    {
+        if (array_key_exists('content', $request->all())) {
+            $page->content = $request->input('content');
+        }
+
+        if (array_key_exists('sections', $request->all())) {
+            $page->setAttribute('sections', $request->input('sections'));
+        }
+    }
+
+    private function forcePersistContent(Page $page, Request $request): void
+    {
+        if (! $page->id) {
+            return;
+        }
+
+        $updates = [];
+
+        if (array_key_exists('content', $request->all())) {
+            $updates['content'] = json_encode(
+                $request->input('content'),
+                JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR
+            );
+        }
+
+        if (array_key_exists('sections', $request->all())) {
+            $updates['sections'] = json_encode(
+                $request->input('sections'),
+                JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR
+            );
+        }
+
+        if ($updates !== []) {
+            $updates['updated_at'] = now();
+            DB::table('pages')->where('id', $page->id)->update($updates);
         }
     }
 
@@ -160,22 +273,22 @@ class PageController extends Controller
     {
         try {
             $page = Page::find($id);
-            
-            if (!$page) {
+
+            if (! $page) {
                 return response()->json([
-                    'message' => 'Página no encontrada'
+                    'message' => 'Página no encontrada',
                 ], 404);
             }
-            
+
             $page->delete();
 
             return response()->json([
-                'message' => 'Página eliminada exitosamente'
+                'message' => 'Página eliminada exitosamente',
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error al eliminar la página',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -184,30 +297,29 @@ class PageController extends Controller
     {
         try {
             $page = Page::find($id);
-            
-            if (!$page) {
+
+            if (! $page) {
                 return response()->json([
-                    'message' => 'Página no encontrada'
+                    'message' => 'Página no encontrada',
                 ], 404);
             }
-            
-            // Solo actualizar si no está ya publicada
+
             if ($page->status !== 'published') {
                 $page->update([
                     'status' => 'published',
                     'published_at' => now(),
-                    'updated_by' => Auth::id()
+                    'updated_by' => Auth::id(),
                 ]);
             }
 
             return response()->json([
                 'data' => $page->load('creator:id,name', 'updater:id,name'),
-                'message' => 'Página publicada exitosamente'
+                'message' => 'Página publicada exitosamente',
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error al publicar la página',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
+import { scrollToTop } from '../utils/scrollToTop';
 
 const routes = [
   {
@@ -84,7 +85,16 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    }
+    if (to.hash) {
+      return { el: to.hash, top: 80, behavior: 'smooth' };
+    }
+    return { top: 0, left: 0 };
+  },
 });
 
 router.beforeEach(async (to, from, next) => {
@@ -112,6 +122,12 @@ router.beforeEach(async (to, from, next) => {
   }
 
   next();
+});
+
+router.afterEach((to, from) => {
+  if (to.fullPath !== from.fullPath && !to.hash) {
+    scrollToTop();
+  }
 });
 
 export default router;

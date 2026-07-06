@@ -14,7 +14,7 @@
             <div class="mt-8 flex justify-center gap-4">
               <router-link 
                 to="/servicios"
-                class="px-6 py-3 bg-yellow-400 text-[#003C5F] font-semibold rounded-lg hover:bg-yellow-300 transition-colors"
+                class="px-6 py-3 bg-[#C4A140] text-[#003C5F] font-semibold rounded-lg hover:bg-[#D9B85A] transition-colors"
               >
                 Nuestros Servicios
               </router-link>

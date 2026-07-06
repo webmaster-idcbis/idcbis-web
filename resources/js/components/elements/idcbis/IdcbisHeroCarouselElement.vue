@@ -9,6 +9,12 @@
           v-for="(slide, index) in slides"
           :key="slide.id || index"
           class="idcbis-hero idcbis-hero-carousel__slide"
+          :class="[
+            partClasses(slideAnchor(slide, index)),
+            { 'idcbis-hero--with-bg': hasSlideBackground(slide) },
+          ]"
+          :style="slideBackgroundStyle(slide)"
+          @click.stop="onSlideClick(slide, index, $event)"
         >
           <div class="idcbis-hero__content">
             <div class="idcbis-hero__text">
@@ -96,18 +102,57 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { useIdcbisEditorParts } from '../../../composables/useIdcbisEditorParts'
+import { buildHeroSlideFocusAnchor } from '../../../utils/editorPartFocus'
 
 const props = defineProps({
   element: { type: Object, required: true },
   preview: { type: Boolean, default: false },
+  focusedPart: { type: String, default: null },
 })
 
-defineEmits(['click'])
+const emit = defineEmits(['click', 'focus-part'])
+
+const { partClasses, focusPart } = useIdcbisEditorParts(props, emit)
 
 const currentSlide = ref(0)
 let autoplayInterval = null
 
 const slides = computed(() => props.element.slides || [])
+
+const hasSlideBackground = (slide) => Boolean(slide.backgroundImage || props.element.backgroundImage)
+
+const slideBackgroundStyle = (slide) => {
+  const bg = slide.backgroundImage || props.element.backgroundImage
+  if (!bg) return {}
+  return {
+    background: `url("${bg}") center / cover no-repeat`,
+  }
+}
+
+const slideAnchor = (slide, index) => buildHeroSlideFocusAnchor(slide.id || `index-${index}`)
+
+const slideLabel = (slide, index) => {
+  const title = [slide.titleLight, slide.titleBold].filter(Boolean).join(' ').trim()
+  return title || `Slide ${index + 1}`
+}
+
+const onSlideClick = (slide, index, event) => {
+  goToSlide(index)
+  focusPart(slideAnchor(slide, index), slideLabel(slide, index), event)
+  if (!props.preview) {
+    emit('click', props.element)
+  }
+}
+
+const focusSlideFromAnchor = (anchor) => {
+  if (!anchor?.startsWith('slide:')) return
+  const id = anchor.slice(6)
+  const index = slides.value.findIndex((slide, i) => (slide.id || `index-${i}`) === id)
+  if (index >= 0) currentSlide.value = index
+}
+
+watch(() => props.focusedPart, focusSlideFromAnchor, { immediate: true })
 
 const trackStyles = computed(() => ({
   transform: `translateX(-${currentSlide.value * 100}%)`,
@@ -129,7 +174,7 @@ const goToSlide = (index) => {
 
 const startAutoplay = () => {
   stopAutoplay()
-  if (props.element.autoPlay !== false && slides.value.length > 1) {
+  if (props.preview && props.element.autoPlay !== false && slides.value.length > 1) {
     autoplayInterval = setInterval(nextSlide, props.element.interval || 5000)
   }
 }
@@ -175,6 +220,25 @@ onUnmounted(stopAutoplay)
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, #0b4f6c, #2c8c99);
+}
+
+.idcbis-hero--with-bg {
+  background-color: #0b4f6c;
+  min-height: clamp(320px, 36.46vw, 700px);
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.idcbis-hero--with-bg::before,
+.idcbis-hero--with-bg::after {
+  display: none;
+}
+
+.idcbis-hero--with-bg .idcbis-hero__content {
+  justify-content: flex-start;
+  width: 100%;
+  padding: 4rem 2rem 6rem;
 }
 
 .idcbis-hero::before {

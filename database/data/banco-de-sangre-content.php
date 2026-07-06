@@ -7,6 +7,7 @@ return [
     [
         'id' => 'bds_hero',
         'type' => 'carousel',
+        'blockLabel' => 'Hero carrusel',
         'content' => '',
         'fullBleed' => true,
         'variant' => 'hero-full',
@@ -49,6 +50,7 @@ return [
     [
         'id' => 'bds_stats',
         'type' => 'stats-grid',
+        'blockLabel' => 'Cifras destacadas',
         'content' => '',
         'fullBleed' => true,
         'items' => [
@@ -61,6 +63,7 @@ return [
     [
         'id' => 'bds_benefits',
         'type' => 'container',
+        'blockLabel' => 'Beneficios de donar',
         'fullBleed' => true,
         'sectionBoxed' => true,
         'maxWidth' => '1200px',
@@ -93,6 +96,7 @@ return [
     [
         'id' => 'bds_process',
         'type' => 'process-timeline',
+        'blockLabel' => 'Proceso de donación',
         'fullBleed' => true,
         'backgroundColor' => '#f0f4f8',
         'padding' => '6rem 2rem',
@@ -108,6 +112,7 @@ return [
     [
         'id' => 'bds_types',
         'type' => 'container',
+        'blockLabel' => 'Tipos de donación',
         'fullBleed' => true,
         'maxWidth' => '1200px',
         'border' => 'none',
@@ -141,6 +146,7 @@ return [
     [
         'id' => 'bds_rights',
         'type' => 'dual-panel',
+        'blockLabel' => 'Derechos y deberes',
         'fullBleed' => true,
         'title' => 'Derechos y Deberes del Donante',
         'subtitle' => 'Conoce tus derechos y responsabilidades como donante de sangre',
@@ -180,6 +186,7 @@ return [
     [
         'id' => 'bds_faq',
         'type' => 'accordion',
+        'blockLabel' => 'Preguntas frecuentes',
         'fullBleed' => true,
         'title' => 'Preguntas frecuentes',
         'subtitle' => 'Resolvemos tus dudas sobre la donación de sangre',
@@ -193,6 +200,7 @@ return [
     [
         'id' => 'bds_location',
         'type' => 'container',
+        'blockLabel' => 'Ubicación y contacto',
         'fullBleed' => true,
         'maxWidth' => '1200px',
         'border' => 'none',
@@ -223,6 +231,7 @@ return [
     [
         'id' => 'bds_cta',
         'type' => 'cta-banner',
+        'blockLabel' => 'Llamado a la acción',
         'fullBleed' => true,
         'title' => '¿Listo para ser un héroe anónimo?',
         'subtitle' => 'Tu donación puede marcar la diferencia entre la vida y la muerte para alguien. Miles de pacientes en Bogotá necesitan transfusiones cada día.',

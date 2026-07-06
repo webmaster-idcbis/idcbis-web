@@ -94,4 +94,15 @@ class SearchTest extends TestCase
         $this->assertStringContainsString('Trasplante de médula', $page->search_text);
         $this->assertStringContainsString('Servicios médicos', $page->search_text);
     }
+
+    /** @test */
+    public function search_text_is_truncated_to_fit_database_column()
+    {
+        $longLabel = str_repeat('Estados financieros período ', 4000);
+
+        $text = \App\Services\PageSearchIndexer::truncateForStorage($longLabel);
+
+        $this->assertLessThanOrEqual(60000, strlen($text));
+        $this->assertNotSame('', $text);
+    }
 }

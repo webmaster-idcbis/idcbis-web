@@ -106,7 +106,10 @@ export const useCmsStore = defineStore('cms', () => {
   const fetchPageBySlug = async (slug) => {
     loading.value = true;
     try {
-      const response = await axios.get(`/api/pages/slug/${slug}`);
+      const response = await axios.get(`/api/pages/slug/${slug}`, {
+        params: { _t: Date.now() },
+        headers: { 'Cache-Control': 'no-cache' },
+      });
       currentPage.value = response.data.data;
       return currentPage.value;
     } finally {
@@ -115,13 +118,17 @@ export const useCmsStore = defineStore('cms', () => {
   };
 
   const createPage = async (pageData) => {
-    const response = await axios.post('/api/pages', pageData);
+    const formData = new FormData();
+    formData.append('payload', JSON.stringify(pageData));
+    const response = await axios.post('/api/pages', formData);
     pages.value.push(response.data.data);
     return response.data.data;
   };
 
   const updatePage = async (id, pageData) => {
-    const response = await axios.put(`/api/pages/${id}`, pageData);
+    const formData = new FormData();
+    formData.append('payload', JSON.stringify(pageData));
+    const response = await axios.post(`/api/pages/${id}/save`, formData);
     const index = pages.value.findIndex(p => p.id === id);
     if (index !== -1) {
       pages.value[index] = response.data.data;

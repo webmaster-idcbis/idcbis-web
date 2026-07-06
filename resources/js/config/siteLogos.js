@@ -1,39 +1,47 @@
 /**
- * Rutas y tamaños de logos IDCBIS (public/images/logo/).
+ * Rutas y tamaños de logos IDCBIS (public/img/Logo IDCBIS/).
  */
+export const IDCBIS_LOGO_BASE = '/img/Logo%20IDCBIS'
+
+/** Logo a color — fondos claros o distintos al azul institucional */
+export const IDCBIS_BRAND_LOGO = `${IDCBIS_LOGO_BASE}/logo.png`
+
+/** Logo blanco — fondos azules (#005674, #008996, #003C5F) */
+export const IDCBIS_BRAND_LOGO_ON_BLUE = `${IDCBIS_LOGO_BASE}/Logo%20IDCBIS-95.png`
+
 export const SITE_LOGOS = {
   /** Menú principal — fondo azul oscuro */
   header: {
-    src: '/images/logo/logo-IDCBIS-blanco.png',
+    src: IDCBIS_BRAND_LOGO_ON_BLUE,
     alt: 'IDCBIS — Instituto Distrital de Ciencia, Biotecnología e Innovación en Salud',
     class: 'h-11 sm:h-12 md:h-14 w-auto max-w-[200px] sm:max-w-[240px] object-contain',
   },
   /** Versión compacta (sidebar colapsado, favicon en UI) */
   icon: {
-    src: '/images/logo/logo32x32.png',
+    src: IDCBIS_BRAND_LOGO,
     alt: 'IDCBIS',
     class: 'h-8 w-8 object-contain',
   },
   /** Panel admin — fondo claro */
   admin: {
-    src: '/images/logo/logo-IDCBIS.jpg',
+    src: IDCBIS_BRAND_LOGO,
     alt: 'IDCBIS',
     class: 'h-10 w-auto max-w-[180px] object-contain',
   },
   adminCompact: {
-    src: '/images/logo/logo-IDCBIS.jpg',
+    src: IDCBIS_BRAND_LOGO,
     alt: 'IDCBIS',
     class: 'h-8 w-auto max-w-[120px] object-contain',
   },
   /** Pie de página — fondo azul oscuro */
   footer: {
-    src: '/images/logo/logo-IDCBIS-blanco.png',
+    src: IDCBIS_BRAND_LOGO_ON_BLUE,
     alt: 'IDCBIS',
     class: 'w-[140px] sm:w-[160px] h-auto object-contain',
   },
-  /** Sección “Somos IDCBIS” en página de inicio */
+  /** Sección “Somos IDCBIS” en página de inicio — fondo claro */
   about: {
-    src: '/images/logo/logo-IDCBIS.jpg',
+    src: IDCBIS_BRAND_LOGO,
     alt: 'Logo IDCBIS',
     class: 'max-w-full h-auto max-h-[280px] object-contain mx-auto',
   },

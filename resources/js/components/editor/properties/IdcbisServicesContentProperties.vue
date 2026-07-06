@@ -1,7 +1,11 @@
 <template>
   <div class="space-y-3">
     <h4 class="text-sm font-semibold text-gray-900">Servicios IDCBIS</h4>
-    <div class="grid grid-cols-2 gap-2">
+    <p class="text-xs text-indigo-700 bg-indigo-50 border border-indigo-100 rounded-lg px-3 py-2">
+      Haz clic en el encabezado o en una tarjeta del lienzo para editarla aquí.
+    </p>
+
+    <div data-editor-focus="services:header" class="grid grid-cols-2 gap-2" :class="{ 'ring-2 ring-[#0B4F6C] rounded-lg p-2': activeFocus === 'services:header' }">
       <div>
         <label class="block text-xs text-gray-600 mb-1">Título sección</label>
         <input v-model="element.sectionTitle" type="text" class="field-input">
@@ -10,12 +14,19 @@
         <label class="block text-xs text-gray-600 mb-1">Palabra destacada</label>
         <input v-model="element.sectionHighlight" type="text" class="field-input">
       </div>
+      <div class="col-span-2">
+        <label class="block text-xs text-gray-600 mb-1">Subtítulo</label>
+        <input v-model="element.sectionSubtitle" type="text" class="field-input">
+      </div>
     </div>
-    <div>
-      <label class="block text-xs text-gray-600 mb-1">Subtítulo</label>
-      <input v-model="element.sectionSubtitle" type="text" class="field-input">
-    </div>
-    <div v-for="(card, i) in element.cards" :key="card.id || i" class="border rounded p-3 space-y-2 bg-gray-50">
+
+    <div
+      v-for="(card, i) in element.cards"
+      :key="card.id || i"
+      :data-editor-focus="cardAnchor(card, i)"
+      class="border rounded p-3 space-y-2 bg-gray-50"
+      :class="{ 'ring-2 ring-[#0B4F6C]': activeFocus === cardAnchor(card, i) }"
+    >
       <div class="flex justify-between items-center">
         <span class="text-xs font-medium">Tarjeta {{ i + 1 }}</span>
         <button type="button" class="text-xs text-red-600" @click="removeCard(i)">Quitar</button>
@@ -33,9 +44,21 @@
 </template>
 
 <script setup>
+import { computed, watch } from 'vue'
 import { generateId } from '../../../utils/pageElementFactory'
+import { scrollToEditorFocus, buildServiceCardFocusAnchor } from '../../../utils/editorPartFocus'
 
-const props = defineProps({ element: { type: Object, required: true } })
+const props = defineProps({
+  element: { type: Object, required: true },
+  partFocus: { type: Object, default: null },
+})
+
+const activeFocus = computed(() => props.partFocus?.anchor || '')
+const cardAnchor = (card, index) => buildServiceCardFocusAnchor(card.id || `index-${index}`)
+
+watch(() => props.partFocus?.anchor, (anchor) => {
+  if (anchor) scrollToEditorFocus(anchor)
+}, { immediate: true })
 
 const addCard = () => {
   if (!props.element.cards) props.element.cards = []

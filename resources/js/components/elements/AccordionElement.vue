@@ -151,7 +151,7 @@ const toggle = (index) => {
 }
 
 .faq-item.active .faq-answer {
-  max-height: 500px;
+  max-height: 4000px;
   padding: 0 2rem 2rem;
 }
 
@@ -159,5 +159,6 @@ const toggle = (index) => {
   margin: 0;
   color: #555;
   line-height: 1.65;
+  white-space: pre-line;
 }
 </style>

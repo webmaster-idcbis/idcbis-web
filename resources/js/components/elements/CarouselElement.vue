@@ -17,7 +17,9 @@
           v-for="(slide, index) in slides"
           :key="slide.id || index"
           class="carousel-slide"
+          :class="partClasses(slideAnchor(slide, index))"
           :style="slideStyles"
+          @click.stop="onSlideClick(slide, index, $event)"
         >
           <a
             v-if="slide.link && preview"
@@ -86,20 +88,40 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-
 import { resolveBackgroundColor } from '../../composables/useElementStyles'
+import { useIdcbisEditorParts } from '../../composables/useIdcbisEditorParts'
+import { buildCarouselSlideFocusAnchor } from '../../utils/editorPartFocus'
 
 const props = defineProps({
   element: { type: Object, required: true },
   preview: { type: Boolean, default: false },
+  focusedPart: { type: String, default: null },
 })
 
-defineEmits(['click'])
+const emit = defineEmits(['click', 'focus-part'])
+const { partClasses, focusPart } = useIdcbisEditorParts(props, emit)
 
 const currentSlide = ref(0)
 let autoplayInterval = null
 
 const slides = computed(() => props.element.slides || [])
+
+const slideAnchor = (slide, index) => buildCarouselSlideFocusAnchor(slide.id || `index-${index}`)
+
+const onSlideClick = (slide, index, event) => {
+  goToSlide(index)
+  focusPart(slideAnchor(slide, index), slide.title || `Slide ${index + 1}`, event)
+  if (!props.preview) emit('click', props.element)
+}
+
+const focusSlideFromAnchor = (anchor) => {
+  if (!anchor?.startsWith('slide:')) return
+  const id = anchor.slice(6)
+  const index = slides.value.findIndex((slide, i) => (slide.id || `index-${i}`) === id)
+  if (index >= 0) currentSlide.value = index
+}
+
+watch(() => props.focusedPart, focusSlideFromAnchor, { immediate: true })
 
 const isHeroFull = computed(() => props.element.variant === 'hero-full')
 
@@ -195,7 +217,7 @@ const goToSlide = (index) => {
 
 const startAutoplay = () => {
   stopAutoplay()
-  if (props.element.autoPlay && slides.value.length > 1) {
+  if (props.preview && props.element.autoPlay && slides.value.length > 1) {
     autoplayInterval = setInterval(nextSlide, props.element.interval || 5000)
   }
 }

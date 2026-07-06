@@ -5,6 +5,8 @@
         v-for="(item, index) in items"
         :key="item.id || index"
         class="idcbis-contact__item"
+        :class="partClasses(contactAnchor(item, index))"
+        @click.stop="onItemClick(item, index, $event)"
       >
         <h4>{{ item.icon ? `${item.icon} ` : '' }}{{ item.title }}</h4>
         <component
@@ -20,15 +22,26 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useIdcbisEditorParts } from '../../../composables/useIdcbisEditorParts'
+import { buildContactFocusAnchor } from '../../../utils/editorPartFocus'
 
 const props = defineProps({
   element: { type: Object, required: true },
   preview: { type: Boolean, default: false },
+  focusedPart: { type: String, default: null },
 })
 
-defineEmits(['click'])
+const emit = defineEmits(['click', 'focus-part'])
+const { partClasses, focusPart } = useIdcbisEditorParts(props, emit)
 
 const items = computed(() => props.element.items || [])
+
+const contactAnchor = (item, index) => buildContactFocusAnchor(item.id || `index-${index}`)
+
+const onItemClick = (item, index, event) => {
+  focusPart(contactAnchor(item, index), item.title || `Contacto ${index + 1}`, event)
+  if (!props.preview) emit('click', props.element)
+}
 </script>
 
 <style scoped>
@@ -59,7 +72,7 @@ const items = computed(() => props.element.items || [])
 .idcbis-contact__item h4 {
   font-size: 1.8rem;
   margin-bottom: 1rem;
-  color: #ffd166;
+  color: #C4A140;
 }
 
 .idcbis-contact__item p,
@@ -68,6 +81,8 @@ const items = computed(() => props.element.items || [])
   text-decoration: none;
   font-size: 1.1rem;
   margin: 0;
+  white-space: pre-line;
+  line-height: 1.6;
 }
 
 @media (max-width: 900px) {
