@@ -49,7 +49,7 @@ return [
                 'tag' => '#FUTURO',
                 'url' => '/banco-publico-sangre-cordon-umbilical',
                 'image' => '/img/Servicios%20Home/B-Cordon-1200x800.png',
-                'title' => 'Cordón umbilical',
+                'title' => 'Sangre de Cordón umbilical',
                 'description' => 'Las células del cordón son un tesoro. Ayudan a pacientes pediátricos con enfermedades graves.',
             ],
             [
@@ -57,7 +57,7 @@ return [
                 'tag' => '#REGALAVIDA',
                 'url' => '/banco-distrital-de-tejidos',
                 'image' => '/img/Servicios%20Home/BT-1200x800.png',
-                'title' => 'Tejidos',
+                'title' => 'Banco Distrital de Tejidos',
                 'description' => 'Piel, huesos, córneas... Tu donación puede devolver la vista o la movilidad a alguien.',
             ],
             [
@@ -73,7 +73,7 @@ return [
                 'tag' => '#SANGREUNICA',
                 'url' => '/darcelulas',
                 'image' => '/img/Servicios%20Home/DC-1200x800.png',
-                'title' => 'Registro de donantes',
+                'title' => 'Registro Nacional de donantes',
                 'description' => '¿Tienes sangre rara? Tu tipo puede ser clave para alguien. Inscribite.',
             ],
             [

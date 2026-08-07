@@ -1,8 +1,7 @@
 <?php
 
 /**
- * Contenido de /banco-publico-sangre-cordon-umbilical (bloques del editor).
- * Fuente: https://idcbis.org.co/banco-de-sangre-cordon-umbilical/
+ * Contenido de /banco-publico-sangre-cordon-umbilical tal como está en la base de datos (bloques del editor).
  * Sincronizado con: php artisan page:sync-data-files
  */
 
@@ -124,8 +123,8 @@ return [
                         'variant' => 'feature',
                     ],
                 ],
-                'backgroundColor' => 'transparent',
                 'justifyContent' => 'center',
+                'backgroundColor' => 'transparent',
                 'gridTemplateColumns' => 'repeat(auto-fit, minmax(min(100%, 320px), 320px))',
             ],
         ],
@@ -216,8 +215,8 @@ return [
                         'variant' => 'feature',
                     ],
                 ],
-                'backgroundColor' => 'transparent',
                 'justifyContent' => 'center',
+                'backgroundColor' => 'transparent',
                 'gridTemplateColumns' => 'repeat(auto-fit, minmax(min(100%, 300px), 300px))',
             ],
         ],
@@ -359,8 +358,8 @@ return [
                         'variant' => 'info',
                     ],
                 ],
-                'backgroundColor' => 'transparent',
                 'justifyContent' => 'center',
+                'backgroundColor' => 'transparent',
                 'gridTemplateColumns' => 'repeat(auto-fit, minmax(min(100%, 300px), 300px))',
             ],
         ],
@@ -373,8 +372,6 @@ return [
     [
         'id' => 'bscu_team',
         'type' => 'idcbis-team-grid',
-        'sectionIcon' => '👥',
-        'sectionTitle' => 'Grupo Banco de Sangre de Cordón Umbilical',
         'members' => [
             [
                 'id' => 'bscu_tm1',
@@ -423,6 +420,8 @@ return [
             ],
         ],
         'fullBleed' => true,
+        'sectionIcon' => '👥',
+        'sectionTitle' => 'Grupo Banco de Sangre de Cordón Umbilical',
     ],
     [
         'id' => 'bscu_faq',
@@ -517,8 +516,8 @@ Líder: Ana María Perdomo · amperdomo@idcbis.org.co',
                         'variant' => 'info',
                     ],
                 ],
-                'backgroundColor' => 'transparent',
                 'justifyContent' => 'center',
+                'backgroundColor' => 'transparent',
                 'gridTemplateColumns' => 'repeat(auto-fit, minmax(min(100%, 300px), 300px))',
             ],
         ],

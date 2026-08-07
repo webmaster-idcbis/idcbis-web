@@ -81,7 +81,7 @@ return [
                 'documents' => [
                     [
                         'id' => 'grupos-muj-1',
-                        'url' => '/banco-publico-sangre-cordon-umbilical',
+                        'url' => 'https://idcbis.org.co/banco-de-sangre-cordon-umbilical/',
                         'title' => 'Programa de Captación Cordial',
                         'publishedAt' => '',
                     ],
