@@ -105,8 +105,7 @@ const onCardClick = (card, index, event) => {
 
 .idcbis-services__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 380px));
-  justify-content: center;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: stretch;
   gap: 2rem;
 }
@@ -155,10 +154,11 @@ const onCardClick = (card, index, event) => {
 }
 
 .service-card h3 {
-  font-size: 2rem;
+  font-size: clamp(1.35rem, 1.1rem + 0.9vw, 2rem);
   font-weight: 700;
   margin-bottom: 0.8rem;
   color: #1b1b1b;
+  line-height: 1.2;
 }
 
 .service-card p {
@@ -181,9 +181,23 @@ const onCardClick = (card, index, event) => {
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
+  .idcbis-services__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .idcbis-services {
+    padding: 4rem 1.25rem;
+  }
+
   .idcbis-services__grid {
     grid-template-columns: 1fr;
+  }
+
+  .service-card h3 {
+    font-size: 1.5rem;
   }
 }
 </style>
