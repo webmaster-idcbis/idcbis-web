@@ -32,7 +32,7 @@ class SitemapPagesSeeder extends Seeder
         foreach ($pages as $pageData) {
             $existing = Page::withTrashed()->where('slug', $pageData['slug'])->first();
 
-            if ($existing && ! $existing->trashed() && $pageData['skip_if_exists'] ?? true) {
+            if ($existing && ! $existing->trashed() && ($pageData['skip_if_exists'] ?? true)) {
                 $skipped++;
                 continue;
             }
