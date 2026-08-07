@@ -49,7 +49,8 @@ const cardStyles = computed(() => mergeElementStyles(props.element, {
   boxShadow: props.element.boxShadow || '0 8px 24px rgba(11, 79, 108, 0.08)',
   padding: props.element.image ? '0' : (props.element.padding || '24px'),
   width: props.element.width || '100%',
-  height: props.element.height || 'auto',
+  height: props.element.height || '100%',
+  flex: '1 1 auto',
   transition: 'transform 0.2s, box-shadow 0.2s',
 }))
 

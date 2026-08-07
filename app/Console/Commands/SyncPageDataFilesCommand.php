@@ -68,6 +68,10 @@ class SyncPageDataFilesCommand extends Command
             'source' => 'https://idcbis.org.co/unidad-de-terapias-avanzadas/',
             'monolith' => false,
         ],
+        'banco-publico-sangre-cordon-umbilical' => [
+            'source' => 'https://idcbis.org.co/banco-de-sangre-cordon-umbilical/',
+            'monolith' => false,
+        ],
         'contacto' => [
             'monolith' => false,
         ],

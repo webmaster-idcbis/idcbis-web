@@ -51,15 +51,13 @@
       </div>
 
       <div 
-        :class="[
-          'grid gap-8',
-          gridClass
-        ]"
+        class="cards-section__grid gap-8"
+        :style="gridStyle"
       >
         <div 
           v-for="(card, index) in cards" 
           :key="index"
-          class="group relative overflow-hidden cursor-pointer"
+          class="group relative overflow-hidden cursor-pointer h-full"
           :class="getCardClass(card)"
           :style="getCardStyle(card)"
           @click="!isEditing && card.link ? openLink(card.link) : null"
@@ -278,15 +276,18 @@ const editableContent = ref({
 
 const cards = ref([...editableContent.value.items]);
 
-const gridClass = computed(() => {
+const gridStyle = computed(() => {
   const cols = editableContent.value.columns || 3;
-  const classes = {
-    2: 'grid-cols-1 md:grid-cols-2',
-    3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
-    4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
-    6: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-6'
+  const minByCols = { 2: 300, 3: 280, 4: 240, 6: 160 };
+  const maxByCols = { 2: 420, 3: 340, 4: 280, 6: 200 };
+  const min = minByCols[cols] || 280;
+  const max = maxByCols[cols] || 340;
+  return {
+    display: 'grid',
+    gridTemplateColumns: `repeat(auto-fit, minmax(min(100%, ${min}px), ${max}px))`,
+    justifyContent: 'center',
+    alignItems: 'stretch',
   };
-  return classes[cols] || classes[3];
 });
 
 const getCardClass = (card) => {
@@ -367,6 +368,10 @@ const removeCard = (index) => {
 </script>
 
 <style scoped>
+.cards-section__grid {
+  width: 100%;
+}
+
 .group:hover {
   transform: rotate(0deg) scale(1.02) !important;
 }

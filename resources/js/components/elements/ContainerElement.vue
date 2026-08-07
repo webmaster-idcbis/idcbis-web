@@ -65,13 +65,23 @@ const isDragOver = ref(false)
 
 const hasChildren = computed(() => (props.element.children || []).length > 0)
 
+/** Evita que filas incompletas estiren cards al 100% y permite centrarlas */
+const normalizeGridColumns = (columns) => {
+  if (!columns || typeof columns !== 'string') return columns
+  return columns.replace(
+    /minmax\(\s*([\d.]+(?:px|rem|em))\s*,\s*1fr\s*\)/gi,
+    (_, min) => `minmax(min(100%, ${min}), ${min})`
+  )
+}
+
 const containerStyles = computed(() => {
   const el = props.element
+  const isGrid = el.display === 'grid'
   const styles = {
     display: el.display || 'flex',
     flexDirection: el.flexDirection || 'column',
     flexWrap: el.flexWrap || 'nowrap',
-    justifyContent: el.justifyContent || 'flex-start',
+    justifyContent: el.justifyContent || (isGrid ? 'center' : 'flex-start'),
     alignItems: el.alignItems || 'stretch',
     gap: el.gap || '16px',
     width: el.width || '100%',
@@ -84,8 +94,9 @@ const containerStyles = computed(() => {
     boxSizing: 'border-box',
   }
 
-  if (el.display === 'grid') {
-    styles.gridTemplateColumns = el.gridTemplateColumns || 'repeat(auto-fit, minmax(200px, 1fr))'
+  if (isGrid) {
+    const rawColumns = el.gridTemplateColumns || 'repeat(auto-fit, minmax(200px, 1fr))'
+    styles.gridTemplateColumns = normalizeGridColumns(rawColumns)
   }
 
   if (el.fullBleed && props.preview) {

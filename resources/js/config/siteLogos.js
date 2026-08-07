@@ -70,6 +70,6 @@ export const INSTITUTIONAL_LOGOS = {
   govCo: {
     src: '/img/Vertical-Color-gov.png',
     alt: 'GOV.CO — Portal del Estado colombiano',
-    class: 'h-5 w-auto object-contain',
+    class: 'h-4 w-auto object-contain',
   },
 }

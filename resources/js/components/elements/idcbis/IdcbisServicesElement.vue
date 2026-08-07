@@ -105,7 +105,9 @@ const onCardClick = (card, index, event) => {
 
 .idcbis-services__grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 380px));
+  justify-content: center;
+  align-items: stretch;
   gap: 2rem;
 }
 
@@ -177,12 +179,6 @@ const onCardClick = (card, index, event) => {
   align-self: flex-start;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-@media (max-width: 900px) {
-  .idcbis-services__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 @media (max-width: 600px) {

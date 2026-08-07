@@ -1,5 +1,5 @@
 <template>
-  <section class="dual-panel" :style="sectionStyles" @click.stop="$emit('click', element)">
+  <section :id="element.id || undefined" class="dual-panel" :style="sectionStyles" @click.stop="$emit('click', element)">
     <div class="dual-panel__container">
       <div v-if="element.title || element.subtitle" class="section-header">
         <h2 v-if="element.title" class="section-title section-title--light">{{ element.title }}</h2>
@@ -81,7 +81,9 @@ const sectionStyles = computed(() => ({
 
 .dual-panel__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 480px));
+  justify-content: center;
+  align-items: stretch;
   gap: 3rem;
   margin-top: 3rem;
 }
@@ -93,6 +95,9 @@ const sectionStyles = computed(() => ({
   padding: 2.5rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: transform 0.4s ease, background 0.4s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .panel-card:hover {
@@ -116,6 +121,7 @@ const sectionStyles = computed(() => ({
   list-style: none;
   margin: 0;
   padding: 0;
+  flex: 1;
 }
 
 .panel-list li {

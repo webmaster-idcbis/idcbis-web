@@ -33,7 +33,7 @@ export default {
       label: 'Services',
       open: 'Open services menu',
       blood: 'Donate blood',
-      cord: 'Umbilical cord',
+      cord: 'Umbilical cord blood',
       tissues: 'Tissues',
       therapies: 'Advanced therapies',
       donors: 'Donor registry',

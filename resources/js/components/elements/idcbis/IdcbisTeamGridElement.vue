@@ -103,7 +103,9 @@ const onMemberClick = (member, index, event) => {
 
 .team-grid__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 280px));
+  justify-content: center;
+  align-items: stretch;
   gap: 1.5rem;
 }
 
@@ -113,6 +115,9 @@ const onMemberClick = (member, index, event) => {
   border-radius: 16px;
   overflow: hidden;
   transition: box-shadow 0.2s;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .team-card__photo-wrap { aspect-ratio: 1; overflow: hidden; background: #e8f4f8; }

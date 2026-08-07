@@ -3,7 +3,7 @@
     <!-- Barra institucional GOV.CO -->
     <div class="bg-white border-b border-gray-200">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between min-h-10 py-1 gap-3">
+        <div class="flex items-center justify-between min-h-8 py-0.5 gap-2">
           <a
             href="https://www.gov.co/home/"
             target="_blank"
@@ -18,9 +18,9 @@
             >
           </a>
 
-          <div class="flex items-center gap-3 min-w-0">
+          <div class="flex items-center gap-2 min-w-0">
             <nav
-              class="hidden md:flex items-center gap-5"
+              class="hidden md:flex items-center gap-4"
               :aria-label="t('header.institutionalNav')"
             >
               <router-link

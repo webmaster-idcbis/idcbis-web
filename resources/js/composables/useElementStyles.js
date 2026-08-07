@@ -127,8 +127,13 @@ export function getContainerChildWrapperStyles(child, container) {
     }
   }
 
-  if (display === 'grid' && child.gridColumn) {
-    styles.gridColumn = child.gridColumn
+  if (display === 'grid') {
+    // Igualar altura de cards dentro de cada fila del grid
+    styles.height = '100%'
+    styles.display = 'flex'
+    styles.flexDirection = 'column'
+    styles.minWidth = '0'
+    if (child.gridColumn) styles.gridColumn = child.gridColumn
   }
 
   if (child.alignCenter) {

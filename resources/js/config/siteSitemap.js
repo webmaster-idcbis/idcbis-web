@@ -108,6 +108,7 @@ export const PUBLISHED_SITEMAP_SLUGS = new Set([
   // Servicios
   'banco-de-sangre',
   'banco-distrital-de-tejidos',
+  'banco-publico-sangre-cordon-umbilical',
   'darcelulas',
   'unidad-de-terapias-avanzadas',
   // Transparencia y gestión

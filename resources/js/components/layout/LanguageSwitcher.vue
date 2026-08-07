@@ -74,6 +74,10 @@ const selectLocale = (code) => {
 }
 
 .language-switcher--compact .language-switcher__btn {
+  min-width: 1.75rem;
+  min-height: 1.75rem;
+  padding: 0.15rem 0.4rem;
+  font-size: 0.6875rem;
   color: #005674;
 }
 
