@@ -45,7 +45,7 @@ return [
         'cards' => [
             [
                 'id' => 'card_sangre',
-                'title' => 'Donar sangre',
+                'title' => 'Banco Distrital de Sangre',
                 'description' => 'Es rápida, segura y salva hasta 3 vidas. Necesitamos todos los grupos sanguíneos.',
                 'image' => '/img/Servicios%20Home/BS-1200x800.png',
                 'tag' => '#DONARVIDA',
@@ -73,7 +73,7 @@ return [
                 'description' => 'Tratamos enfermedades autoinmunes con células. Somos pioneros en Latinoamérica.',
                 'image' => '/img/Servicios%20Home/TE-AV-1200x800.png',
                 'tag' => '#INNOVACIÓN',
-                'url' => '/investigacion-terapias-avanzadas',
+                'url' => '/unidad-de-terapias-avanzadas',
             ],
             [
                 'id' => 'card_donantes',

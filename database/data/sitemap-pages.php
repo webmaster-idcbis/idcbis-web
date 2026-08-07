@@ -11,6 +11,7 @@ return [
     ['slug' => 'banco-distrital-de-tejidos', 'title' => 'Banco Distrital de Tejidos', 'skip_if_exists' => true],
     ['slug' => 'banco-publico-sangre-cordon-umbilical', 'title' => 'Banco Público de Sangre de Cordón Umbilical'],
     ['slug' => 'darcelulas', 'title' => 'DarCélulas', 'skip_if_exists' => true],
+    ['slug' => 'unidad-de-terapias-avanzadas', 'title' => 'Unidad de Terapias Avanzadas', 'skip_if_exists' => true],
     ['slug' => 'servicios-institucionales', 'title' => 'Servicios Institucionales'],
     ['slug' => 'investigacion', 'title' => 'Investigación IDCBIS'],
     ['slug' => 'investigacion-cientifica', 'title' => 'Investigación Científica'],

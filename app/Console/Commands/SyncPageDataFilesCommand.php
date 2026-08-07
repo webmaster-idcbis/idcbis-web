@@ -15,8 +15,13 @@ class SyncPageDataFilesCommand extends Command
 
     protected $description = 'Sincroniza database/data/* desde el contenido actual de las páginas en la BD';
 
-    /** @var array<string, array{source?: string, monolith?: bool}> */
+    /** @var array<string, array{source?: string, monolith?: bool, basename?: string}> */
     private const PAGE_REGISTRY = [
+        'inicio' => [
+            // En BD el slug es "inicio"; los archivos canónicos son propuesta-azul-*.php
+            'basename' => 'propuesta-azul',
+            'monolith' => false,
+        ],
         'ejecucion-presupuestal' => [
             'source' => 'https://idcbis.org.co/ejecucion-presupuestal/',
             'monolith' => true,
@@ -57,6 +62,10 @@ class SyncPageDataFilesCommand extends Command
         ],
         'darcelulas' => [
             'source' => 'https://idcbis.darcelulas.com.co/',
+            'monolith' => false,
+        ],
+        'unidad-de-terapias-avanzadas' => [
+            'source' => 'https://idcbis.org.co/unidad-de-terapias-avanzadas/',
             'monolith' => false,
         ],
         'contacto' => [
@@ -148,12 +157,13 @@ class SyncPageDataFilesCommand extends Command
                 continue;
             }
 
-            $contentPath = database_path("data/{$slug}-content.php");
-            $pagePath = database_path("data/{$slug}-page.php");
-            $metaPath = database_path("data/{$slug}-meta.php");
+            $basename = $config['basename'] ?? $slug;
+            $contentPath = database_path("data/{$basename}-content.php");
+            $pagePath = database_path("data/{$basename}-page.php");
+            $metaPath = database_path("data/{$basename}-meta.php");
 
             $types = implode(', ', array_map(fn ($b) => $b['type'] ?? '?', $content));
-            $this->line("→ {$slug} [{$types}]");
+            $this->line("→ {$slug} → {$basename} [{$types}]");
 
             if ($dryRun) {
                 $this->comment("  content: {$contentPath}");
@@ -194,7 +204,7 @@ class SyncPageDataFilesCommand extends Command
                 "/** Metadatos de la página /{$slug} — sincronizado desde la BD */",
             );
 
-            $this->info("✓ {$slug}: archivos actualizados");
+            $this->info("✓ {$slug}: archivos actualizados ({$basename}-*.php)");
             $updated++;
         }
 

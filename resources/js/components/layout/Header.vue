@@ -65,13 +65,14 @@
                   @mouseenter="openServicesDropdown"
                   @mouseleave="closeServicesDropdown"
                 >
-                  <router-link
-                    :to="item.href"
+                  <button
+                    type="button"
                     class="inline-flex items-center gap-1 text-sm font-medium hover:text-[#C4A140] transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A140] focus-visible:ring-offset-2 focus-visible:ring-offset-[#005674] rounded-sm"
-                    :class="{ 'text-white/90': isActive(item.href) || isServiceChildActive }"
+                    :class="{ 'text-white/90': isServiceChildActive }"
                     :aria-expanded="servicesDropdownOpen"
                     aria-haspopup="true"
                     @focus="openServicesDropdown"
+                    @click.prevent
                   >
                     {{ item.name }}
                     <ChevronDown
@@ -79,7 +80,7 @@
                       :class="{ 'rotate-180': servicesDropdownOpen }"
                       aria-hidden="true"
                     />
-                  </router-link>
+                  </button>
 
                   <div
                     v-show="servicesDropdownOpen"
@@ -160,29 +161,21 @@
       <div class="px-4 pb-3 space-y-1">
         <template v-for="item in menuItems" :key="item.href">
           <div v-if="item.children?.length">
-            <div class="flex items-stretch rounded-md overflow-hidden">
-              <router-link
-                :to="item.href"
-                class="flex-1 px-3 py-2.5 text-base font-medium hover:bg-white/10 hover:text-[#C4A140] transition-colors"
-                :class="{ 'bg-white/10': isActive(item.href) || isServiceChildActive }"
-                @click="mobileMenuOpen = false"
-              >
-                {{ item.name }}
-              </router-link>
-              <button
-                type="button"
-                class="inline-flex items-center justify-center min-w-11 min-h-11 px-3 hover:bg-white/10 hover:text-[#C4A140] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#C4A140]"
-                :aria-expanded="mobileServicesOpen"
-                :aria-label="t('header.servicesMenu.open')"
-                @click="mobileServicesOpen = !mobileServicesOpen"
-              >
-                <ChevronDown
-                  class="h-4 w-4 transition-transform duration-200"
-                  :class="{ 'rotate-180': mobileServicesOpen }"
-                  aria-hidden="true"
-                />
-              </button>
-            </div>
+            <button
+              type="button"
+              class="flex w-full items-center justify-between gap-2 px-3 py-2.5 rounded-md text-base font-medium hover:bg-white/10 hover:text-[#C4A140] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#C4A140] min-h-11"
+              :class="{ 'bg-white/10': isServiceChildActive }"
+              :aria-expanded="mobileServicesOpen"
+              :aria-label="t('header.servicesMenu.open')"
+              @click="mobileServicesOpen = !mobileServicesOpen"
+            >
+              <span>{{ item.name }}</span>
+              <ChevronDown
+                class="h-4 w-4 shrink-0 transition-transform duration-200"
+                :class="{ 'rotate-180': mobileServicesOpen }"
+                aria-hidden="true"
+              />
+            </button>
             <div v-show="mobileServicesOpen" class="ml-3 mt-1 space-y-0.5 border-l border-white/20 pl-2">
               <router-link
                 v-for="child in item.children"

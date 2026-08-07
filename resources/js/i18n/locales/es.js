@@ -32,11 +32,11 @@ export default {
     servicesMenu: {
       label: 'Servicios',
       open: 'Abrir menú de servicios',
-      blood: 'Donar sangre',
-      cord: 'Cordón umbilical',
-      tissues: 'Tejidos',
+      blood: 'Banco Distrital de Sangre',
+      cord: 'Sangre de Cordón umbilical',
+      tissues: 'Banco Distrital de Tejidos',
       therapies: 'Terapias avanzadas',
-      donors: 'Registro de donantes',
+      donors: 'Registro Nacional de donantes',
       wellness: 'Bienestar',
     },
     social: {

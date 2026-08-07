@@ -46,7 +46,7 @@ export function buildPropuestaAzulPage() {
     sectionSubtitle: 'Elige el que más se adapte a ti. Todos son importantes.',
     cards: [
       { title: 'Banco Distrital de Sangre', description: 'Es rápida, segura y salva hasta 3 vidas. Necesitamos todos los grupos sanguíneos.', image: IMG.services[0], tag: '#DONARVIDA', url: HOME_SERVICES[0].href },
-      { title: 'Sandre de Cordón umbilical', description: 'Las células del cordón son un tesoro. Ayudan a pacientes pediátricos con enfermedades graves.', image: IMG.services[1], tag: '#FUTURO', url: HOME_SERVICES[1].href },
+      { title: 'Sangre de Cordón umbilical', description: 'Las células del cordón son un tesoro. Ayudan a pacientes pediátricos con enfermedades graves.', image: IMG.services[1], tag: '#FUTURO', url: HOME_SERVICES[1].href },
       { title: 'Banco Distrital de Tejidos', description: 'Piel, huesos, córneas... Tu donación puede devolver la vista o la movilidad a alguien.', image: IMG.services[2], tag: '#REGALAVIDA', url: HOME_SERVICES[2].href },
       { title: 'Terapias avanzadas', description: 'Tratamos enfermedades autoinmunes con células. Somos pioneros en Latinoamérica.', image: IMG.services[3], tag: '#INNOVACIÓN', url: HOME_SERVICES[3].href },
       { title: 'Registro Nacional de donantes', description: '¿Tienes sangre rara? Tu tipo puede ser clave para alguien. Inscribite.', image: IMG.services[4], tag: '#SANGREUNICA', url: HOME_SERVICES[4].href },

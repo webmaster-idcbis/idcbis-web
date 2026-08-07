@@ -19,6 +19,7 @@ export const SITE_SITEMAP = [
       { title: 'Banco Distrital de Tejidos', slug: 'banco-distrital-de-tejidos', icon: '🧬' },
       { title: 'DarCélulas', slug: 'darcelulas', icon: '🧫' },
       { title: 'Banco Público de Sangre de Cordón Umbilical', slug: 'banco-publico-sangre-cordon-umbilical', icon: '👶' },
+      { title: 'Terapias Avanzadas', slug: 'unidad-de-terapias-avanzadas', icon: '🔬' },
       { title: 'Servicios Institucionales', slug: 'servicios-institucionales', icon: '🏥' },
     ],
   },
@@ -29,7 +30,7 @@ export const SITE_SITEMAP = [
     description: 'Ciencia, innovación y publicaciones',
     children: [
       { title: 'Investigación Científica', slug: 'investigacion-cientifica' },
-      { title: 'Investigación y desarrollo en Terapias Avanzadas', slug: 'investigacion-terapias-avanzadas' },
+      { title: 'Investigación y desarrollo en Terapias Avanzadas', slug: 'unidad-de-terapias-avanzadas' },
       { title: 'Investigación en Células Progenitoras Hematopoyéticas', slug: 'investigacion-celulas-progenitoras-hematopoyeticas' },
       { title: 'Investigación en medicina transfusional e inmunohematología avanzada', slug: 'investigacion-medicina-transfusional' },
       { title: 'Publicaciones Científicas', slug: 'publicaciones-cientificas' },
@@ -108,6 +109,7 @@ export const PUBLISHED_SITEMAP_SLUGS = new Set([
   'banco-de-sangre',
   'banco-distrital-de-tejidos',
   'darcelulas',
+  'unidad-de-terapias-avanzadas',
   // Transparencia y gestión
   'transparencia',
   'informacion-de-la-entidad',

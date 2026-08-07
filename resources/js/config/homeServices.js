@@ -25,7 +25,7 @@ export const HOME_SERVICES = [
     id: 'card_terapias',
     titleKey: 'header.servicesMenu.therapies',
     title: 'Terapias avanzadas',
-    href: '/investigacion-terapias-avanzadas',
+    href: '/unidad-de-terapias-avanzadas',
   },
   {
     id: 'card_donantes',
