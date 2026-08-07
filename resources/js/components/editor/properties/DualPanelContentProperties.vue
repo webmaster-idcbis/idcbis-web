@@ -18,7 +18,7 @@
     >
       <template #default="{ item }">
         <input v-model="item.title" type="text" placeholder="Título del panel" class="editor-field-input">
-        <input v-model="item.icon" type="text" placeholder="Icono" class="editor-field-input">
+        <input v-model="item.icon" type="text" placeholder="Emoji o ruta SVG" class="editor-field-input">
         <select v-model="item.listStyle" class="editor-field-input">
           <option value="check">Lista con check</option>
           <option value="bullet">Lista con viñetas</option>

@@ -1,14 +1,14 @@
 <template>
   <div ref="rootRef" class="site-search relative">
     <form class="relative" @submit.prevent="goToResults">
-      <label :for="inputId" class="sr-only">Buscar en el sitio</label>
+      <label :for="inputId" class="sr-only">{{ t('search.label') }}</label>
       <Search class="site-search__icon" aria-hidden="true" />
       <input
         :id="inputId"
         v-model="query"
         type="search"
         autocomplete="off"
-        placeholder="Buscar…"
+        :placeholder="t('search.placeholder')"
         class="site-search__input"
         @focus="openDropdown = true"
         @keydown.escape="closeDropdown"
@@ -20,7 +20,7 @@
         v-if="query"
         type="button"
         class="site-search__clear"
-        aria-label="Limpiar búsqueda"
+        :aria-label="t('search.clear')"
         @click="clearSearch"
       >
         <X class="h-4 w-4" />
@@ -31,10 +31,10 @@
       v-if="openDropdown && (loading || results.length || (query.length >= 2 && !loading))"
       class="site-search__dropdown"
     >
-      <div v-if="loading" class="site-search__status">Buscando…</div>
+      <div v-if="loading" class="site-search__status">{{ t('search.searching') }}</div>
 
       <template v-else-if="results.length">
-        <p class="site-search__summary">{{ results.length }} resultado(s)</p>
+        <p class="site-search__summary">{{ t('search.resultsCount', { count: results.length }) }}</p>
         <ul class="site-search__list">
           <li v-for="(item, index) in results.slice(0, 6)" :key="item.id">
             <router-link
@@ -50,12 +50,12 @@
           </li>
         </ul>
         <button type="button" class="site-search__view-all" @click="goToResults">
-          Ver todos los resultados
+          {{ t('search.viewAll') }}
         </button>
       </template>
 
       <div v-else-if="query.length >= 2" class="site-search__status">
-        No se encontraron resultados para “{{ query }}”.
+        {{ t('search.noResults', { query }) }}
       </div>
     </div>
   </div>
@@ -66,6 +66,7 @@ import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import { Search, X } from 'lucide-vue-next';
 import { useSearchStore } from '../../stores/search';
+import { useI18n } from '../../i18n';
 
 const props = defineProps({
   compact: { type: Boolean, default: false },
@@ -73,6 +74,7 @@ const props = defineProps({
 
 const router = useRouter();
 const searchStore = useSearchStore();
+const { t } = useI18n();
 
 const inputId = `site-search-${Math.random().toString(36).slice(2, 8)}`;
 const rootRef = ref(null);

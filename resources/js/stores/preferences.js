@@ -1,16 +1,14 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
+import { DEFAULT_LOCALE, setI18nLocale, getStoredLocale } from '../i18n';
 
 export const usePreferencesStore = defineStore('preferences', () => {
-  // State
   const theme = ref(localStorage.getItem('theme') || 'light');
-  const language = ref(localStorage.getItem('language') || 'es');
+  const language = ref(getStoredLocale() || DEFAULT_LOCALE);
   
-  // Getters
   const isDarkMode = computed(() => theme.value === 'dark');
   const currentLanguage = computed(() => language.value);
   
-  // Actions
   const toggleTheme = () => {
     theme.value = theme.value === 'light' ? 'dark' : 'light';
     localStorage.setItem('theme', theme.value);
@@ -24,8 +22,8 @@ export const usePreferencesStore = defineStore('preferences', () => {
   };
   
   const setLanguage = (newLanguage) => {
-    language.value = newLanguage;
-    localStorage.setItem('language', newLanguage);
+    const next = setI18nLocale(newLanguage);
+    language.value = next;
   };
   
   const applyTheme = () => {
@@ -37,9 +35,12 @@ export const usePreferencesStore = defineStore('preferences', () => {
     }
   };
   
-  // Initialize theme on load
   const initTheme = () => {
     applyTheme();
+  };
+
+  const initLocale = () => {
+    setLanguage(language.value);
   };
   
   return {
@@ -50,6 +51,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
     toggleTheme,
     setTheme,
     setLanguage,
-    initTheme
+    initTheme,
+    initLocale,
   };
 });

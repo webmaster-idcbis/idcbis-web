@@ -8,11 +8,11 @@ export const IDCBIS_PROPOSAL_IMAGES = {
   hero: '/img/banco-distrital-de-tejidos-01.jpg',
   about: IDCBIS_BRAND_LOGO,
   services: [
-    '/img/servicio-01-donar-sangre.jpg',
-    '/img/servicio-02-cordon.jpg',
-    '/img/servicio-03-tejidos.jpg',
-    '/img/servicio-04-terapias.jpg',
-    '/img/donantes1.png',
-    '/img/servicio-06-bienestar.jpg',
+    '/img/Servicios%20Home/BS-1200x800.png',
+    '/img/Servicios%20Home/B-Cordon-1200x800.png',
+    '/img/Servicios%20Home/BT-1200x800.png',
+    '/img/Servicios%20Home/TE-AV-1200x800.png',
+    '/img/Servicios%20Home/DC-1200x800.png',
+    '/img/Servicios%20Home/Bienestar-Charlas-Investigacion-1200x800.png',
   ],
 }

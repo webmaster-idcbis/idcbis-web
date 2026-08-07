@@ -36,6 +36,21 @@ const routes = [
         component: () => import('../views/admin/PageEditor.vue')
       },
       {
+        path: 'posts',
+        name: 'Posts',
+        component: () => import('../views/admin/Posts.vue')
+      },
+      {
+        path: 'posts/create',
+        name: 'CreatePost',
+        component: () => import('../views/admin/PostEditor.vue')
+      },
+      {
+        path: 'posts/:id/edit',
+        name: 'EditPost',
+        component: () => import('../views/admin/PostEditor.vue')
+      },
+      {
         path: 'users',
         name: 'Users',
         component: () => import('../views/admin/Users.vue')
@@ -75,6 +90,11 @@ const routes = [
   {
     path: '/inicio',
     redirect: '/',
+  },
+  {
+    path: '/noticias/:slug',
+    name: 'NewsArticle',
+    component: () => import('../views/NewsArticle.vue')
   },
   {
     path: '/:slug',
@@ -117,7 +137,7 @@ router.beforeEach(async (to, from, next) => {
     return next('/login');
   }
 
-  if (to.meta.requiresAdmin && !authStore.isAdmin) {
+  if (to.meta.requiresAdmin && !authStore.isEditor) {
     return next('/');
   }
 

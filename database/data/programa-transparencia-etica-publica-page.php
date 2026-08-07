@@ -3,19 +3,21 @@
 /**
  * Bloque idcbis-documents-page — Programa de Transparencia y Ética Pública.
  * Fuente: https://idcbis.org.co/programa-de-transparencia-y-etica-publica/
+ *
+ * Generado/sincronizado desde la base de datos con page:sync-data-files
  */
 
 $doc = static function (
     string $id,
     string $title,
-    string $publishedAt,
+    string $publishedAt = '',
     string $url = '',
 ): array {
     return compact('id', 'title', 'publishedAt', 'url');
 };
 
-return [
-    'id' => 'pte_page',
+$page = [
+    'id' => 'pte_page_page',
     'type' => 'idcbis-documents-page',
     'content' => '',
     'fullBleed' => true,
@@ -26,6 +28,7 @@ return [
     'layout' => 'sidebar',
     'documentColumns' => 2,
     'showSearch' => true,
+,
     'groups' => [
         [
             'id' => 'pte-2026',
@@ -79,3 +82,5 @@ return [
         ],
     ],
 ];
+
+return $page;

@@ -2,50 +2,24 @@
 
 namespace Database\Seeders;
 
-use App\Models\Page;
-use App\Models\User;
+use Database\Seeders\Concerns\SeedsCmsPageFromDataFiles;
 use Illuminate\Database\Seeder;
 
 class MapaDelSitioPageSeeder extends Seeder
 {
+    use SeedsCmsPageFromDataFiles;
+
     public function run(): void
     {
-        $user = User::query()->where('email', 'admin@idcbis.gov.co')->first()
-            ?? User::query()->first();
+        $page = $this->seedPageFromDataFiles('mapa-del-sitio', [
+            'title' => 'Mapa del sitio | IDCBIS',
+            'meta_title' => 'Mapa del sitio — IDCBIS',
+            'meta_description' => 'Índice de todas las secciones del sitio web del Instituto Distrital de Ciencia, Biotecnología e Innovación en Salud.',
+            'meta_keywords' => 'IDCBIS, mapa del sitio, navegación',
+        ]);
 
-        if (! $user) {
-            if ($this->command) {
-                $this->command->error('No hay usuarios. Ejecuta: php artisan db:seed --class=AdminUserSeeder');
-            }
-
-            return;
-        }
-
-        $content = require database_path('data/mapa-del-sitio-content.php');
-
-        $page = Page::withTrashed()->updateOrCreate(
-            ['slug' => 'mapa-del-sitio'],
-            [
-                'title' => 'Mapa del sitio',
-                'meta_title' => 'Mapa del sitio | IDCBIS',
-                'meta_description' => 'Índice de todas las secciones y páginas del sitio web del IDCBIS.',
-                'meta_keywords' => 'mapa del sitio, IDCBIS, navegación, secciones',
-                'content' => $content,
-                'sections' => [],
-                'status' => 'published',
-                'published_at' => now(),
-                'created_by' => $user->id,
-                'updated_by' => $user->id,
-                'deleted_at' => null,
-            ]
-        );
-
-        if ($page->trashed()) {
-            $page->restore();
-        }
-
-        if ($this->command) {
-            $this->command->info('Página creada/actualizada: /mapa-del-sitio (visible en Admin → Páginas)');
+        if ($page && $this->command) {
+            $this->command->info('Página creada/actualizada: /mapa-del-sitio');
         }
     }
 }

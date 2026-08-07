@@ -71,6 +71,22 @@
               </span>
             </router-link>
           </li>
+          <li v-if="authStore.hasPermission('posts.view')">
+            <router-link 
+              to="/admin/posts"
+              class="flex items-center p-1.5 text-white rounded-lg hover:bg-white/10 group relative text-sm"
+              :class="{ 
+                'bg-white/20': $route.path.startsWith('/admin/posts'),
+                'justify-center': sidebarCollapsed
+              }"
+            >
+              <Newspaper class="w-4 h-4" :class="sidebarCollapsed ? '' : 'mr-2'" />
+              <span v-if="!sidebarCollapsed" class="transition-opacity duration-300 text-xs">Noticias</span>
+              <span v-if="sidebarCollapsed" class="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 pointer-events-none">
+                Noticias
+              </span>
+            </router-link>
+          </li>
           <li v-if="authStore.hasPermission('users.view')">
             <router-link 
               to="/admin/users"
@@ -240,14 +256,35 @@
         <router-view />
       </main>
     </div>
+
+    <Transition
+      enter-active-class="transition ease-out duration-200"
+      enter-from-class="translate-y-2 opacity-0"
+      enter-to-class="translate-y-0 opacity-100"
+      leave-active-class="transition ease-in duration-200"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
+    >
+      <div
+        v-if="uiStore.flash"
+        class="fixed bottom-4 right-4 z-50 max-w-sm px-5 py-3 rounded-lg shadow-lg flex items-center gap-2 text-sm font-medium"
+        :class="uiStore.flash.type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'"
+        role="status"
+      >
+        <Check v-if="uiStore.flash.type === 'success'" class="w-5 h-5 shrink-0" aria-hidden="true" />
+        <X v-else class="w-5 h-5 shrink-0" aria-hidden="true" />
+        {{ uiStore.flash.message }}
+      </div>
+    </Transition>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../stores/auth';
 import { usePreferencesStore } from '../../stores/preferences';
+import { useUiStore } from '../../stores/ui';
 import { SITE_LOGOS } from '../../config/siteLogos';
 import {
   LayoutDashboard, 
@@ -264,16 +301,26 @@ import {
   UserCircle,
   Sun,
   Moon,
-  MenuIcon
+  MenuIcon,
+  Newspaper,
+  Check
 } from 'lucide-vue-next';
 
 const router = useRouter();
 const authStore = useAuthStore();
 const preferencesStore = usePreferencesStore();
+const uiStore = useUiStore();
 const sidebarOpen = ref(false);
 const sidebarCollapsed = ref(true);
 const showLanguageMenu = ref(false);
 const siteLogos = SITE_LOGOS;
+
+let flashTimer = null;
+watch(() => uiStore.flash?.id, (id) => {
+  if (!id) return;
+  clearTimeout(flashTimer);
+  flashTimer = setTimeout(() => uiStore.clearFlash(), 4000);
+});
 
 const availableLanguages = [
   { code: 'es', name: 'Español', flag: '🇪🇸' },

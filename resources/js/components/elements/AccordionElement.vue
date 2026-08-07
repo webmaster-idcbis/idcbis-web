@@ -12,12 +12,38 @@
           class="faq-item"
           :class="{ active: openIndex === index }"
         >
-          <button type="button" class="faq-question" @click.stop="toggle(index)">
+          <button
+            type="button"
+            class="faq-question"
+            :aria-expanded="openIndex === index ? 'true' : 'false'"
+            @click.stop="toggle(index)"
+          >
             <span>{{ item.question }}</span>
             <span class="faq-chevron">▼</span>
           </button>
           <div class="faq-answer">
-            <p>{{ item.answer }}</p>
+            <p v-if="item.answer" class="faq-answer__text">{{ item.answer }}</p>
+            <img
+              v-if="item.image"
+              :src="item.image"
+              :alt="item.imageAlt || item.question"
+              class="faq-answer__image"
+              @error="($event) => { $event.target.style.display = 'none' }"
+            />
+            <div v-if="item.links?.length" class="faq-links">
+              <a
+                v-for="(link, li) in item.links"
+                :key="link.id || li"
+                :href="preview ? (link.url || '#') : '#'"
+                :target="preview && link.url?.startsWith('http') ? '_blank' : undefined"
+                rel="noopener"
+                class="faq-link"
+                @click.stop="!preview && $event.preventDefault()"
+              >
+                <strong>{{ link.label }}</strong>
+                <span v-if="link.description">{{ link.description }}</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -89,7 +115,7 @@ const toggle = (index) => {
   position: absolute;
   width: 120px;
   height: 5px;
-  background: linear-gradient(to right, #d32f2f, #00acc1);
+  background: linear-gradient(to right, #0b4f6c, #2c8c99);
   bottom: -15px;
   left: 50%;
   transform: translateX(-50%);
@@ -134,7 +160,7 @@ const toggle = (index) => {
 }
 
 .faq-chevron {
-  color: #d32f2f;
+  color: #2c8c99;
   font-size: 0.75rem;
   transition: transform 0.3s ease;
   flex-shrink: 0;
@@ -151,7 +177,7 @@ const toggle = (index) => {
 }
 
 .faq-item.active .faq-answer {
-  max-height: 4000px;
+  max-height: 20000px;
   padding: 0 2rem 2rem;
 }
 
@@ -160,5 +186,60 @@ const toggle = (index) => {
   color: #555;
   line-height: 1.65;
   white-space: pre-line;
+}
+
+.faq-answer__image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 1.25rem 0;
+  border-radius: 12px;
+}
+
+.faq-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.faq-answer p + .faq-links,
+.faq-answer__image + .faq-links {
+  margin-top: 1.25rem;
+}
+
+.faq-link {
+  display: block;
+  padding: 1rem 1.25rem;
+  background: #f0f5f8;
+  border-left: 4px solid #2c8c99;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.faq-link:hover,
+.faq-link:focus-visible {
+  background: #e1f0f5;
+  transform: translateX(4px);
+}
+
+.faq-link:focus-visible {
+  outline: 2px solid #005674;
+  outline-offset: 2px;
+}
+
+.faq-link strong {
+  display: block;
+  color: #0b4f6c;
+  font-size: 1rem;
+}
+
+.faq-link span {
+  display: block;
+  margin-top: 0.25rem;
+  color: #555;
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 </style>

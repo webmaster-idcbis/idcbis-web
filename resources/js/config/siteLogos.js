@@ -66,4 +66,10 @@ export const INSTITUTIONAL_LOGOS = {
     alt: 'Ministerio de Salud',
     class: 'w-full max-w-[200px] h-auto object-contain',
   },
+  /** Barra institucional superior — fondo claro */
+  govCo: {
+    src: '/img/Vertical-Color-gov.png',
+    alt: 'GOV.CO — Portal del Estado colombiano',
+    class: 'h-5 w-auto object-contain',
+  },
 }

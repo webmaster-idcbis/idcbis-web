@@ -25,7 +25,7 @@
         >
           <div
             class="service-card__image"
-            :style="card.image ? { backgroundImage: `url(${card.image})` } : {}"
+            :style="card.image ? { backgroundImage: `url('${card.image}')` } : {}"
           />
           <div class="service-card__content">
             <h3>{{ card.title }}</h3>
@@ -130,7 +130,7 @@ const onCardClick = (card, index, event) => {
 }
 
 .service-card__image {
-  height: 180px;
+  height: 240px;
   background-size: cover;
   background-position: center;
   border-radius: 38px 18px 0 0;

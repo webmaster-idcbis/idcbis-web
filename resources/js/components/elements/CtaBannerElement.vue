@@ -12,7 +12,7 @@
           :class="btn.variant === 'outline' ? 'btn-outline' : 'btn-primary'"
           @click.stop="!preview && $event.preventDefault()"
         >
-          <span v-if="btn.icon">{{ btn.icon }}</span>
+          <ContentIcon v-if="btn.icon" :value="btn.icon" />
           {{ btn.label }}
         </a>
       </div>
@@ -23,6 +23,7 @@
 <script setup>
 import { computed } from 'vue'
 import { resolveBackground } from '../../composables/useElementStyles'
+import ContentIcon from './ContentIcon.vue'
 
 const props = defineProps({
   element: { type: Object, required: true },

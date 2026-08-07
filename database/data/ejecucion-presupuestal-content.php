@@ -1,5 +1,407 @@
 <?php
 
-return \App\Support\SplitPageContent::split([
-    require database_path('data/ejecucion-presupuestal-page.php'),
-]);
+/**
+ * Contenido de /ejecucion-presupuestal tal como está en la base de datos (bloques del editor).
+ * Sincronizado con: php artisan page:sync-data-files
+ */
+
+return [
+    [
+        'id' => 'ep_page_hero',
+        'type' => 'hero',
+        'color' => '#ffffff',
+        'title' => 'Ejecución presupuestal',
+        'content' => '',
+        'fontSize' => '16px',
+        'subtitle' => 'Información pública
+Consulta los informes mensuales de ejecución presupuestal del IDCBIS, organizados por vigencia.',
+        'fullBleed' => true,
+        'minHeight' => '280px',
+        'textAlign' => 'center',
+        'blockLabel' => 'Encabezado',
+        'backgroundColor' => 'linear-gradient(135deg, #0b4f6c 0%, #2c8c99 100%)',
+        'backgroundImage' => '',
+    ],
+    [
+        'id' => 'ep_page_list',
+        'type' => 'idcbis-documents-list',
+        'color' => '#000000',
+        'groups' => [
+            [
+                'id' => 'ep-2026',
+                'label' => '2026',
+                'documents' => [
+                    [
+                        'id' => 'ep-2026-01',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Enero',
+                        'publishedAt' => '23 Febrero 2026',
+                    ],
+                    [
+                        'id' => 'ep-2026-02',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Febrero',
+                        'publishedAt' => '17 Marzo 2026',
+                    ],
+                    [
+                        'id' => 'ep-2026-03',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Marzo',
+                        'publishedAt' => '24 Abril 2026',
+                    ],
+                    [
+                        'id' => 'ep-2026-04',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Abril',
+                        'publishedAt' => '03 Junio 2026',
+                    ],
+                    [
+                        'id' => 'ep-2026-05',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Mayo',
+                        'publishedAt' => '24 Junio 2026',
+                    ],
+                ],
+            ],
+            [
+                'id' => 'ep-2025',
+                'label' => '2025',
+                'documents' => [
+                    [
+                        'id' => 'ep-2025-01',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Enero',
+                        'publishedAt' => '13 Febrero 2025',
+                    ],
+                    [
+                        'id' => 'ep-2025-02',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Febrero',
+                        'publishedAt' => '15 Mayo 2025',
+                    ],
+                    [
+                        'id' => 'ep-2025-03',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Marzo',
+                        'publishedAt' => '15 Mayo 2025',
+                    ],
+                    [
+                        'id' => 'ep-2025-04',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Abril',
+                        'publishedAt' => '15 Mayo 2025',
+                    ],
+                    [
+                        'id' => 'ep-2025-05',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Mayo',
+                        'publishedAt' => '4 Julio 2025',
+                    ],
+                    [
+                        'id' => 'ep-2025-06',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Junio',
+                        'publishedAt' => '15 Julio 2025',
+                    ],
+                    [
+                        'id' => 'ep-2025-07',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Julio',
+                        'publishedAt' => '15 Agosto 2025',
+                    ],
+                    [
+                        'id' => 'ep-2025-08',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Agosto',
+                        'publishedAt' => '15 Septiembre 2025',
+                    ],
+                    [
+                        'id' => 'ep-2025-09',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Septiembre',
+                        'publishedAt' => '15 Octubre 2025',
+                    ],
+                    [
+                        'id' => 'ep-2025-10',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Octubre',
+                        'publishedAt' => '20 Noviembre 2025',
+                    ],
+                    [
+                        'id' => 'ep-2025-11',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Noviembre',
+                        'publishedAt' => '18 Diciembre 2025',
+                    ],
+                    [
+                        'id' => 'ep-2025-12',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Diciembre',
+                        'publishedAt' => '19 Enero 2026',
+                    ],
+                ],
+            ],
+            [
+                'id' => 'ep-2024',
+                'label' => '2024',
+                'documents' => [
+                    [
+                        'id' => 'ep-2024-01',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Enero',
+                        'publishedAt' => '12 Marzo 2024',
+                    ],
+                    [
+                        'id' => 'ep-2024-02',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Febrero',
+                        'publishedAt' => '02 Abril 2024',
+                    ],
+                    [
+                        'id' => 'ep-2024-03',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Marzo',
+                        'publishedAt' => '19 Abril 2024',
+                    ],
+                    [
+                        'id' => 'ep-2024-04',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Abril',
+                        'publishedAt' => '24 Mayo 2024',
+                    ],
+                    [
+                        'id' => 'ep-2024-05',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Mayo',
+                        'publishedAt' => '17 Junio 2024',
+                    ],
+                    [
+                        'id' => 'ep-2024-06',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Junio',
+                        'publishedAt' => '29 Julio 2024',
+                    ],
+                    [
+                        'id' => 'ep-2024-07',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Julio',
+                        'publishedAt' => '16 Agosto 2024',
+                    ],
+                    [
+                        'id' => 'ep-2024-08',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Agosto',
+                        'publishedAt' => '11 Septiembre 2024',
+                    ],
+                    [
+                        'id' => 'ep-2024-09',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Septiembre',
+                        'publishedAt' => '10 Octubre 2024',
+                    ],
+                    [
+                        'id' => 'ep-2024-10',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Octubre',
+                        'publishedAt' => '22 Noviembre 2024',
+                    ],
+                    [
+                        'id' => 'ep-2024-11',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Noviembre',
+                        'publishedAt' => '17 Diciembre 2024',
+                    ],
+                    [
+                        'id' => 'ep-2024-12',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Diciembre',
+                        'publishedAt' => '15 Enero 2025',
+                    ],
+                ],
+            ],
+            [
+                'id' => 'ep-2023',
+                'label' => '2023',
+                'documents' => [
+                    [
+                        'id' => 'ep-2023-01',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Enero',
+                        'publishedAt' => '31 Marzo 2023',
+                    ],
+                    [
+                        'id' => 'ep-2023-02',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Febrero',
+                        'publishedAt' => '31 Marzo 2023',
+                    ],
+                    [
+                        'id' => 'ep-2023-03',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Marzo',
+                        'publishedAt' => '5 Mayo 2023',
+                    ],
+                    [
+                        'id' => 'ep-2023-04',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Abril',
+                        'publishedAt' => '31 Mayo 2023',
+                    ],
+                    [
+                        'id' => 'ep-2023-05',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Mayo',
+                        'publishedAt' => '5 Julio 2023',
+                    ],
+                    [
+                        'id' => 'ep-2023-06',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Junio',
+                        'publishedAt' => '21 Julio 2023',
+                    ],
+                    [
+                        'id' => 'ep-2023-07',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Julio',
+                        'publishedAt' => '24 Agosto 2023',
+                    ],
+                    [
+                        'id' => 'ep-2023-08',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Agosto',
+                        'publishedAt' => '28 Septiembre 2023',
+                    ],
+                    [
+                        'id' => 'ep-2023-09',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Septiembre',
+                        'publishedAt' => '17 Octubre 2023',
+                    ],
+                    [
+                        'id' => 'ep-2023-10',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Octubre',
+                        'publishedAt' => '06 Diciembre 2023',
+                    ],
+                    [
+                        'id' => 'ep-2023-11',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Noviembre',
+                        'publishedAt' => '11 Enero 2024',
+                    ],
+                    [
+                        'id' => 'ep-2023-12',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Diciembre',
+                        'publishedAt' => '24 Enero 2024',
+                    ],
+                ],
+            ],
+            [
+                'id' => 'ep-2022',
+                'label' => '2022',
+                'documents' => [
+                    [
+                        'id' => 'ep-2022-01',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Enero',
+                        'publishedAt' => '23 Mayo 2022',
+                    ],
+                    [
+                        'id' => 'ep-2022-02',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Febrero',
+                        'publishedAt' => '23 Mayo 2022',
+                    ],
+                    [
+                        'id' => 'ep-2022-03',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Marzo',
+                        'publishedAt' => '23 Mayo 2022',
+                    ],
+                    [
+                        'id' => 'ep-2022-04',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Abril',
+                        'publishedAt' => '23 Mayo 2022',
+                    ],
+                    [
+                        'id' => 'ep-2022-05',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Mayo',
+                        'publishedAt' => '14 Julio 2022',
+                    ],
+                    [
+                        'id' => 'ep-2022-06',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Junio',
+                        'publishedAt' => '14 Julio 2022',
+                    ],
+                    [
+                        'id' => 'ep-2022-07',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Julio',
+                        'publishedAt' => '16 Agosto 2022',
+                    ],
+                    [
+                        'id' => 'ep-2022-08',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Agosto',
+                        'publishedAt' => '19 Septiembre 2022',
+                    ],
+                    [
+                        'id' => 'ep-2022-09',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Septiembre',
+                        'publishedAt' => '16 Enero 2023',
+                    ],
+                    [
+                        'id' => 'ep-2022-10',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Octubre',
+                        'publishedAt' => '16 Enero 2023',
+                    ],
+                    [
+                        'id' => 'ep-2022-11',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Noviembre',
+                        'publishedAt' => '16 Enero 2023',
+                    ],
+                    [
+                        'id' => 'ep-2022-12',
+                        'url' => '',
+                        'title' => 'Ejecución presupuestal – Diciembre',
+                        'publishedAt' => '16 Enero 2023',
+                    ],
+                ],
+            ],
+            [
+                'id' => 'ep-2021',
+                'label' => '2021',
+                'documents' => [],
+            ],
+            [
+                'id' => 'ep-2020',
+                'label' => '2020',
+                'documents' => [],
+            ],
+            [
+                'id' => 'ep-2019',
+                'label' => '2019',
+                'documents' => [],
+            ],
+            [
+                'id' => 'ep-2018',
+                'label' => '2018',
+                'documents' => [],
+            ],
+        ],
+        'layout' => 'sidebar',
+        'content' => '',
+        'fontSize' => '16px',
+        'fullBleed' => true,
+        'blockLabel' => 'Listado de documentos',
+        'showSearch' => true,
+        'documentColumns' => 2,
+    ],
+];

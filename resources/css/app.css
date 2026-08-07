@@ -27,6 +27,7 @@
 @layer base {
     html {
         font-family: var(--font-idcbis);
+        font-size: calc(100% * var(--a11y-font-scale, 1));
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
@@ -59,4 +60,51 @@
     button, input, select, textarea {
         font-family: inherit;
     }
+}
+
+/* Preferencias de accesibilidad (menú flotante público) */
+#a11y-content.a11y-grayscale {
+    filter: grayscale(1);
+}
+
+#a11y-content.a11y-contrast {
+    filter: contrast(1.75);
+}
+
+#a11y-content.a11y-grayscale.a11y-contrast {
+    filter: grayscale(1) contrast(1.75);
+}
+
+#a11y-content.a11y-high-contrast,
+#a11y-content.a11y-high-contrast *:not(img):not(svg):not(video):not(iframe):not(canvas) {
+    background-color: #000 !important;
+    color: #ff0 !important;
+    border-color: #ff0 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+#a11y-content.a11y-high-contrast img,
+#a11y-content.a11y-high-contrast video,
+#a11y-content.a11y-high-contrast svg,
+#a11y-content.a11y-high-contrast canvas {
+    filter: grayscale(1) contrast(1.25);
+}
+
+#a11y-content.a11y-high-contrast a,
+#a11y-content.a11y-high-contrast a * {
+    color: #0ff !important;
+    text-decoration: underline !important;
+}
+
+#a11y-content.a11y-high-contrast button,
+#a11y-content.a11y-high-contrast [role='button'] {
+    background-color: #000 !important;
+    color: #ff0 !important;
+    border: 1px solid #ff0 !important;
+}
+
+html.a11y-underline-links a {
+    text-decoration: underline !important;
+    text-underline-offset: 0.15em;
 }

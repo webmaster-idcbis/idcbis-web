@@ -34,6 +34,8 @@ import IdcbisQuienesSomosElement from '../components/elements/idcbis/IdcbisQuien
 import IdcbisDocumentsPageElement from '../components/elements/idcbis/IdcbisDocumentsPageElement.vue'
 import IdcbisDocumentsListElement from '../components/elements/idcbis/IdcbisDocumentsListElement.vue'
 import IdcbisTeamGridElement from '../components/elements/idcbis/IdcbisTeamGridElement.vue'
+import IdcbisNewsListElement from '../components/elements/idcbis/IdcbisNewsListElement.vue'
+import IdcbisNewsCarouselElement from '../components/elements/idcbis/IdcbisNewsCarouselElement.vue'
 import StatsGridElement from '../components/elements/StatsGridElement.vue'
 import ProcessTimelineElement from '../components/elements/ProcessTimelineElement.vue'
 import AccordionElement from '../components/elements/AccordionElement.vue'
@@ -77,6 +79,8 @@ const elementComponents = {
   'idcbis-documents-page': markRaw(IdcbisDocumentsPageElement),
   'idcbis-documents-list': markRaw(IdcbisDocumentsListElement),
   'idcbis-team-grid': markRaw(IdcbisTeamGridElement),
+  'idcbis-news-list': markRaw(IdcbisNewsListElement),
+  'idcbis-news-carousel': markRaw(IdcbisNewsCarouselElement),
   'stats-grid': markRaw(StatsGridElement),
   'process-timeline': markRaw(ProcessTimelineElement),
   accordion: markRaw(AccordionElement),
@@ -101,6 +105,8 @@ const IDCBIS_BLOCK_TYPES = [
   'idcbis-documents-page',
   'idcbis-documents-list',
   'idcbis-team-grid',
+  'idcbis-news-list',
+  'idcbis-news-carousel',
 ]
 
 export function usePageElements() {

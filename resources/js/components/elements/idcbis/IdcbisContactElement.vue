@@ -8,7 +8,10 @@
         :class="partClasses(contactAnchor(item, index))"
         @click.stop="onItemClick(item, index, $event)"
       >
-        <h4>{{ item.icon ? `${item.icon} ` : '' }}{{ item.title }}</h4>
+        <h4>
+          <ContentIcon v-if="item.icon" :value="item.icon" />
+          <span>{{ item.title }}</span>
+        </h4>
         <component
           :is="item.link && preview ? 'a' : 'p'"
           :href="item.link && preview ? item.link : undefined"
@@ -24,6 +27,7 @@
 import { computed } from 'vue'
 import { useIdcbisEditorParts } from '../../../composables/useIdcbisEditorParts'
 import { buildContactFocusAnchor } from '../../../utils/editorPartFocus'
+import ContentIcon from '../ContentIcon.vue'
 
 const props = defineProps({
   element: { type: Object, required: true },
@@ -70,6 +74,10 @@ const onItemClick = (item, index, event) => {
 }
 
 .idcbis-contact__item h4 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
   font-size: 1.8rem;
   margin-bottom: 1rem;
   color: #C4A140;

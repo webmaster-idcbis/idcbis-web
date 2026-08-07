@@ -20,6 +20,13 @@ class RolesAndPermissionsSeeder extends Seeder
             'pages.delete',
             'pages.publish',
             
+            // Posts
+            'posts.view',
+            'posts.create',
+            'posts.edit',
+            'posts.delete',
+            'posts.publish',
+            
             // Users
             'users.view',
             'users.create',
@@ -54,10 +61,15 @@ class RolesAndPermissionsSeeder extends Seeder
             'pages.create',
             'pages.edit',
             'pages.publish',
+            'posts.view',
+            'posts.create',
+            'posts.edit',
+            'posts.publish',
         ]);
 
         $viewerRole->syncPermissions([
             'pages.view',
+            'posts.view',
         ]);
 
         // Crear usuario admin por defecto

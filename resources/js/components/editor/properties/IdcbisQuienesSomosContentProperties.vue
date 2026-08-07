@@ -91,7 +91,7 @@
       >
         <template #default="{ item }">
           <div class="grid grid-cols-[3rem_1fr] gap-2">
-            <input v-model="item.icon" type="text" class="editor-field-input text-center" placeholder="⭐" title="Icono emoji">
+            <input v-model="item.icon" type="text" class="editor-field-input text-center" placeholder="Emoji o ruta SVG" title="Icono">
             <input v-model="item.title" type="text" class="editor-field-input" placeholder="Nombre del principio">
           </div>
         </template>
@@ -152,7 +152,7 @@
       >
         <template #default="{ item: section }">
           <div class="grid grid-cols-[3rem_1fr] gap-2">
-            <input v-model="section.icon" type="text" class="editor-field-input text-center" placeholder="📄">
+            <input v-model="section.icon" type="text" class="editor-field-input text-center" placeholder="Emoji o ruta SVG">
             <input v-model="section.title" type="text" class="editor-field-input" placeholder="Título de la sección">
           </div>
           <div>
@@ -220,7 +220,7 @@
             >
               <template #default="{ item: pol }">
                 <div class="grid grid-cols-[3rem_1fr] gap-2">
-                  <input v-model="pol.icon" type="text" class="editor-field-input text-center" placeholder="📋">
+                  <input v-model="pol.icon" type="text" class="editor-field-input text-center" placeholder="Emoji o ruta SVG">
                   <input v-model="pol.title" type="text" placeholder="Título" class="editor-field-input">
                 </div>
                 <input v-model="pol.description" type="text" placeholder="Descripción breve" class="editor-field-input">
@@ -241,7 +241,7 @@
             >
               <template #default="{ item: block }">
                 <div class="grid grid-cols-[3rem_1fr] gap-2">
-                  <input v-model="block.icon" type="text" class="editor-field-input text-center" placeholder="📍">
+                  <input v-model="block.icon" type="text" class="editor-field-input text-center" placeholder="Emoji o ruta SVG">
                   <input v-model="block.title" type="text" placeholder="Título" class="editor-field-input">
                 </div>
                 <textarea v-model="block.text" rows="3" placeholder="Texto (puede incluir saltos de línea)" class="editor-field-input" />

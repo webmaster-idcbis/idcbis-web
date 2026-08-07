@@ -35,7 +35,7 @@
           :class="partClasses('mission')"
           @click.stop="focusPart('mission', 'Misión')"
         >
-          <div class="qs-mv-card__icon">🎯</div>
+          <ContentIcon value="/img/Iconos/mision.svg" class="qs-mv-card__icon" />
           <h2>Misión</h2>
           <p>{{ element.mission }}</p>
         </article>
@@ -44,7 +44,7 @@
           :class="partClasses('vision')"
           @click.stop="focusPart('vision', 'Visión 2030')"
         >
-          <div class="qs-mv-card__icon">🔭</div>
+          <ContentIcon value="/img/Iconos/vision.svg" class="qs-mv-card__icon" />
           <h2>Visión 2030</h2>
           <p>{{ element.vision }}</p>
         </article>
@@ -75,7 +75,7 @@
             :class="partClasses(buildPrincipleFocusAnchor(item.id || index))"
             @click.stop="focusPart(buildPrincipleFocusAnchor(item.id || index), item.title)"
           >
-            <span class="qs-principle__icon" aria-hidden="true">{{ item.icon }}</span>
+            <ContentIcon :value="item.icon" class="qs-principle__icon" />
             <span class="qs-principle__label">{{ item.title }}</span>
           </li>
         </ul>
@@ -133,7 +133,7 @@
               :aria-expanded="openIndex === index"
               @click.stop="onSectionTrigger(index, section)"
             >
-              <span class="qs-accordion__trigger-icon" aria-hidden="true">{{ section.icon || '📄' }}</span>
+              <ContentIcon :value="sectionIcon(section)" class="qs-accordion__trigger-icon" />
               <span class="qs-accordion__trigger-text">{{ section.title }}</span>
               <ChevronDown class="qs-accordion__chevron" aria-hidden="true" />
             </button>
@@ -191,7 +191,7 @@
                       class="qs-policy-card"
                       :target="preview && pol.url?.startsWith('http') ? '_blank' : undefined"
                     >
-                      <span class="qs-policy-card__icon">{{ pol.icon || '📋' }}</span>
+                      <ContentIcon :value="pol.icon || '📋'" class="qs-policy-card__icon" />
                       <div>
                         <strong>{{ pol.title }}</strong>
                         <p v-if="pol.description">{{ pol.description }}</p>
@@ -203,7 +203,7 @@
                 <!-- Contacto / horarios -->
                 <div v-else-if="section.layout === 'contact'" class="qs-contact-grid">
                   <div v-for="(block, ci) in section.items" :key="ci" class="qs-contact-card">
-                    <span class="qs-contact-card__icon">{{ block.icon }}</span>
+                    <ContentIcon :value="block.icon" class="qs-contact-card__icon" />
                     <h3>{{ block.title }}</h3>
                     <p>{{ block.text }}</p>
                   </div>
@@ -221,6 +221,7 @@
 import { computed, ref, watch } from 'vue'
 import { ChevronDown } from 'lucide-vue-next'
 import { teamPhotoUrl, avatarFallbackUrl } from '../../../config/idcbisTeamPhotos'
+import ContentIcon from '../ContentIcon.vue'
 import {
   buildIntroFocusAnchor,
   buildPrincipleFocusAnchor,
@@ -242,6 +243,16 @@ const introParagraphs = computed(() => props.element.intro || [])
 const principles = computed(() => props.element.principles || [])
 const director = computed(() => props.element.director || null)
 const sections = computed(() => props.element.sections || [])
+
+const sectionIcons = {
+  list: '/img/Iconos/Funciones IDCBIS.svg',
+  founders: '/img/Iconos/miembros fundadores.svg',
+  team: '/img/Iconos/gestores lideres.svg',
+  policies: '/img/Iconos/politicas y lineamientos.svg',
+  contact: '/img/Iconos/horario y contacto.svg',
+}
+
+const sectionIcon = (section) => sectionIcons[section.layout] || section.icon || '📄'
 
 const partClasses = (anchor) => {
   if (props.preview) return {}

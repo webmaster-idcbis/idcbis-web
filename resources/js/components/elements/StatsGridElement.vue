@@ -6,7 +6,7 @@
         :key="item.id || index"
         class="stat-card"
       >
-        <div v-if="item.icon" class="stat-card__icon">{{ item.icon }}</div>
+        <ContentIcon v-if="item.icon" :value="item.icon" class="stat-card__icon" />
         <span class="stat-card__number">{{ item.value }}</span>
         <span class="stat-card__label">{{ item.label }}</span>
       </div>
@@ -17,6 +17,7 @@
 <script setup>
 import { computed } from 'vue'
 import { mergeElementStyles } from '../../composables/useElementStyles'
+import ContentIcon from './ContentIcon.vue'
 
 const props = defineProps({
   element: { type: Object, required: true },
@@ -63,6 +64,7 @@ const sectionStyles = computed(() => mergeElementStyles(props.element))
 }
 
 .stat-card__icon {
+  display: inline-block;
   font-size: 2.5rem;
   margin-bottom: 1.2rem;
   line-height: 1;

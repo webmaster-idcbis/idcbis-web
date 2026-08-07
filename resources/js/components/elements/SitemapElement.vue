@@ -45,7 +45,7 @@
           class="sitemap__anchor"
           @click="scrollTo(anchor.id)"
         >
-          <span aria-hidden="true">{{ anchor.icon }}</span>
+          <ContentIcon :value="anchor.icon" />
           {{ anchor.label }}
         </button>
       </div>
@@ -69,7 +69,7 @@
           class="sitemap__card"
         >
           <div class="sitemap__card-head">
-            <span class="sitemap__card-icon" aria-hidden="true">{{ section.icon || '📄' }}</span>
+            <ContentIcon :value="section.icon || '📄'" class="sitemap__card-icon" />
             <div class="sitemap__card-head-text">
               <SitemapLink
                 :slug="section.slug"
@@ -97,8 +97,13 @@
                 class="sitemap__child-link"
                 @navigate="onLinkClick"
               >
-                <span v-if="child.icon" class="sitemap__child-icon" aria-hidden="true">{{ child.icon }}</span>
+                <ContentIcon v-if="child.icon" :value="child.icon" class="sitemap__child-icon" />
                 <span class="sitemap__child-label">{{ child.title }}</span>
+                <span
+                  class="sitemap__quick-dot"
+                  :class="isPublished(child.slug) ? 'sitemap__quick-dot--live' : ''"
+                  :title="isPublished(child.slug) ? 'Disponible' : 'En preparación'"
+                />
                 <ChevronRight class="sitemap__child-arrow" aria-hidden="true" />
               </SitemapLink>
             </li>
@@ -114,7 +119,7 @@
         class="sitemap__group"
       >
         <div class="sitemap__group-head">
-          <span class="sitemap__group-icon" aria-hidden="true">{{ group.icon }}</span>
+          <ContentIcon :value="group.icon" class="sitemap__group-icon" />
           <h2 class="sitemap__group-title">{{ group.group }}</h2>
         </div>
         <ul class="sitemap__quick-grid">
@@ -125,7 +130,7 @@
               class="sitemap__quick-link"
               @navigate="onLinkClick"
             >
-              <span v-if="item.icon" class="sitemap__quick-icon" aria-hidden="true">{{ item.icon }}</span>
+              <ContentIcon v-if="item.icon" :value="item.icon" class="sitemap__quick-icon" />
               <span>{{ item.title }}</span>
               <span
                 class="sitemap__quick-dot"
@@ -152,6 +157,7 @@
 import { computed, ref, defineComponent, h } from 'vue';
 import { RouterLink } from 'vue-router';
 import { Search, X, ChevronRight, Info } from 'lucide-vue-next';
+import ContentIcon from './ContentIcon.vue';
 import {
   SITE_SITEMAP,
   SITEMAP_QUICK_LINKS,

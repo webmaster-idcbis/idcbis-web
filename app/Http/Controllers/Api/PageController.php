@@ -38,6 +38,7 @@ class PageController extends Controller
                 'canonical_url' => 'nullable|string|max:500',
                 'content' => 'nullable|array',
                 'sections' => 'nullable|array',
+                'translations' => 'nullable|array',
                 'status' => 'in:draft,published,archived',
             ]);
 
@@ -52,7 +53,7 @@ class PageController extends Controller
                 $validated['published_at'] = now();
             }
 
-            $page = new Page(collect($validated)->except(['content', 'sections'])->all());
+            $page = new Page(collect($validated)->except(['content', 'sections', 'translations'])->all());
             $this->assignPageContentFromRequest($page, $request);
             $page->save();
             $page->refresh();
@@ -132,6 +133,7 @@ class PageController extends Controller
                 'canonical_url' => 'nullable|string|max:500',
                 'content' => 'nullable|array',
                 'sections' => 'nullable|array',
+                'translations' => 'nullable|array',
                 'status' => 'in:draft,published,archived',
             ]);
 
@@ -145,7 +147,7 @@ class PageController extends Controller
                 }
             }
 
-            $page->fill(collect($validated)->except(['content', 'sections'])->all());
+            $page->fill(collect($validated)->except(['content', 'sections', 'translations'])->all());
             $this->assignPageContentFromRequest($page, $request);
             $page->save();
             $this->forcePersistContent($page, $request);
@@ -239,6 +241,10 @@ class PageController extends Controller
         if (array_key_exists('sections', $request->all())) {
             $page->setAttribute('sections', $request->input('sections'));
         }
+
+        if (array_key_exists('translations', $request->all())) {
+            $page->translations = $request->input('translations');
+        }
     }
 
     private function forcePersistContent(Page $page, Request $request): void
@@ -259,6 +265,13 @@ class PageController extends Controller
         if (array_key_exists('sections', $request->all())) {
             $updates['sections'] = json_encode(
                 $request->input('sections'),
+                JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR
+            );
+        }
+
+        if (array_key_exists('translations', $request->all())) {
+            $updates['translations'] = json_encode(
+                $request->input('translations'),
                 JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR
             );
         }

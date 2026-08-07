@@ -1,5 +1,6 @@
 import { createElement, createIdcbisHeroSlide } from '../../utils/pageElementFactory'
 import { IDCBIS_PROPOSAL_IMAGES as IMG } from '../idcbisProposalImages'
+import { HOME_SERVICES } from '../homeServices'
 
 export const PROPUESTA_AZUL_PAGE_META = {
   title: 'IDCBIS | Ciencia que te conecta con la vida',
@@ -44,13 +45,13 @@ export function buildPropuestaAzulPage() {
     sectionHighlight: 'servicios',
     sectionSubtitle: 'Elige el que más se adapte a ti. Todos son importantes.',
     cards: [
-      { title: 'Donar sangre', description: 'Es rápida, segura y salva hasta 3 vidas. Necesitamos todos los grupos sanguíneos.', image: IMG.services[0], tag: '#DONARVIDA', url: '#' },
-      { title: 'Cordón umbilical', description: 'Las células del cordón son un tesoro. Ayudan a pacientes pediátricos con enfermedades graves.', image: IMG.services[1], tag: '#FUTURO', url: '#' },
-      { title: 'Tejidos', description: 'Piel, huesos, córneas... Tu donación puede devolver la vista o la movilidad a alguien.', image: IMG.services[2], tag: '#REGALAVIDA', url: '#' },
-      { title: 'Terapias avanzadas', description: 'Tratamos enfermedades autoinmunes con células. Somos pioneros en Latinoamérica.', image: IMG.services[3], tag: '#INNOVACIÓN', url: '#' },
-      { title: 'Registro de donantes', description: '¿Tienes sangre rara? Tu tipo puede ser clave para alguien. Inscribite.', image: IMG.services[4], tag: '#SANGREUNICA', url: '#' },
-      { title: 'Bienestar', description: 'Charlas, hábitos, comunidad. Porque la salud también es prevenir.', image: IMG.services[5], tag: '#SENTIRSEBIEN', url: '#' },
-    ].map((c, i) => ({ ...c, id: `card_${i}` })),
+      { title: 'Banco Distrital de Sangre', description: 'Es rápida, segura y salva hasta 3 vidas. Necesitamos todos los grupos sanguíneos.', image: IMG.services[0], tag: '#DONARVIDA', url: HOME_SERVICES[0].href },
+      { title: 'Sandre de Cordón umbilical', description: 'Las células del cordón son un tesoro. Ayudan a pacientes pediátricos con enfermedades graves.', image: IMG.services[1], tag: '#FUTURO', url: HOME_SERVICES[1].href },
+      { title: 'Banco Distrital de Tejidos', description: 'Piel, huesos, córneas... Tu donación puede devolver la vista o la movilidad a alguien.', image: IMG.services[2], tag: '#REGALAVIDA', url: HOME_SERVICES[2].href },
+      { title: 'Terapias avanzadas', description: 'Tratamos enfermedades autoinmunes con células. Somos pioneros en Latinoamérica.', image: IMG.services[3], tag: '#INNOVACIÓN', url: HOME_SERVICES[3].href },
+      { title: 'Registro Nacional de donantes', description: '¿Tienes sangre rara? Tu tipo puede ser clave para alguien. Inscribite.', image: IMG.services[4], tag: '#SANGREUNICA', url: HOME_SERVICES[4].href },
+      { title: 'Bienestar', description: 'Charlas, hábitos, comunidad. Porque la salud también es prevenir.', image: IMG.services[5], tag: '#SENTIRSEBIEN', url: HOME_SERVICES[5].href },
+    ].map((c, i) => ({ ...c, id: HOME_SERVICES[i]?.id || `card_${i}` })),
   })
 
   const stats = createElement('idcbis-stats')

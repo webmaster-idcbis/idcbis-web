@@ -3,6 +3,8 @@
 /**
  * Bloque idcbis-documents-page — Contratación bienes y servicios.
  * Fuente: https://idcbis.org.co/contratacion-bienes-y-servicios/
+ *
+ * Generado/sincronizado desde la base de datos con page:sync-data-files
  */
 
 $doc = static function (
@@ -14,229 +16,249 @@ $doc = static function (
     return compact('id', 'title', 'publishedAt', 'url');
 };
 
-$monthNames = [
-    1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',
-    5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto',
-    9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre',
-];
-
-$monthKey = static fn (int $month): string => str_pad((string) $month, 2, '0', STR_PAD_LEFT);
-
-$prestacionYModificaciones = static function (
-    int $year,
-    int $fromMonth,
-    int $toMonth,
-    bool $capitalizeMonth = false,
-) use ($doc, $monthNames, $monthKey): array {
-    $documents = [];
-
-    for ($month = $fromMonth; $month <= $toMonth; $month++) {
-        $name = $monthNames[$month];
-        $label = $capitalizeMonth ? $name : strtolower($name);
-        $key = "cbs-{$year}-{$monthKey($month)}";
-
-        $documents[] = $doc("{$key}-ps", "Contratación prestación de servicios {$label} {$year}");
-        $documents[] = $doc("{$key}-mod", "Modificaciones contractuales {$label} {$year}");
-    }
-
-    return $documents;
-};
-
-$bienesPrestacionModificaciones = static function (
-    int $year,
-    int $fromMonth,
-    int $toMonth,
-) use ($doc, $monthNames, $monthKey): array {
-    $documents = [];
-
-    for ($month = $fromMonth; $month <= $toMonth; $month++) {
-        $label = strtolower($monthNames[$month]);
-        $key = "cbs-{$year}-{$monthKey($month)}";
-
-        $documents[] = $doc("{$key}-bs", "Contratación bienes y servicios {$label} {$year}");
-        $documents[] = $doc("{$key}-ps", "Contratación prestación de servicios {$label} {$year}");
-        $documents[] = $doc("{$key}-mod", "Modificaciones contractuales {$label} {$year}");
-    }
-
-    return $documents;
-};
-
-$bienesYPrestacion = static function (
-    int $year,
-    int $fromMonth,
-    int $toMonth,
-) use ($doc, $monthNames, $monthKey): array {
-    $documents = [];
-
-    for ($month = $fromMonth; $month <= $toMonth; $month++) {
-        $label = strtolower($monthNames[$month]);
-        $key = "cbs-{$year}-{$monthKey($month)}";
-
-        $documents[] = $doc("{$key}-bs", "Contratación bienes y servicios {$label} {$year}");
-        $documents[] = $doc("{$key}-ps", "Contratación prestación de servicios {$label} {$year}");
-    }
-
-    return $documents;
-};
-
-$generalYModificaciones = static function (
-    int $year,
-    int $fromMonth,
-    int $toMonth,
-) use ($doc, $monthNames, $monthKey): array {
-    $documents = [];
-
-    for ($month = $fromMonth; $month <= $toMonth; $month++) {
-        $label = strtolower($monthNames[$month]);
-        $key = "cbs-{$year}-{$monthKey($month)}";
-
-        $documents[] = $doc("{$key}-gen", "Contratación general {$label} {$year}");
-        $documents[] = $doc("{$key}-mod", "Modificaciones contractuales {$label} {$year}");
-    }
-
-    return $documents;
-};
-
-$bienesPrestacionConModificacionesDesde = static function (
-    int $year,
-    int $fromMonth,
-    int $toMonth,
-    int $modificacionesFromMonth,
-) use ($doc, $monthNames, $monthKey): array {
-    $documents = [];
-
-    for ($month = $fromMonth; $month <= $toMonth; $month++) {
-        $label = strtolower($monthNames[$month]);
-        $key = "cbs-{$year}-{$monthKey($month)}";
-
-        $documents[] = $doc("{$key}-bs", "Contratación bienes y servicios {$label} {$year}");
-        $documents[] = $doc("{$key}-ps", "Contratación prestación de servicios {$label} {$year}");
-
-        if ($month >= $modificacionesFromMonth) {
-            $documents[] = $doc("{$key}-mod", "Modificaciones contractuales {$label} {$year}");
-        }
-    }
-
-    return $documents;
-};
-
-$soloBienes = static function (
-    int $year,
-    int $fromMonth,
-    int $toMonth,
-) use ($doc, $monthNames, $monthKey): array {
-    $documents = [];
-
-    for ($month = $fromMonth; $month <= $toMonth; $month++) {
-        $label = strtolower($monthNames[$month]);
-        $key = "cbs-{$year}-{$monthKey($month)}";
-
-        $documents[] = $doc("{$key}-bs", "Contratación bienes y servicios {$label} {$year}");
-    }
-
-    return $documents;
-};
-
-$informesTransparencia2025 = static function () use ($doc): array {
-    return [
-        $doc('cbs-2025-03-con', 'Informe de Transparencia y ética pública Marzo 2025 – CONTRATOS', '28 Abril 2025'),
-        $doc('cbs-2025-03-mod', 'Informe de Transparencia y Ética Pública Marzo 2025 – MODIFICACIONES', '28 Abril 2025'),
-        $doc('cbs-2025-04-con', 'Informe de Transparencia y Ética Pública Abril 2025 – CONTRATOS 0001', '23 Mayo 2025'),
-        $doc('cbs-2025-04-mod', 'Informe de Transparencia y Ética Pública Abril 2025 – MODIFICACIONES', '23 Mayo 2025'),
-        $doc('cbs-2025-05-con', 'Informe de Transparencia y Ética Pública Mayo 2025 – CONTRATOS', '10 Junio 2025'),
-        $doc('cbs-2025-05-mod', 'Informe de Transparencia y Ética Pública Mayo 2025 – MODIFICACIONES', '10 Junio 2025'),
-        $doc('cbs-2025-06-con', 'Informe de Transparencia y Ética Pública Junio 2025 – CONTRATOS', '10 Julio 2025'),
-        $doc('cbs-2025-06-mod', 'Informe de Transparencia y Ética Pública Junio 2025 – MODIFICACIONES', '10 Julio 2025'),
-        $doc('cbs-2025-07-con', 'Informe de Transparencia y Ética Pública Julio 2025 – CONTRATOS', '19 Agosto 2025'),
-        $doc('cbs-2025-07-mod', 'Informe de Transparencia y Ética Pública Julio 2025 – MODIFICACIONES', '19 Agosto 2025'),
-        $doc('cbs-2025-08-con', 'Informe de Transparencia y Ética Pública Agosto 2025 – CONTRATOS', '19 Agosto 2025'),
-        $doc('cbs-2025-08-mod', 'Informe de Transparencia y Ética Pública Agosto 2025 – MODIFICACIONES', '19 Agosto 2025'),
-        $doc('cbs-2025-09-con', 'Informe de Transparencia y Ética Pública Septiembre 2025 – CONTRATOS', '01 Octubre 2025'),
-        $doc('cbs-2025-09-mod', 'Informe de Transparencia y Ética Pública Septiembre 2025 – MODIFICACIONES', '01 Octubre 2025'),
-        $doc('cbs-2025-10-con', 'Informe de Transparencia y Ética Pública Octubre 2025 – CONTRATOS', '20 Noviembre 2025'),
-        $doc('cbs-2025-10-mod', 'Informe de Transparencia y Ética Pública Octubre 2025 – MODIFICACIONES', '20 Noviembre 2025'),
-        $doc('cbs-2025-11-con', 'Informe de Transparencia y Ética Pública Noviembre 2025 – CONTRATOS', '20 Diciembre 2025'),
-        $doc('cbs-2025-11-mod', 'Informe de Transparencia y Ética Pública Noviembre 2025 – MODIFICACIONES', '20 Diciembre 2025'),
-        $doc('cbs-2025-12-con', 'Informe de Transparencia y Ética Pública Diciembre 2025 – CONTRATOS', '16 Enero 2026'),
-        $doc('cbs-2025-12-mod', 'Informe de Transparencia y Ética Pública Diciembre 2025 – MODIFICACIONES', '16 Enero 2026'),
-    ];
-};
-
-return [
-    'id' => 'cbs_page',
+$page = [
+    'id' => 'cbs_page_page',
     'type' => 'idcbis-documents-page',
     'content' => '',
     'fullBleed' => true,
     'eyebrow' => 'Información pública',
     'heroTitle' => 'Contratación bienes y servicios',
     'heroSubtitle' => 'Consulta el manual de contratación y los informes mensuales de contratos y modificaciones contractuales del IDCBIS.',
-    'intro' => 'Selecciona una sección en el menú lateral. Cada documento incluye su fecha de publicación oficial cuando está disponible.',
+    'intro' => '',
     'layout' => 'sidebar',
     'documentColumns' => 2,
     'showSearch' => true,
+,
     'groups' => [
-        [
-            'id' => 'cbs-manual',
-            'label' => 'Manual',
-            'documents' => [
-                $doc('cbs-manual-01', 'Manual de contratación de bienes y servicios'),
-            ],
-        ],
         [
             'id' => 'cbs-2026',
             'label' => '2026',
-            'documents' => $prestacionYModificaciones(2026, 1, 5, true),
+            'documents' => [
+                $doc('cbs-2026-01-ps', 'Contratación prestación de servicios Enero 2026'),
+                $doc('cbs-2026-01-mod', 'Modificaciones contractuales Enero 2026'),
+                $doc('cbs-2026-02-ps', 'Contratación prestación de servicios Febrero 2026'),
+                $doc('cbs-2026-02-mod', 'Modificaciones contractuales Febrero 2026'),
+                $doc('cbs-2026-03-ps', 'Contratación prestación de servicios Marzo 2026'),
+                $doc('cbs-2026-03-mod', 'Modificaciones contractuales Marzo 2026'),
+                $doc('cbs-2026-04-ps', 'Contratación prestación de servicios Abril 2026'),
+                $doc('cbs-2026-04-mod', 'Modificaciones contractuales Abril 2026'),
+                $doc('cbs-2026-05-ps', 'Contratación prestación de servicios Mayo 2026'),
+                $doc('cbs-2026-05-mod', 'Modificaciones contractuales Mayo 2026'),
+            ],
         ],
         [
             'id' => 'cbs-2025',
             'label' => '2025',
-            'documents' => array_merge(
-                $prestacionYModificaciones(2025, 1, 2),
-                $informesTransparencia2025(),
-            ),
+            'documents' => [
+                $doc('cbs-2025-01-ps', 'Contratación prestación de servicios enero 2025'),
+                $doc('cbs-2025-01-mod', 'Modificaciones contractuales enero 2025'),
+                $doc('cbs-2025-02-ps', 'Contratación prestación de servicios febrero 2025'),
+                $doc('cbs-2025-02-mod', 'Modificaciones contractuales febrero 2025'),
+                $doc('cbs-2025-03-con', 'Informe de Transparencia y ética pública Marzo 2025 – CONTRATOS', '28 Abril 2025'),
+                $doc('cbs-2025-03-mod', 'Informe de Transparencia y Ética Pública Marzo 2025 – MODIFICACIONES', '28 Abril 2025'),
+                $doc('cbs-2025-04-con', 'Informe de Transparencia y Ética Pública Abril 2025 – CONTRATOS 0001', '23 Mayo 2025'),
+                $doc('cbs-2025-04-mod', 'Informe de Transparencia y Ética Pública Abril 2025 – MODIFICACIONES', '23 Mayo 2025'),
+                $doc('cbs-2025-05-con', 'Informe de Transparencia y Ética Pública Mayo 2025 – CONTRATOS', '10 Junio 2025'),
+                $doc('cbs-2025-05-mod', 'Informe de Transparencia y Ética Pública Mayo 2025 – MODIFICACIONES', '10 Junio 2025'),
+                $doc('cbs-2025-06-con', 'Informe de Transparencia y Ética Pública Junio 2025 – CONTRATOS', '10 Julio 2025'),
+                $doc('cbs-2025-06-mod', 'Informe de Transparencia y Ética Pública Junio 2025 – MODIFICACIONES', '10 Julio 2025'),
+                $doc('cbs-2025-07-con', 'Informe de Transparencia y Ética Pública Julio 2025 – CONTRATOS', '19 Agosto 2025'),
+                $doc('cbs-2025-07-mod', 'Informe de Transparencia y Ética Pública Julio 2025 – MODIFICACIONES', '19 Agosto 2025'),
+                $doc('cbs-2025-08-con', 'Informe de Transparencia y Ética Pública Agosto 2025 – CONTRATOS', '19 Agosto 2025'),
+                $doc('cbs-2025-08-mod', 'Informe de Transparencia y Ética Pública Agosto 2025 – MODIFICACIONES', '19 Agosto 2025'),
+                $doc('cbs-2025-09-con', 'Informe de Transparencia y Ética Pública Septiembre 2025 – CONTRATOS', '01 Octubre 2025'),
+                $doc('cbs-2025-09-mod', 'Informe de Transparencia y Ética Pública Septiembre 2025 – MODIFICACIONES', '01 Octubre 2025'),
+                $doc('cbs-2025-10-con', 'Informe de Transparencia y Ética Pública Octubre 2025 – CONTRATOS', '20 Noviembre 2025'),
+                $doc('cbs-2025-10-mod', 'Informe de Transparencia y Ética Pública Octubre 2025 – MODIFICACIONES', '20 Noviembre 2025'),
+                $doc('cbs-2025-11-con', 'Informe de Transparencia y Ética Pública Noviembre 2025 – CONTRATOS', '20 Diciembre 2025'),
+                $doc('cbs-2025-11-mod', 'Informe de Transparencia y Ética Pública Noviembre 2025 – MODIFICACIONES', '20 Diciembre 2025'),
+                $doc('cbs-2025-12-con', 'Informe de Transparencia y Ética Pública Diciembre 2025 – CONTRATOS', '16 Enero 2026'),
+                $doc('cbs-2025-12-mod', 'Informe de Transparencia y Ética Pública Diciembre 2025 – MODIFICACIONES', '16 Enero 2026'),
+            ],
         ],
         [
             'id' => 'cbs-2024',
             'label' => '2024',
-            'documents' => array_merge(
-                $bienesPrestacionModificaciones(2024, 1, 7),
-                $generalYModificaciones(2024, 8, 12),
-            ),
+            'documents' => [
+                $doc('cbs-2024-01-bs', 'Contratación bienes y servicios enero 2024'),
+                $doc('cbs-2024-01-ps', 'Contratación prestación de servicios enero 2024'),
+                $doc('cbs-2024-01-mod', 'Modificaciones contractuales enero 2024'),
+                $doc('cbs-2024-02-bs', 'Contratación bienes y servicios febrero 2024'),
+                $doc('cbs-2024-02-ps', 'Contratación prestación de servicios febrero 2024'),
+                $doc('cbs-2024-02-mod', 'Modificaciones contractuales febrero 2024'),
+                $doc('cbs-2024-03-bs', 'Contratación bienes y servicios marzo 2024'),
+                $doc('cbs-2024-03-ps', 'Contratación prestación de servicios marzo 2024'),
+                $doc('cbs-2024-03-mod', 'Modificaciones contractuales marzo 2024'),
+                $doc('cbs-2024-04-bs', 'Contratación bienes y servicios abril 2024'),
+                $doc('cbs-2024-04-ps', 'Contratación prestación de servicios abril 2024'),
+                $doc('cbs-2024-04-mod', 'Modificaciones contractuales abril 2024'),
+                $doc('cbs-2024-05-bs', 'Contratación bienes y servicios mayo 2024'),
+                $doc('cbs-2024-05-ps', 'Contratación prestación de servicios mayo 2024'),
+                $doc('cbs-2024-05-mod', 'Modificaciones contractuales mayo 2024'),
+                $doc('cbs-2024-06-bs', 'Contratación bienes y servicios junio 2024'),
+                $doc('cbs-2024-06-ps', 'Contratación prestación de servicios junio 2024'),
+                $doc('cbs-2024-06-mod', 'Modificaciones contractuales junio 2024'),
+                $doc('cbs-2024-07-bs', 'Contratación bienes y servicios julio 2024'),
+                $doc('cbs-2024-07-ps', 'Contratación prestación de servicios julio 2024'),
+                $doc('cbs-2024-07-mod', 'Modificaciones contractuales julio 2024'),
+                $doc('cbs-2024-08-gen', 'Contratación general agosto 2024'),
+                $doc('cbs-2024-08-mod', 'Modificaciones contractuales agosto 2024'),
+                $doc('cbs-2024-09-gen', 'Contratación general septiembre 2024'),
+                $doc('cbs-2024-09-mod', 'Modificaciones contractuales septiembre 2024'),
+                $doc('cbs-2024-10-gen', 'Contratación general octubre 2024'),
+                $doc('cbs-2024-10-mod', 'Modificaciones contractuales octubre 2024'),
+                $doc('cbs-2024-11-gen', 'Contratación general noviembre 2024'),
+                $doc('cbs-2024-11-mod', 'Modificaciones contractuales noviembre 2024'),
+                $doc('cbs-2024-12-gen', 'Contratación general diciembre 2024'),
+                $doc('cbs-2024-12-mod', 'Modificaciones contractuales diciembre 2024'),
+            ],
         ],
         [
             'id' => 'cbs-2023',
             'label' => '2023',
-            'documents' => array_merge(
-                [$doc('cbs-2023-01-ps', 'Contratación prestación de servicios enero 2023')],
-                $bienesYPrestacion(2023, 2, 7),
-                $bienesPrestacionConModificacionesDesde(2023, 8, 12, 8),
-            ),
+            'documents' => [
+                $doc('cbs-2023-01-ps', 'Contratación prestación de servicios enero 2023'),
+                $doc('cbs-2023-02-bs', 'Contratación bienes y servicios febrero 2023'),
+                $doc('cbs-2023-02-ps', 'Contratación prestación de servicios febrero 2023'),
+                $doc('cbs-2023-03-bs', 'Contratación bienes y servicios marzo 2023'),
+                $doc('cbs-2023-03-ps', 'Contratación prestación de servicios marzo 2023'),
+                $doc('cbs-2023-04-bs', 'Contratación bienes y servicios abril 2023'),
+                $doc('cbs-2023-04-ps', 'Contratación prestación de servicios abril 2023'),
+                $doc('cbs-2023-05-bs', 'Contratación bienes y servicios mayo 2023'),
+                $doc('cbs-2023-05-ps', 'Contratación prestación de servicios mayo 2023'),
+                $doc('cbs-2023-06-bs', 'Contratación bienes y servicios junio 2023'),
+                $doc('cbs-2023-06-ps', 'Contratación prestación de servicios junio 2023'),
+                $doc('cbs-2023-07-bs', 'Contratación bienes y servicios julio 2023'),
+                $doc('cbs-2023-07-ps', 'Contratación prestación de servicios julio 2023'),
+                $doc('cbs-2023-08-bs', 'Contratación bienes y servicios agosto 2023'),
+                $doc('cbs-2023-08-ps', 'Contratación prestación de servicios agosto 2023'),
+                $doc('cbs-2023-08-mod', 'Modificaciones contractuales agosto 2023'),
+                $doc('cbs-2023-09-bs', 'Contratación bienes y servicios septiembre 2023'),
+                $doc('cbs-2023-09-ps', 'Contratación prestación de servicios septiembre 2023'),
+                $doc('cbs-2023-09-mod', 'Modificaciones contractuales septiembre 2023'),
+                $doc('cbs-2023-10-bs', 'Contratación bienes y servicios octubre 2023'),
+                $doc('cbs-2023-10-ps', 'Contratación prestación de servicios octubre 2023'),
+                $doc('cbs-2023-10-mod', 'Modificaciones contractuales octubre 2023'),
+                $doc('cbs-2023-11-bs', 'Contratación bienes y servicios noviembre 2023'),
+                $doc('cbs-2023-11-ps', 'Contratación prestación de servicios noviembre 2023'),
+                $doc('cbs-2023-11-mod', 'Modificaciones contractuales noviembre 2023'),
+                $doc('cbs-2023-12-bs', 'Contratación bienes y servicios diciembre 2023'),
+                $doc('cbs-2023-12-ps', 'Contratación prestación de servicios diciembre 2023'),
+                $doc('cbs-2023-12-mod', 'Modificaciones contractuales diciembre 2023'),
+            ],
         ],
         [
             'id' => 'cbs-2022',
             'label' => '2022',
-            'documents' => $bienesYPrestacion(2022, 1, 12),
+            'documents' => [
+                $doc('cbs-2022-01-bs', 'Contratación bienes y servicios enero 2022'),
+                $doc('cbs-2022-01-ps', 'Contratación prestación de servicios enero 2022'),
+                $doc('cbs-2022-02-bs', 'Contratación bienes y servicios febrero 2022'),
+                $doc('cbs-2022-02-ps', 'Contratación prestación de servicios febrero 2022'),
+                $doc('cbs-2022-03-bs', 'Contratación bienes y servicios marzo 2022'),
+                $doc('cbs-2022-03-ps', 'Contratación prestación de servicios marzo 2022'),
+                $doc('cbs-2022-04-bs', 'Contratación bienes y servicios abril 2022'),
+                $doc('cbs-2022-04-ps', 'Contratación prestación de servicios abril 2022'),
+                $doc('cbs-2022-05-bs', 'Contratación bienes y servicios mayo 2022'),
+                $doc('cbs-2022-05-ps', 'Contratación prestación de servicios mayo 2022'),
+                $doc('cbs-2022-06-bs', 'Contratación bienes y servicios junio 2022'),
+                $doc('cbs-2022-06-ps', 'Contratación prestación de servicios junio 2022'),
+                $doc('cbs-2022-07-bs', 'Contratación bienes y servicios julio 2022'),
+                $doc('cbs-2022-07-ps', 'Contratación prestación de servicios julio 2022'),
+                $doc('cbs-2022-08-bs', 'Contratación bienes y servicios agosto 2022'),
+                $doc('cbs-2022-08-ps', 'Contratación prestación de servicios agosto 2022'),
+                $doc('cbs-2022-09-bs', 'Contratación bienes y servicios septiembre 2022'),
+                $doc('cbs-2022-09-ps', 'Contratación prestación de servicios septiembre 2022'),
+                $doc('cbs-2022-10-bs', 'Contratación bienes y servicios octubre 2022'),
+                $doc('cbs-2022-10-ps', 'Contratación prestación de servicios octubre 2022'),
+                $doc('cbs-2022-11-bs', 'Contratación bienes y servicios noviembre 2022'),
+                $doc('cbs-2022-11-ps', 'Contratación prestación de servicios noviembre 2022'),
+                $doc('cbs-2022-12-bs', 'Contratación bienes y servicios diciembre 2022'),
+                $doc('cbs-2022-12-ps', 'Contratación prestación de servicios diciembre 2022'),
+            ],
         ],
         [
             'id' => 'cbs-2021',
             'label' => '2021',
-            'documents' => $bienesYPrestacion(2021, 1, 12),
+            'documents' => [
+                $doc('cbs-2021-01-bs', 'Contratación bienes y servicios enero 2021'),
+                $doc('cbs-2021-01-ps', 'Contratación prestación de servicios enero 2021'),
+                $doc('cbs-2021-02-bs', 'Contratación bienes y servicios febrero 2021'),
+                $doc('cbs-2021-02-ps', 'Contratación prestación de servicios febrero 2021'),
+                $doc('cbs-2021-03-bs', 'Contratación bienes y servicios marzo 2021'),
+                $doc('cbs-2021-03-ps', 'Contratación prestación de servicios marzo 2021'),
+                $doc('cbs-2021-04-bs', 'Contratación bienes y servicios abril 2021'),
+                $doc('cbs-2021-04-ps', 'Contratación prestación de servicios abril 2021'),
+                $doc('cbs-2021-05-bs', 'Contratación bienes y servicios mayo 2021'),
+                $doc('cbs-2021-05-ps', 'Contratación prestación de servicios mayo 2021'),
+                $doc('cbs-2021-06-bs', 'Contratación bienes y servicios junio 2021'),
+                $doc('cbs-2021-06-ps', 'Contratación prestación de servicios junio 2021'),
+                $doc('cbs-2021-07-bs', 'Contratación bienes y servicios julio 2021'),
+                $doc('cbs-2021-07-ps', 'Contratación prestación de servicios julio 2021'),
+                $doc('cbs-2021-08-bs', 'Contratación bienes y servicios agosto 2021'),
+                $doc('cbs-2021-08-ps', 'Contratación prestación de servicios agosto 2021'),
+                $doc('cbs-2021-09-bs', 'Contratación bienes y servicios septiembre 2021'),
+                $doc('cbs-2021-09-ps', 'Contratación prestación de servicios septiembre 2021'),
+                $doc('cbs-2021-10-bs', 'Contratación bienes y servicios octubre 2021'),
+                $doc('cbs-2021-10-ps', 'Contratación prestación de servicios octubre 2021'),
+                $doc('cbs-2021-11-bs', 'Contratación bienes y servicios noviembre 2021'),
+                $doc('cbs-2021-11-ps', 'Contratación prestación de servicios noviembre 2021'),
+                $doc('cbs-2021-12-bs', 'Contratación bienes y servicios diciembre 2021'),
+                $doc('cbs-2021-12-ps', 'Contratación prestación de servicios diciembre 2021'),
+            ],
         ],
         [
             'id' => 'cbs-2020',
             'label' => '2020',
-            'documents' => array_merge(
-                [$doc('cbs-2020-01-bs', 'Contratación bienes y servicios enero 2020')],
-                $bienesYPrestacion(2020, 2, 12),
-            ),
+            'documents' => [
+                $doc('cbs-2020-01-bs', 'Contratación bienes y servicios enero 2020'),
+                $doc('cbs-2020-02-bs', 'Contratación bienes y servicios febrero 2020'),
+                $doc('cbs-2020-02-ps', 'Contratación prestación de servicios febrero 2020'),
+                $doc('cbs-2020-03-bs', 'Contratación bienes y servicios marzo 2020'),
+                $doc('cbs-2020-03-ps', 'Contratación prestación de servicios marzo 2020'),
+                $doc('cbs-2020-04-bs', 'Contratación bienes y servicios abril 2020'),
+                $doc('cbs-2020-04-ps', 'Contratación prestación de servicios abril 2020'),
+                $doc('cbs-2020-05-bs', 'Contratación bienes y servicios mayo 2020'),
+                $doc('cbs-2020-05-ps', 'Contratación prestación de servicios mayo 2020'),
+                $doc('cbs-2020-06-bs', 'Contratación bienes y servicios junio 2020'),
+                $doc('cbs-2020-06-ps', 'Contratación prestación de servicios junio 2020'),
+                $doc('cbs-2020-07-bs', 'Contratación bienes y servicios julio 2020'),
+                $doc('cbs-2020-07-ps', 'Contratación prestación de servicios julio 2020'),
+                $doc('cbs-2020-08-bs', 'Contratación bienes y servicios agosto 2020'),
+                $doc('cbs-2020-08-ps', 'Contratación prestación de servicios agosto 2020'),
+                $doc('cbs-2020-09-bs', 'Contratación bienes y servicios septiembre 2020'),
+                $doc('cbs-2020-09-ps', 'Contratación prestación de servicios septiembre 2020'),
+                $doc('cbs-2020-10-bs', 'Contratación bienes y servicios octubre 2020'),
+                $doc('cbs-2020-10-ps', 'Contratación prestación de servicios octubre 2020'),
+                $doc('cbs-2020-11-bs', 'Contratación bienes y servicios noviembre 2020'),
+                $doc('cbs-2020-11-ps', 'Contratación prestación de servicios noviembre 2020'),
+                $doc('cbs-2020-12-bs', 'Contratación bienes y servicios diciembre 2020'),
+                $doc('cbs-2020-12-ps', 'Contratación prestación de servicios diciembre 2020'),
+            ],
         ],
         [
             'id' => 'cbs-2019',
             'label' => '2019',
-            'documents' => array_merge(
-                $bienesYPrestacion(2019, 1, 4),
-                $soloBienes(2019, 5, 12),
-            ),
+            'documents' => [
+                $doc('cbs-2019-01-bs', 'Contratación bienes y servicios enero 2019'),
+                $doc('cbs-2019-01-ps', 'Contratación prestación de servicios enero 2019'),
+                $doc('cbs-2019-02-bs', 'Contratación bienes y servicios febrero 2019'),
+                $doc('cbs-2019-02-ps', 'Contratación prestación de servicios febrero 2019'),
+                $doc('cbs-2019-03-bs', 'Contratación bienes y servicios marzo 2019'),
+                $doc('cbs-2019-03-ps', 'Contratación prestación de servicios marzo 2019'),
+                $doc('cbs-2019-04-bs', 'Contratación bienes y servicios abril 2019'),
+                $doc('cbs-2019-04-ps', 'Contratación prestación de servicios abril 2019'),
+                $doc('cbs-2019-05-bs', 'Contratación bienes y servicios mayo 2019'),
+                $doc('cbs-2019-06-bs', 'Contratación bienes y servicios junio 2019'),
+                $doc('cbs-2019-07-bs', 'Contratación bienes y servicios julio 2019'),
+                $doc('cbs-2019-08-bs', 'Contratación bienes y servicios agosto 2019'),
+                $doc('cbs-2019-09-bs', 'Contratación bienes y servicios septiembre 2019'),
+                $doc('cbs-2019-10-bs', 'Contratación bienes y servicios octubre 2019'),
+                $doc('cbs-2019-11-bs', 'Contratación bienes y servicios noviembre 2019'),
+                $doc('cbs-2019-12-bs', 'Contratación bienes y servicios diciembre 2019'),
+            ],
         ],
     ],
 ];
+
+return $page;

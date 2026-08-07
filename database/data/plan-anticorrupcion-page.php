@@ -3,6 +3,8 @@
 /**
  * Bloque idcbis-documents-page — Plan anticorrupción.
  * Fuente: https://idcbis.org.co/plan-anticorrupcion/
+ *
+ * Generado/sincronizado desde la base de datos con page:sync-data-files
  */
 
 $doc = static function (
@@ -14,18 +16,19 @@ $doc = static function (
     return compact('id', 'title', 'publishedAt', 'url');
 };
 
-return [
-    'id' => 'paac_page',
+$page = [
+    'id' => 'paac_page_page',
     'type' => 'idcbis-documents-page',
     'content' => '',
     'fullBleed' => true,
     'eyebrow' => 'Información pública',
     'heroTitle' => 'Plan anticorrupción',
     'heroSubtitle' => 'Consulta el Plan Anticorrupción y de Atención al Ciudadano (PAAC) del IDCBIS y sus seguimientos por vigencia.',
-    'intro' => 'Selecciona un año en el menú lateral para ver los documentos publicados. Cada informe incluye su fecha de publicación oficial cuando está disponible.',
+    'intro' => '',
     'layout' => 'sidebar',
     'documentColumns' => 2,
     'showSearch' => true,
+,
     'groups' => [
         [
             'id' => 'paac-2022',
@@ -82,3 +85,5 @@ return [
         ],
     ],
 ];
+
+return $page;

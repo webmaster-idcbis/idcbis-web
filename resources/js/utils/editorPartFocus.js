@@ -67,6 +67,10 @@ export function buildDocumentItemFocusAnchor(docId) {
   return `document:${docId}`
 }
 
+export function buildNewsItemFocusAnchor(itemId) {
+  return `news:${itemId}`
+}
+
 export function buildCarouselSlideFocusAnchor(slideId) {
   return `slide:${slideId}`
 }

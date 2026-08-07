@@ -7,10 +7,13 @@
 <script setup>
 import { onMounted } from 'vue';
 import { usePreferencesStore } from './stores/preferences';
+import { initAccessibility } from './composables/useAccessibility';
 
 const preferencesStore = usePreferencesStore();
 
 onMounted(() => {
   preferencesStore.initTheme();
+  preferencesStore.initLocale();
+  initAccessibility();
 });
 </script>

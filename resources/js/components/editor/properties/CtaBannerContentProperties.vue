@@ -23,7 +23,7 @@
       <template #default="{ item }">
         <input v-model="item.label" type="text" placeholder="Texto" class="editor-field-input">
         <input v-model="item.url" type="text" placeholder="Enlace" class="editor-field-input">
-        <input v-model="item.icon" type="text" placeholder="Icono" class="editor-field-input">
+        <input v-model="item.icon" type="text" placeholder="Emoji o ruta SVG" class="editor-field-input">
         <select v-model="item.variant" class="editor-field-input">
           <option value="primary">Principal</option>
           <option value="outline">Contorno</option>

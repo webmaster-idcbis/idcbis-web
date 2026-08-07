@@ -314,7 +314,7 @@ export const createElement = (type) => {
       return {
         ...baseElement,
         fullBleed: true,
-        items: [{ icon: '📍', title: 'Contacto', text: '', id: generateId() }],
+        items: [{ icon: '/img/Iconos/contacto.svg', title: 'Contacto', text: '', id: generateId() }],
       }
     case 'idcbis-hero-carousel':
       return {
@@ -347,6 +347,11 @@ export const createElement = (type) => {
       return {
         ...baseElement,
         fullBleed: true,
+        color: '#ffffff',
+        backgroundColor: '#0b4f6c',
+        highlightColor: '#C4A140',
+        cardBackground: '',
+        cardTextColor: '',
         sectionTitle: 'Recursos',
         sectionHighlight: 'y enlaces',
         sectionSubtitle: '',
@@ -372,7 +377,7 @@ export const createElement = (type) => {
         mission: 'Misión del IDCBIS.',
         vision: 'Visión del IDCBIS.',
         purpose: 'Propósito superior.',
-        principles: [{ id: generateId(), icon: '⭐', title: 'Excelencia' }],
+        principles: [{ id: generateId(), icon: '/img/Iconos/excelencia.svg', title: 'Excelencia' }],
         director: null,
         sections: [],
       }
@@ -414,6 +419,48 @@ export const createElement = (type) => {
           },
         ],
       }
+    case 'idcbis-news-list':
+      return {
+        ...baseElement,
+        fullBleed: true,
+        columns: 3,
+        itemsPerPage: 9,
+        showSearch: true,
+        showCategoryFilter: true,
+        items: [
+          {
+            id: generateId(),
+            title: 'Noticia de ejemplo',
+            excerpt: 'Resumen breve de la noticia para la tarjeta del listado.',
+            category: 'investigacion',
+            publishedAt: '',
+            image: '',
+            slug: '',
+          },
+        ],
+      }
+    case 'idcbis-news-carousel':
+      return {
+        ...baseElement,
+        fullBleed: true,
+        sectionEyebrow: 'Actualidad',
+        sectionTitle: 'Noticias destacadas',
+        sectionSubtitle: 'Las publicaciones más recientes del IDCBIS.',
+        limit: 8,
+        autoPlay: true,
+        interval: 4500,
+        items: [
+          {
+            id: generateId(),
+            title: 'Noticia de ejemplo',
+            excerpt: 'Resumen breve para el carrusel de noticias.',
+            category: 'investigacion',
+            publishedAt: '',
+            image: '',
+            slug: '',
+          },
+        ],
+      }
     case 'idcbis-team-grid':
       return {
         ...baseElement,
@@ -437,8 +484,8 @@ export const createElement = (type) => {
         ...baseElement,
         fullBleed: true,
         items: [
-          { id: generateId(), icon: '⏱', value: '15', label: 'Minutos de donación' },
-          { id: generateId(), icon: '🩸', value: '450', label: 'ml por donación' },
+          { id: generateId(), icon: '/img/Iconos/horario.svg', value: '15', label: 'Minutos de donación' },
+          { id: generateId(), icon: '/img/Iconos/banco de sangre.svg', value: '450', label: 'ml por donación' },
         ],
       }
     case 'process-timeline':
@@ -466,7 +513,7 @@ export const createElement = (type) => {
         title: '¿Listo para donar?',
         subtitle: 'Tu donación puede salvar vidas.',
         buttons: [
-          { id: generateId(), label: 'Agendar cita', url: '#', variant: 'primary', icon: '📅' },
+          { id: generateId(), label: 'Agendar cita', url: '#', variant: 'primary', icon: '/img/Iconos/horario.svg' },
         ],
       }
     case 'dual-panel':

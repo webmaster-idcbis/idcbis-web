@@ -11,7 +11,7 @@
         <option value="info">Panel informativo</option>
       </select>
     </div>
-    <input v-model="element.icon" type="text" class="editor-field-input" placeholder="Icono (emoji)">
+    <input v-model="element.icon" type="text" class="editor-field-input" placeholder="Emoji o ruta SVG">
     <input v-model="element.tag" type="text" class="editor-field-input" placeholder="Etiqueta (#SERVICIO)">
     <input v-model="element.title" type="text" class="editor-field-input" placeholder="Título">
     <input v-model="element.subtitle" type="text" class="editor-field-input" placeholder="Subtítulo">

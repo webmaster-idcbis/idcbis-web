@@ -13,7 +13,7 @@
       :style="{ backgroundImage: `url(${element.image})` }"
     />
     <div class="card-body">
-      <span v-if="element.icon" class="card-icon">{{ element.icon }}</span>
+      <ContentIcon v-if="element.icon" :value="element.icon" class="card-icon" />
       <div v-if="element.tag" class="card-tag">{{ element.tag }}</div>
       <div v-if="element.title" class="card-title" :style="titleStyles">{{ element.title }}</div>
       <div v-if="element.subtitle" class="card-subtitle">{{ element.subtitle }}</div>
@@ -26,6 +26,7 @@
 <script setup>
 import { computed } from 'vue'
 import { mergeElementStyles, resolveBackgroundColor } from '../../composables/useElementStyles'
+import ContentIcon from './ContentIcon.vue'
 
 const props = defineProps({
   element: { type: Object, required: true },

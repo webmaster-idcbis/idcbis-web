@@ -11,7 +11,7 @@
       class="border rounded p-2 space-y-2"
       :class="{ 'ring-2 ring-[#0B4F6C]': activeFocus === contactAnchor(item, i) }"
     >
-      <input v-model="item.icon" type="text" class="field-input" placeholder="📍">
+      <input v-model="item.icon" type="text" class="field-input" placeholder="Emoji o ruta SVG">
       <input v-model="item.title" type="text" class="field-input" placeholder="Sede">
       <input v-model="item.text" type="text" class="field-input" placeholder="Dirección o teléfono">
       <button type="button" class="text-xs text-red-600" @click="element.items.splice(i, 1)">Quitar</button>

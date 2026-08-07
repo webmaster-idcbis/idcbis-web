@@ -17,8 +17,17 @@
       @move="moveItem"
     >
       <template #default="{ item }">
-        <input v-model="item.question" type="text" placeholder="Pregunta" class="editor-field-input">
-        <textarea v-model="item.answer" rows="2" placeholder="Respuesta" class="editor-field-input" />
+        <input v-model="item.question" type="text" placeholder="Pregunta / título de sección" class="editor-field-input">
+        <textarea v-model="item.answer" rows="3" placeholder="Respuesta / texto" class="editor-field-input" />
+        <input v-model="item.image" type="text" placeholder="URL de imagen (opcional, ej. organigrama)" class="editor-field-input">
+        <input v-model="item.imageAlt" type="text" placeholder="Texto alternativo de la imagen" class="editor-field-input">
+        <div v-for="(link, li) in item.links || []" :key="link.id || li" class="border rounded p-2 space-y-1">
+          <input v-model="link.label" type="text" placeholder="Título del enlace" class="editor-field-input">
+          <input v-model="link.url" type="text" placeholder="URL" class="editor-field-input">
+          <input v-model="link.description" type="text" placeholder="Descripción (opcional)" class="editor-field-input">
+          <button type="button" class="text-xs text-red-600" @click="item.links.splice(li, 1)">Quitar enlace</button>
+        </div>
+        <button type="button" class="w-full py-1.5 text-xs border border-dashed rounded" @click="addLink(item)">+ Enlace</button>
       </template>
     </PropertyRepeater>
   </div>
@@ -36,6 +45,11 @@ const addItem = () => {
 }
 
 const removeItem = (index) => props.element.items.splice(index, 1)
+
+const addLink = (item) => {
+  if (!item.links) item.links = []
+  item.links.push({ id: generateId(), label: '', url: '', description: '' })
+}
 
 const moveItem = (index, direction) => {
   const list = props.element.items

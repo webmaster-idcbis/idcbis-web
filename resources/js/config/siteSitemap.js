@@ -6,17 +6,18 @@ export const SITE_SITEMAP = [
   {
     title: 'Quiénes Somos',
     slug: 'quienes-somos',
-    icon: '🏛️',
+    icon: '/img/Iconos/IDCBIS.svg',
     description: 'Historia, misión y equipo del instituto',
   },
   {
     title: 'Servicios',
     slug: 'servicios',
-    icon: '❤️',
+    icon: '/img/Iconos/compromiso social.svg',
     description: 'Bancos de sangre, tejidos y servicios institucionales',
     children: [
-      { title: 'Banco Distrital de Sangre', slug: 'banco-de-sangre', icon: '🩸' },
+      { title: 'Banco Distrital de Sangre', slug: 'banco-de-sangre', icon: '/img/Iconos/banco de sangre.svg' },
       { title: 'Banco Distrital de Tejidos', slug: 'banco-distrital-de-tejidos', icon: '🧬' },
+      { title: 'DarCélulas', slug: 'darcelulas', icon: '🧫' },
       { title: 'Banco Público de Sangre de Cordón Umbilical', slug: 'banco-publico-sangre-cordon-umbilical', icon: '👶' },
       { title: 'Servicios Institucionales', slug: 'servicios-institucionales', icon: '🏥' },
     ],
@@ -37,7 +38,7 @@ export const SITE_SITEMAP = [
   {
     title: 'Transparencia',
     slug: 'transparencia',
-    icon: '📋',
+    icon: '/img/Iconos/transparencia.svg',
     description: 'Información pública, normativa y datos abiertos',
     children: [
       { title: 'Información de la entidad', slug: 'informacion-de-la-entidad' },
@@ -45,11 +46,12 @@ export const SITE_SITEMAP = [
       { title: 'Contratación', slug: 'contratacion' },
       { title: 'Planeación, presupuesto e informes', slug: 'planeacion-presupuesto-e-informes' },
       { title: 'Trámites', slug: 'tramites' },
-      { title: 'Participa', slug: 'transparencia-participa' },
+      { title: 'Participa', slug: 'participa' },
       { title: 'Datos Abiertos', slug: 'datos-abiertos' },
       { title: 'Información específica para grupos de interés', slug: 'informacion-grupos-de-interes' },
       { title: 'Obligación de reporte de información', slug: 'obligacion-reporte-informacion' },
       { title: 'Información tributaria en entidades territoriales locales', slug: 'informacion-tributaria-entidades-territoriales' },
+      { title: 'Gestión de activos fijos y almacén', slug: 'gestion-de-activos-fijos-y-almacen' },
     ],
   },
 ];
@@ -58,16 +60,16 @@ export const SITE_SITEMAP = [
 export const SITEMAP_QUICK_LINKS = [
   {
     group: 'Participación y atención',
-    icon: '🤝',
+    icon: '/img/Iconos/compromiso social.svg',
     items: [
       { title: 'Participa', slug: 'participa' },
       { title: 'Atención a Usuarios', slug: 'atencion-a-usuarios' },
-      { title: 'Contáctenos', slug: 'contacto', icon: '✉️' },
+      { title: 'Contáctenos', slug: 'contacto', icon: '/img/Iconos/correo.svg' },
     ],
   },
   {
     group: 'Transparencia y gestión',
-    icon: '📊',
+    icon: '/img/Iconos/gestion.svg',
     items: [
       { title: 'Programa de Transparencia y Ética Pública', slug: 'programa-transparencia-etica-publica' },
       { title: 'Plan anticorrupción y atención al ciudadano', slug: 'plan-anticorrupcion' },
@@ -89,17 +91,41 @@ export const SITEMAP_QUICK_LINKS = [
   },
 ];
 
-/** Slugs con contenido publicado y listo */
+/**
+ * Slugs con contenido diseñado y listo (no placeholder).
+ * Actualizar al publicar nuevas páginas en el CMS.
+ */
 export const PUBLISHED_SITEMAP_SLUGS = new Set([
+  // Principales
   'inicio',
   'mapa-del-sitio',
   'quienes-somos',
-  'programa-transparencia-etica-publica',
-  'estados-financieros',
-  'plan-anticorrupcion',
-  'banco-de-sangre',
-  'servicios',
   'contacto',
+  'noticias',
+  'atencion-a-usuarios',
+  'participa',
+  // Servicios
+  'banco-de-sangre',
+  'banco-distrital-de-tejidos',
+  'darcelulas',
+  // Transparencia y gestión
+  'transparencia',
+  'informacion-de-la-entidad',
+  'normativa',
+  'contratacion',
+  'planeacion-presupuesto-e-informes',
+  'tramites',
+  'datos-abiertos',
+  'informacion-grupos-de-interes',
+  'obligacion-reporte-informacion',
+  'informacion-tributaria-entidades-territoriales',
+  'gestion-de-activos-fijos-y-almacen',
+  'programa-transparencia-etica-publica',
+  'plan-anticorrupcion',
+  'estados-financieros',
+  'ejecucion-presupuestal',
+  'contratacion-bienes-servicios',
+  'rendicion-de-cuentas',
 ]);
 
 export function sitemapItemUrl(slug) {

@@ -8,12 +8,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * En Windows/Laragon el cuerpo JSON a veces no llega a $request->all().
- * Orden de lectura: campo "payload" (FormData) → laravel_raw_input → php://input.
+ * Usar campo "payload" (FormData) → PHP lo lee desde $_POST sin php://input.
  */
 class ParseJsonBody
 {
     public function handle(Request $request, Closure $next): Response
     {
+        if ($request->has('payload')) {
+            $payload = $request->input('payload');
+            if (is_string($payload) && $payload !== '') {
+                $this->mergeDecodedPayload($request, $payload);
+
+                return $next($request);
+            }
+        }
+
         if (! array_key_exists('content', $request->all())) {
             $this->mergeDecodedPayload($request, $this->resolveRawJson($request));
         }
@@ -23,18 +32,6 @@ class ParseJsonBody
 
     private function resolveRawJson(Request $request): ?string
     {
-        if ($request->has('payload')) {
-            $payload = $request->input('payload');
-            if (is_string($payload) && $payload !== '') {
-                return $payload;
-            }
-        }
-
-        $raw = $GLOBALS['laravel_raw_input'] ?? '';
-        if ($raw !== '') {
-            return $raw;
-        }
-
         if (str_contains($request->header('Content-Type', ''), 'application/json')) {
             $stream = @file_get_contents('php://input');
             if (is_string($stream) && $stream !== '') {

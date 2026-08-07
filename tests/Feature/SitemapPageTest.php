@@ -27,8 +27,11 @@ class SitemapPageTest extends TestCase
         $this->assertContains('quienes-somos', $slugs);
         $this->assertContains('servicios', $slugs);
         $this->assertContains('banco-de-sangre', $slugs);
+        $this->assertContains('banco-distrital-de-tejidos', $slugs);
         $this->assertContains('transparencia', $slugs);
         $this->assertContains('contacto', $slugs);
+    }
+
     /** @test */
     public function mapa_del_sitio_seeder_creates_cms_page()
     {

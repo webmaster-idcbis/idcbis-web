@@ -17,7 +17,12 @@ class SplitMonolithicPagesCommand extends Command
         'estados-financieros',
         'plan-anticorrupcion',
         'programa-transparencia-etica-publica',
+        'ejecucion-presupuestal',
+        'contratacion-bienes-servicios',
+        'rendicion-de-cuentas',
         'mapa-del-sitio',
+        'banco-de-sangre',
+        'banco-distrital-de-tejidos',
     ];
 
     public function handle(): int

@@ -4,9 +4,9 @@
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#005674]"></div>
     </div>
 
-    <div v-else-if="page" class="bg-white">
+    <div v-else-if="displayPage" class="bg-white">
       <component
-        v-for="(section, index) in (page.sections || [])"
+        v-for="(section, index) in (displayPage.sections || [])"
         :key="`section-${index}`"
         :is="getSectionComponent(section.type)"
         :section="section"
@@ -22,16 +22,16 @@
         v-if="!hasSections && !hasElementContent"
         class="max-w-7xl mx-auto px-4 py-12"
       >
-        <h1 class="text-3xl font-bold text-gray-900 mb-6">{{ page.title }}</h1>
-        <p class="text-gray-600">Esta página está en construcción.</p>
+        <h1 class="text-3xl font-bold text-gray-900 mb-6">{{ displayPage.title }}</h1>
+        <p class="text-gray-600">{{ t('common.underConstruction') }}</p>
       </div>
     </div>
 
     <div v-else class="max-w-7xl mx-auto px-4 py-12 text-center">
-      <h1 class="text-2xl font-bold text-gray-900 mb-4">Página no encontrada</h1>
-      <p class="text-gray-600">La página que buscas no existe o ha sido eliminada.</p>
+      <h1 class="text-2xl font-bold text-gray-900 mb-4">{{ t('common.pageNotFound') }}</h1>
+      <p class="text-gray-600">{{ t('common.pageNotFoundHint') }}</p>
       <router-link to="/" class="mt-4 inline-block text-[#005674] hover:underline">
-        Volver al inicio
+        {{ t('common.backHome') }}
       </router-link>
     </div>
   </MainLayout>
@@ -42,6 +42,8 @@ import { ref, computed, onMounted, watch, markRaw, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import { useCmsStore } from '../stores/cms';
 import { scrollToTop } from '../utils/scrollToTop';
+import { useI18n } from '../i18n';
+import { localizePage } from '../utils/localizeContent';
 import MainLayout from '../components/layout/MainLayout.vue';
 import PageContentRenderer from '../components/PageContentRenderer.vue';
 
@@ -69,6 +71,7 @@ import NewsletterSection from '../components/sections/NewsletterSection.vue';
 
 const route = useRoute();
 const cmsStore = useCmsStore();
+const { t, locale } = useI18n();
 const loading = ref(true);
 const page = ref(null);
 
@@ -98,22 +101,30 @@ const sectionComponents = {
 
 const getSectionComponent = (type) => sectionComponents[type] || 'div';
 
+// Instantáneo: usa translations guardadas / overlays, sin llamar APIs al navegar.
+const displayPage = computed(() => {
+  if (!page.value) {
+    return null;
+  }
+  return localizePage(page.value, locale.value);
+});
+
 const pageContent = computed(() => {
-  const content = page.value?.content;
+  const content = displayPage.value?.content;
   return Array.isArray(content) ? content : [];
 });
 
 const hasSections = computed(() => {
-  const sections = page.value?.sections;
+  const sections = displayPage.value?.sections;
   return Array.isArray(sections) && sections.length > 0;
 });
 
 const hasElementContent = computed(() => pageContent.value.length > 0);
 
 const pageTheme = computed(() => {
-  const slug = page.value?.slug || '';
+  const slug = displayPage.value?.slug || '';
   if (slug === 'banco-de-sangre') return 'bds';
-  return page.value?.theme || null;
+  return displayPage.value?.theme || null;
 });
 
 const loadPage = async () => {

@@ -20,6 +20,7 @@ class Page extends Model
         'meta_description',
         'content',
         'sections',
+        'translations',
         'status',
         'meta_title',
         'meta_keywords',
@@ -35,6 +36,7 @@ class Page extends Model
     protected $casts = [
         'content' => 'array',
         'sections' => 'array',
+        'translations' => 'array',
         'published_at' => 'datetime',
     ];
 

@@ -9,7 +9,7 @@
       @move="moveItem"
     >
       <template #default="{ item }">
-        <input v-model="item.icon" type="text" placeholder="Icono (emoji)" class="editor-field-input">
+        <input v-model="item.icon" type="text" placeholder="Emoji o ruta SVG" class="editor-field-input">
         <input v-model="item.value" type="text" placeholder="Valor" class="editor-field-input">
         <input v-model="item.label" type="text" placeholder="Etiqueta" class="editor-field-input">
       </template>

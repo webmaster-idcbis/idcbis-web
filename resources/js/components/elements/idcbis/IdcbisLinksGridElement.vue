@@ -1,10 +1,10 @@
 <template>
-  <section class="idcbis-links" @click.stop="$emit('click', element)">
+  <section class="idcbis-links" :class="element.className" :style="sectionStyles" @click.stop="$emit('click', element)">
     <div class="idcbis-links__container">
       <div class="idcbis-links__header">
         <h2>
           {{ element.sectionTitle || 'Recursos' }}
-          <span>{{ element.sectionHighlight || 'y enlaces' }}</span>
+          <span :style="{ color: element.highlightColor || '#C4A140' }">{{ element.sectionHighlight || 'y enlaces' }}</span>
         </h2>
         <p v-if="element.sectionSubtitle">{{ element.sectionSubtitle }}</p>
       </div>
@@ -16,9 +16,10 @@
           :href="preview && link.url ? link.url : undefined"
           :target="preview && link.url?.startsWith('http') ? '_blank' : undefined"
           class="link-card"
+          :style="cardStyles"
         >
-          <span class="link-card__icon">{{ link.icon || '🔗' }}</span>
-          <h3>{{ link.label }}</h3>
+          <ContentIcon :value="link.icon || '🔗'" class="link-card__icon" />
+          <h3 :style="element.cardTitleColor ? { color: element.cardTitleColor } : undefined">{{ link.label }}</h3>
           <p v-if="link.description">{{ link.description }}</p>
         </component>
       </div>
@@ -28,6 +29,8 @@
 
 <script setup>
 import { computed } from 'vue'
+import { mergeElementStyles, resolveBackground } from '../../../composables/useElementStyles'
+import ContentIcon from '../ContentIcon.vue'
 
 const props = defineProps({
   element: { type: Object, required: true },
@@ -37,13 +40,35 @@ const props = defineProps({
 defineEmits(['click'])
 
 const links = computed(() => props.element.links || [])
+
+const sectionStyles = computed(() => {
+  const styles = mergeElementStyles(props.element)
+
+  // Soporta color plano o gradiente; sin imagen de fondo aplica el azul institucional por defecto
+  if (!props.element.backgroundImage) {
+    styles.background = resolveBackground(props.element, '#0b4f6c')
+    delete styles.backgroundColor
+  }
+
+  if (!styles.padding) styles.padding = '5rem 2rem'
+  if (!styles.color) styles.color = '#ffffff'
+
+  return styles
+})
+
+const cardStyles = computed(() => {
+  const styles = {}
+  if (props.element.cardBackground) styles.background = props.element.cardBackground
+  if (props.element.cardTextColor) styles.color = props.element.cardTextColor
+  if (props.element.cardBorder) styles.border = props.element.cardBorder
+  if (props.element.cardBorderRadius) styles.borderRadius = props.element.cardBorderRadius
+  if (props.element.cardBoxShadow) styles.boxShadow = props.element.cardBoxShadow
+  return styles
+})
 </script>
 
 <style scoped>
 .idcbis-links {
-  padding: 5rem 2rem;
-  background: #0b4f6c;
-  color: white;
   font-family: var(--font-idcbis);
   cursor: pointer;
 }
@@ -62,10 +87,6 @@ const links = computed(() => props.element.links || [])
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 800;
   text-transform: uppercase;
-}
-
-.idcbis-links__header h2 span {
-  color: #C4A140;
 }
 
 .idcbis-links__header p {
@@ -96,12 +117,12 @@ const links = computed(() => props.element.links || [])
 
 .link-card:hover {
   transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.18);
+  filter: brightness(1.08);
 }
 
 .link-card__icon {
   font-size: 2rem;
-  display: block;
+  display: inline-block;
   margin-bottom: 0.75rem;
 }
 

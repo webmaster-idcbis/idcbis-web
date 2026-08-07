@@ -12,7 +12,7 @@
           class="panel-card"
         >
           <h3>
-            <span v-if="panel.icon" class="panel-icon">{{ panel.icon }}</span>
+            <ContentIcon v-if="panel.icon" :value="panel.icon" class="panel-icon" />
             {{ panel.title }}
           </h3>
           <ul class="panel-list" :class="panel.listStyle || 'check'">
@@ -27,6 +27,7 @@
 <script setup>
 import { computed } from 'vue'
 import { resolveBackground } from '../../composables/useElementStyles'
+import ContentIcon from './ContentIcon.vue'
 
 const props = defineProps({
   element: { type: Object, required: true },
