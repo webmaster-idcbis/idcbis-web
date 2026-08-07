@@ -1,6 +1,6 @@
 <?php
 
-/** Metadatos de la página /unidad-de-terapias-avanzadas */
+/** Metadatos de la página /unidad-de-terapias-avanzadas — sincronizado desde la BD */
 
 return [
     'title' => 'Unidad de Terapias Avanzadas | IDCBIS',

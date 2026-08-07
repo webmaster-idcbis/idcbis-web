@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Contenido de /unidad-de-terapias-avanzadas (Unidad de Terapias Avanzadas — UTA).
- * Fuente: https://idcbis.org.co/unidad-de-terapias-avanzadas/
+ * Contenido de /unidad-de-terapias-avanzadas tal como está en la base de datos (bloques del editor).
+ * Sincronizado con: php artisan page:sync-data-files
  */
 
 return [
@@ -245,9 +245,9 @@ return [
         ],
         'maxWidth' => '1200px',
         'fullBleed' => true,
+        'borderRadius' => '0',
         'flexDirection' => 'column',
         'backgroundColor' => 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
-        'borderRadius' => '0',
     ],
     [
         'id' => 'uta_projects_tisular',
@@ -800,7 +800,12 @@ return [
                         'icon' => '📍',
                         'type' => 'card',
                         'title' => 'Ubicación',
-                        'content' => "Unidad de Terapias Avanzadas — IDCBIS\nCarrera 32 No. 12-81\nEdificio IDCBIS — Secretaría Distrital de Salud\nBogotá, Colombia\n\nLunes a viernes: 8:00 a.m. – 5:00 p.m.",
+                        'content' => 'Unidad de Terapias Avanzadas — IDCBIS
+Carrera 32 No. 12-81
+Edificio IDCBIS — Secretaría Distrital de Salud
+Bogotá, Colombia
+
+Lunes a viernes: 8:00 a.m. – 5:00 p.m.',
                         'variant' => 'info',
                     ],
                     [
@@ -808,7 +813,10 @@ return [
                         'icon' => '📞',
                         'type' => 'card',
                         'title' => 'Contacto',
-                        'content' => "PBX: (+57) 1 3649620\nCorreo: contacto@idcbis.org.co\nLiderazgo científico: gsalguero@idcbis.org.co\nIngeniería de tejidos: izsilva@idcbis.org.co",
+                        'content' => 'PBX: (+57) 1 3649620
+Correo: contacto@idcbis.org.co
+Liderazgo científico: gsalguero@idcbis.org.co
+Ingeniería de tejidos: izsilva@idcbis.org.co',
                         'variant' => 'info',
                     ],
                 ],
