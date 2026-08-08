@@ -196,11 +196,14 @@ onUnmounted(stopAutoplay)
 .idcbis-hero-carousel {
   font-family: var(--font-idcbis);
   cursor: pointer;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .idcbis-hero-carousel__viewport {
   position: relative;
   overflow: hidden;
+  max-width: 100%;
 }
 
 .idcbis-hero-carousel__track {
@@ -219,6 +222,8 @@ onUnmounted(stopAutoplay)
   padding: 4rem 2rem 6rem;
   position: relative;
   overflow: hidden;
+  max-width: 100%;
+  box-sizing: border-box;
   background: linear-gradient(135deg, #0b4f6c, #2c8c99);
 }
 
@@ -266,7 +271,8 @@ onUnmounted(stopAutoplay)
 }
 
 .idcbis-hero__content {
-  max-width: 1400px;
+  max-width: min(1400px, 100%);
+  width: 100%;
   margin: 0 auto;
   position: relative;
   z-index: 2;
@@ -274,38 +280,45 @@ onUnmounted(stopAutoplay)
   align-items: center;
   justify-content: space-between;
   gap: 3rem;
+  box-sizing: border-box;
 }
 
 .idcbis-hero__text {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .idcbis-hero__text h1 {
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-size: clamp(1.75rem, 5vw, 4.5rem);
   font-weight: 600;
-  line-height: 1.1;
+  line-height: 1.15;
   margin-bottom: 1rem;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .idcbis-hero__text h1 .light {
   font-weight: 300;
   display: block;
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1.5rem, 4vw, 3rem);
   opacity: 0.9;
 }
 
 .idcbis-hero__text p {
-  font-size: 1.3rem;
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
   margin-bottom: 2rem;
   opacity: 0.95;
   max-width: 600px;
+  overflow-wrap: break-word;
 }
 
 .idcbis-hero__cta {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .btn-big {
@@ -321,6 +334,9 @@ onUnmounted(stopAutoplay)
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   text-decoration: none;
   display: inline-block;
+  box-sizing: border-box;
+  text-align: center;
+  max-width: 100%;
 }
 
 .btn-big.orange {
@@ -345,8 +361,8 @@ onUnmounted(stopAutoplay)
 }
 
 .idcbis-hero__image {
-  flex: 1;
-  min-width: 280px;
+  flex: 1 1 280px;
+  min-width: 0;
   max-width: 480px;
   border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
   border: 4px solid white;
@@ -460,9 +476,22 @@ onUnmounted(stopAutoplay)
 }
 
 @media (max-width: 900px) {
+  .idcbis-hero {
+    padding: 3rem 1.25rem 4.5rem;
+  }
+
+  .idcbis-hero--with-bg {
+    min-height: 0;
+  }
+
+  .idcbis-hero--with-bg .idcbis-hero__content {
+    padding: 3rem 1.25rem 4.5rem;
+  }
+
   .idcbis-hero__content {
     flex-direction: column;
     text-align: center;
+    gap: 1.75rem;
   }
 
   .idcbis-hero__text p {
@@ -472,12 +501,27 @@ onUnmounted(stopAutoplay)
 
   .idcbis-hero__cta {
     justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .btn-big {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+  }
+
+  .btn-big.orange:hover,
+  .btn-big.purple:hover {
+    transform: none;
   }
 
   .idcbis-hero__image {
     width: 100%;
-    max-width: none;
-    height: 280px;
+    max-width: 320px;
+    height: 220px;
   }
 
   .idcbis-hero-carousel__nav {
@@ -498,6 +542,38 @@ onUnmounted(stopAutoplay)
 
   .idcbis-hero-carousel__nav--next {
     right: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .idcbis-hero,
+  .idcbis-hero--with-bg .idcbis-hero__content {
+    padding: 2.5rem 1rem 4rem;
+  }
+
+  .idcbis-hero__text h1 {
+    font-size: clamp(1.6rem, 9vw, 2.25rem);
+  }
+
+  .idcbis-hero__text h1 .light {
+    font-size: clamp(1.35rem, 7vw, 1.85rem);
+  }
+
+  .idcbis-hero__text p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .idcbis-hero-carousel__track {
+    transition: none;
+  }
+
+  .btn-big,
+  .idcbis-hero-carousel__nav,
+  .idcbis-hero-carousel__dot {
+    transition: none;
   }
 }
 </style>

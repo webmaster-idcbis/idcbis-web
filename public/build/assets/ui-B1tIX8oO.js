@@ -1,0 +1,1 @@
+import{K as l,e as t}from"./app-kgN4UjFq.js";const u=l("ui",()=>{const s=t(null);return{flash:s,setFlash:(e,a="success")=>{s.value={message:e,type:a,id:Date.now()}},clearFlash:()=>{s.value=null}}});export{u};

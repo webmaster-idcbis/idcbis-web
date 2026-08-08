@@ -7,10 +7,8 @@
   >
     <div
       class="carousel-container"
-      :style="{
-        height: element.height || (isHeroFull ? '550px' : '400px'),
-        borderRadius: element.borderRadius || (isHeroFull ? '0 0 30px 30px' : '8px'),
-      }"
+      :class="{ 'carousel-container--hero-full': isHeroFull }"
+      :style="containerStyles"
     >
       <div class="carousel-track" :style="trackStyles">
         <div
@@ -125,6 +123,17 @@ watch(() => props.focusedPart, focusSlideFromAnchor, { immediate: true })
 
 const isHeroFull = computed(() => props.element.variant === 'hero-full')
 
+const containerStyles = computed(() => {
+  const styles = {
+    borderRadius: props.element.borderRadius || (isHeroFull.value ? '0 0 30px 30px' : '8px'),
+  }
+  // Hero full: altura 100% por CSS responsive (ignora height del CMS en móvil).
+  if (!isHeroFull.value) {
+    styles.height = props.element.height || '400px'
+  }
+  return styles
+})
+
 const carouselStyles = computed(() => ({
   width: props.element.width || '100%',
   backgroundColor: resolveBackgroundColor(props.element.backgroundColor, '#f8f9fa'),
@@ -156,49 +165,68 @@ const contentStyles = (slide) => {
     textAlign: align,
     justifyContent: slide.verticalAlign || props.element.verticalAlign || (hero ? 'center' : 'flex-end'),
     alignItems: align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center',
-    padding: props.element.contentPadding || (hero ? '0 4rem' : '32px 24px 48px'),
+    // El padding responsive del hero se aplica por CSS; aquí solo desktop / no-hero
+    padding: props.element.contentPadding || (hero ? undefined : '32px 24px 48px'),
     maxWidth: hero ? '1200px' : undefined,
     margin: hero ? '0 auto' : undefined,
     width: hero ? '100%' : undefined,
+    boxSizing: 'border-box',
   }
 }
 
-const titleStyles = (slide) => ({
-  fontSize: slide.titleSize || props.element.titleSize || (isHeroFull.value ? '3.5rem' : '2.5rem'),
-  fontWeight: slide.titleWeight || props.element.titleWeight || '700',
-  color: slide.titleColor || props.element.titleColor || '#ffffff',
-  textTransform: slide.titleTransform || props.element.titleTransform || 'none',
-  lineHeight: isHeroFull.value ? '1.2' : undefined,
-  marginBottom: isHeroFull.value ? '1.5rem' : undefined,
-  maxWidth: isHeroFull.value ? '800px' : undefined,
-  textShadow: isHeroFull.value ? '0 2px 15px rgba(0, 0, 0, 0.3)' : undefined,
-  fontFamily: isHeroFull.value ? 'var(--font-idcbis)' : undefined,
-})
+const titleStyles = (slide) => {
+  // Hero-full: tipografía por CSS (responsive). Solo inline si el CMS define tamaño.
+  const customSize = slide.titleSize || props.element.titleSize
+  const styles = {
+    fontWeight: slide.titleWeight || props.element.titleWeight || '700',
+    color: slide.titleColor || props.element.titleColor || '#ffffff',
+    textTransform: slide.titleTransform || props.element.titleTransform || 'none',
+    overflowWrap: 'break-word',
+  }
+  if (customSize) styles.fontSize = customSize
+  else if (!isHeroFull.value) styles.fontSize = '2.5rem'
+  if (isHeroFull.value) {
+    styles.lineHeight = '1.2'
+    styles.maxWidth = '800px'
+    styles.textShadow = '0 2px 15px rgba(0, 0, 0, 0.3)'
+    styles.fontFamily = 'var(--font-idcbis)'
+  }
+  return styles
+}
 
-const descriptionStyles = (slide) => ({
-  fontSize: slide.descriptionSize || props.element.descriptionSize || (isHeroFull.value ? '1.4rem' : '1.1rem'),
-  color: slide.descriptionColor || props.element.descriptionColor || '#ffffff',
-  maxWidth: props.element.descriptionMaxWidth || (isHeroFull.value ? '700px' : '720px'),
-  marginBottom: isHeroFull.value ? '2.5rem' : undefined,
-  opacity: isHeroFull.value ? '0.95' : undefined,
-})
+const descriptionStyles = (slide) => {
+  const customSize = slide.descriptionSize || props.element.descriptionSize
+  const styles = {
+    color: slide.descriptionColor || props.element.descriptionColor || '#ffffff',
+    maxWidth: props.element.descriptionMaxWidth || (isHeroFull.value ? '700px' : '720px'),
+    overflowWrap: 'break-word',
+  }
+  if (customSize) styles.fontSize = customSize
+  else if (!isHeroFull.value) styles.fontSize = '1.1rem'
+  if (isHeroFull.value) styles.opacity = '0.95'
+  return styles
+}
 
 const buttonStyles = (slide) => {
   const hero = isHeroFull.value
-  return {
+  const styles = {
     background: slide.buttonBg || props.element.buttonBg || (hero ? 'linear-gradient(135deg, #d32f2f 0%, #9a0007 100%)' : '#005674'),
     color: slide.buttonColor || props.element.buttonColor || '#ffffff',
     borderRadius: slide.buttonRadius || props.element.buttonRadius || '999px',
     fontWeight: slide.buttonWeight || props.element.buttonWeight || '600',
     textTransform: slide.buttonTransform || props.element.buttonTransform || (hero ? 'none' : 'uppercase'),
     letterSpacing: slide.buttonLetterSpacing || props.element.buttonLetterSpacing || (hero ? '0' : '0.04em'),
-    padding: hero ? '1.1rem 2.8rem' : undefined,
-    fontSize: hero ? '1.2rem' : undefined,
-    boxShadow: hero ? '0 8px 25px rgba(211, 47, 47, 0.4)' : undefined,
-    display: hero ? 'inline-flex' : undefined,
-    alignItems: hero ? 'center' : undefined,
-    gap: hero ? '0.8rem' : undefined,
+    maxWidth: '100%',
+    boxSizing: 'border-box',
   }
+  if (hero) {
+    styles.boxShadow = '0 8px 25px rgba(211, 47, 47, 0.4)'
+    styles.display = 'inline-flex'
+    styles.alignItems = 'center'
+    styles.justifyContent = 'center'
+    styles.gap = '0.8rem'
+  }
+  return styles
 }
 
 const nextSlide = () => {
@@ -238,11 +266,13 @@ onUnmounted(stopAutoplay)
 <style scoped>
 .carousel-element {
   cursor: pointer;
+  max-width: 100%;
 }
 
 .carousel-container {
   position: relative;
   width: 100%;
+  max-width: 100%;
   overflow: hidden;
   border-radius: 8px;
 }
@@ -374,6 +404,33 @@ onUnmounted(stopAutoplay)
   font-family: var(--font-idcbis);
 }
 
+/* Altura responsive: conserva estructura absolute del carrusel */
+.carousel-container--hero-full {
+  height: 550px;
+}
+
+.carousel-element--hero-full .slide-content {
+  padding: 3rem 4rem 4rem;
+  box-sizing: border-box;
+}
+
+.carousel-element--hero-full .slide-title {
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  margin-bottom: 1.25rem;
+  line-height: 1.2;
+}
+
+.carousel-element--hero-full .slide-description {
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.carousel-element--hero-full .slide-button {
+  padding: 1.1rem 2.8rem;
+  font-size: 1.2rem;
+}
+
 .carousel-element--hero-full .carousel-nav {
   background: rgba(255, 255, 255, 0.15);
   color: #fff;
@@ -403,11 +460,98 @@ onUnmounted(stopAutoplay)
   box-shadow: 0 15px 30px rgba(211, 47, 47, 0.5);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  .carousel-container--hero-full {
+    height: 500px;
+  }
+
   .carousel-element--hero-full .slide-content {
-    padding: 0 2rem !important;
+    padding: 2.5rem 2rem 3.25rem !important;
     text-align: center !important;
     align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .carousel-element--hero-full .slide-title {
+    font-size: clamp(1.65rem, 5.5vw, 2.4rem) !important;
+    margin-bottom: 0.85rem;
+    max-width: 100%;
+  }
+
+  .carousel-element--hero-full .slide-description {
+    font-size: 1.05rem !important;
+    margin-bottom: 1.35rem;
+    max-width: 100%;
+  }
+
+  .carousel-element--hero-full .slide-button {
+    padding: 0.95rem 1.75rem;
+    font-size: 1.05rem;
+  }
+
+  .carousel-element--hero-full .carousel-nav {
+    width: 44px;
+    height: 44px;
+    font-size: 1.25rem;
+  }
+
+  .carousel-nav-prev { left: 8px; }
+  .carousel-nav-next { right: 8px; }
+}
+
+@media (max-width: 600px) {
+  .carousel-container--hero-full {
+    /* Más alto en móvil para que título + texto + botón quepan sin recorte */
+    height: 580px;
+  }
+
+  .carousel-element--hero-full .slide-content {
+    padding: 2.25rem 1.15rem 3.5rem !important;
+  }
+
+  .carousel-element--hero-full .slide-title {
+    font-size: clamp(1.5rem, 7vw, 2rem) !important;
+    margin-bottom: 0.75rem;
+  }
+
+  .carousel-element--hero-full .slide-description {
+    font-size: 0.98rem !important;
+    margin-bottom: 1.15rem;
+  }
+
+  .carousel-element--hero-full .slide-button {
+    width: 100%;
+    max-width: 280px;
+    padding: 0.9rem 1.4rem;
+    font-size: 1rem;
+  }
+
+  .carousel-element--hero-full .carousel-indicators {
+    bottom: 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .carousel-container--hero-full {
+    height: 620px;
+  }
+
+  .carousel-element--hero-full .slide-content {
+    padding: 2rem 0.9rem 3.25rem !important;
+  }
+
+  .carousel-element--hero-full .slide-button {
+    max-width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-track {
+    transition: none;
+  }
+
+  .carousel-element--hero-full .slide-button:hover {
+    transform: none;
   }
 }
 </style>

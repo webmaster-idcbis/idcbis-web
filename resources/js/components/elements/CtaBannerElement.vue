@@ -112,14 +112,32 @@ const bannerStyles = computed(() => ({
 }
 
 @media (max-width: 768px) {
+  .cta-banner {
+    padding: 2rem 1rem 4rem;
+  }
+
+  .cta-banner__inner {
+    padding: 3rem 1.25rem;
+    border-radius: 20px;
+  }
+
+  .cta-banner__inner p {
+    font-size: 1.05rem;
+    margin-bottom: 2rem;
+  }
+
   .btn {
     width: 100%;
     max-width: 300px;
     justify-content: center;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
   }
+
   .cta-buttons {
     flex-direction: column;
     align-items: center;
+    gap: 1rem;
   }
 }
 </style>

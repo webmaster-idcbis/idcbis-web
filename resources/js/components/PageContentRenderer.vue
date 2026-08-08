@@ -35,6 +35,7 @@ const { getComponentType } = usePageElements()
 .page-content {
   font-family: var(--font-idcbis);
   background: #f5f8fa;
+  max-width: 100%;
 }
 
 .page-element-contained {
@@ -46,6 +47,7 @@ const { getComponentType } = usePageElements()
 
 .page-element-bleed {
   width: 100%;
+  max-width: 100%;
 }
 
 .page-content.theme-bds {
