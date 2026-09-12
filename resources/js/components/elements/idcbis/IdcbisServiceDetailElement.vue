@@ -1,5 +1,5 @@
 <template>
-  <section class="idcbis-service-detail" @click.stop="$emit('click', element)">
+  <section :id="element.id || undefined" class="idcbis-service-detail" @click.stop="$emit('click', element)">
     <div class="idcbis-service-detail__container">
       <div class="idcbis-service-detail__header">
         <h2>
@@ -52,6 +52,7 @@ const items = computed(() => props.element.items || [])
   background: #fff;
   font-family: var(--font-idcbis);
   cursor: pointer;
+  scroll-margin-top: 96px;
 }
 
 .idcbis-service-detail__container {

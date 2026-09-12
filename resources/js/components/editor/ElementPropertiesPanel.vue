@@ -90,6 +90,7 @@ import IdcbisDocumentsListContentProperties from './properties/IdcbisDocumentsLi
 import IdcbisTeamGridContentProperties from './properties/IdcbisTeamGridContentProperties.vue'
 import IdcbisNewsListContentProperties from './properties/IdcbisNewsListContentProperties.vue'
 import IdcbisNewsCarouselContentProperties from './properties/IdcbisNewsCarouselContentProperties.vue'
+import IdcbisTissueCatalogContentProperties from './properties/IdcbisTissueCatalogContentProperties.vue'
 import SitemapContentProperties from './properties/SitemapContentProperties.vue'
 import { paletteCategories } from '../../config/pageElementPalette'
 
@@ -143,6 +144,7 @@ const panels = {
   'idcbis-team-grid': IdcbisTeamGridContentProperties,
   'idcbis-news-list': IdcbisNewsListContentProperties,
   'idcbis-news-carousel': IdcbisNewsCarouselContentProperties,
+  'idcbis-tissue-catalog': IdcbisTissueCatalogContentProperties,
   sitemap: SitemapContentProperties,
 }
 

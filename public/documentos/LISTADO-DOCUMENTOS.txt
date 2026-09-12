@@ -1,0 +1,291 @@
+LISTADO DE DOCUMENTOS A COPIAR
+================================
+Copie cada archivo con el MISMO nombre a la carpeta indicada.
+Origen habitual: C:\laragon\www\transparencia\documentos\  (o el servidor /documentos/ del sitio actual)
+Destino:        C:\laragon\www\idcbis-web\public\documentos\
+
+Los enlaces del CMS ya apuntan a /documentos/{carpeta}/{archivo}
+
+
+planeacion/
+-----------
+Circular-007-de-2018.pdf
+Circular-013-de-2019.pdf
+Circular-007-de-2020.pdf
+Circular-005-de-2021.pdf
+Circular-005-de-2022.pdf
+Circular-001-de-2023.pdf
+Circular-021-de-2024.pdf
+Circular-005-de-2024.pdf
+Circular-003-de-2025.pdf
+Circular-006-de-2025.pdf
+Circular-020-de-2025.pdf
+Circular 031 PRESUPUESTO ANUAL 2026.pdf
+IDCBIS_Plan_Anual_de_Gestion_2025.xlsx
+Plan_estratégico_2021-2025.pdf
+PLAN-ESTRATEGICO-2021-A-2025.pdf
+IDCBIS_Plan_Anual_de_Gestion_2024.xlsx
+IDCBIS_Plan_Anual_de_Gestion_2023.xlsx
+IDCBIS_Plan_Anual_de_Gestion_2022.xlsx
+IDCBIS_Plan_Anual_de_Gestion_2021.xlsx
+Informe de empalme.pdf
+principales_logros_idcbis.pdf
+Rendicion-de cuentas-2019-01-v3.pdf
+Informe-empalme-administrativo-distrital-2020-2024.pdf
+Informe_de_Gestion_enero_a_marzo_2022.pdf
+Informe_de_Gestion_enero_a_junio_2022.pdf
+Informe_de_Gestion_enero_a_septiembre_2022.pdf
+Informe_de_Gestion_enero_a_marzo_2023.pdf
+Informe_de_Gestion_abril_a_junio_2023.pdf
+Informe_de_Gestion_julio_a_septiembre_2023.pdf
+IDCBIS-Informe-direccion-enero-a-diciembre-2023.pdf
+Informe_de_Gestion_enero_a_marzo_2024.pdf
+Informe_de_Gestion_abril_a_junio_2024.pdf
+Informe_de_Gestion_julio_a_septiembre_2024.pdf
+Informe_de_Gestion_enero_a_diciembre_2024.pdf
+Informe_de_Gestion_Enero_Marzo_2025.pdf
+Informe_de_Gestion_Abril_Junio_2025.pdf
+Informe de Gestión Julio - Septiembre 2025.pdf
+Informe de Gestión Octubre a Diciembre 2025.pdf
+Informe de Gestión y Resultados 2025.pdf
+Informe_Final_Auditoria_de_Regularidad_Contraloria_2022.pdf
+Informe Final de Auditoría Financiera, de Gestión y Resultados 2023-2024 PAD 141-2025.pdf
+informe-pqrs-2019.pdf
+Informe_de_gestion_anual_peticiones_2020.pdf
+Informe_de_gestion_anual_peticiones_2021.pdf
+Informe-de-gestion-peticiones-ciudadanas-1-Trimestre_2022.pdf
+Informe_de_gestión_peticiones_ciudadanas_II_Trimestre_2022.pdf
+Informe_de_gestión_peticiones_ciudadanas_III_Trimestre_2022.pdf
+Informe_de_gestión_peticiones_ciudadanas_IV_Trimestre_2022.pdf
+Informe_de_gestión_peticiones_ciudadanas_I_Trimestre_2023.pdf
+Informe_de_gestión_peticiones_ciudadanas_II_Trimestre_2023.pdf
+Informe_de_gestión_peticiones_ciudadanas_III_Trimestre_2023.pdf
+Informe_de_gestión_peticiones_ciudadanas_IV_Trimestre_2023.pdf
+Informe_de_gestión_peticiones_ciudadanas_I_Trimestre_2024.pdf
+Informe_de_gestión_peticiones_ciudadanas_II_Trimestre_2024.pdf
+Informe_de_gestión_peticiones_ciudadanas_III_Trimestre_2024.pdf
+Informe_de_gestión_peticiones_ciudadanas_IV_Trimestre_2024.pdf
+Informe de gestión peticiones ciudadanas 1 trimestre 2026.pdf
+Informe de gestión peticiones ciudadanas 4 trimestre 2025.pdf
+Informe de gestión peticiones ciudadanas 3° trimestre 2025.pdf
+Informe de gestión peticiones ciudadanas 2° trimestre 2025.pdf
+informe_gestion_pqrs_primertrim2025.pdf
+
+
+control/
+--------
+informe-gestion-2019.pdf
+informe-gestion-2020.pdf
+Informe-Direccion-Primer-enero-marzo-2021.pdf
+Informe-Direccion-Primer-abril-junio-2021.pdf
+IDCBIS_Informe_tecnico_cientifico_enero_a_septiembre_2021.pdf
+IDCBIS-Informe-direccion-enero-a-diciembre-2021.pdf
+IDCBIS-Informe-direccion-enero-a-diciembre-2022.pdf
+Plan-Mejoramiento-Contraloria-de-Bogota-2017.pdf
+Plan-Mejoramiento-Contraloria-de-Bogota-2018.pdf
+Plan-Mejoramiento-Contraloria-de-Bogota-2019.pdf
+Plan-Mejoramiento-Contraloria-de-Bogota-2020.pdf
+Plan-Mejoramiento-Contraloria-de-Bogota-2021.pdf
+Plan-Mejoramiento-Contraloria-de-Bogota-2022.pdf
+Plan-Mejoramiento-Contraloria-de-Bogota-2023.pdf
+Seguimiento Plan de Mejoramiento Contraloría Distrital Vigencia 2024.pdf
+Seguimiento Plan de Mejoramiento Contraloría Distrital Vigencia 2025.pdf
+Informe-Revisor-Fiscal-2017.pdf
+Informe-Revisor-Fiscal-2018.pdf
+Informe-Revisor-Fiscal-2019.pdf
+Dictamen-Revisoria-Fiscal-Vigencia-2020.pdf
+DICTAMEN-FINAL-REVISORIA-FISCAL-2021.pdf
+DICTAMEN-FINAL-REVISORIA-FISCAL-2022.pdf
+Informe_revisoria_fiscal_2023.pdf
+DICTAMEN_REVISORIA_FISCAL_2024.pdf
+Dictamen Revisoría Fiscal 2025 - KRESTON.pdf
+dictamen_revisor_fiscal_2017.pdf
+informe_revisor_fiscal_2017.pdf
+recomendaciones_revisor_fiscal_2017.pdf
+Informe EvaluacionIndependiente II-25.pdf
+Informe EvaluaciónIndependiente I-25.pdf
+Informe-Interno-2024-II.pdf
+Informe-Interno-2024-I.pdf
+Informe-Interno-2023-II.pdf
+Informe-Interno-2023-I.pdf
+Informe-Interno-2022-II.pdf
+Informe-Interno-2022-I.pdf
+Informe-Interno-2021-II.pdf
+Informe-Interno-2021.pdf
+Informe-SCI-2020-2.pdf
+Informe-Interno-2020.pdf
+Informe Software legal 2025.pdf
+Informe_Software_legal_2024.pdf
+Informe_Software_legal_vigencia_2023.pdf
+Defensa-Judicial-I-Semestre-2020.pdf
+
+
+normatividad/
+-------------
+Matriz de requisitos legales y otros requisitos IDCBIS_V03 2026.pdf
+Acuerdo_761_de_2020_Plan_de_Desarrollo_2020_2024.pdf
+acuerdo_641_de_20166.pdf
+Certificación Final - Denuncia Acoso sexual.pdf
+
+
+almacen/
+--------
+Acta Comite de inventarios y baja de bienes.pdf
+Anexo 1. Comite de inventarios.pdf
+
+
+datos/
+------
+Plan_Institucional_de_Archivos.pdf
+Politica_de_gestion_documental.pdf
+cartilla_digital_trasarte.pdf
+Infografia Ruta del trasplante.pdf
+Folleto padres v9.pdf
+Procesamos_Tejidos.pdf
+
+
+pdf/   (archivos que en el sitio viejo estaban en /pdf/)
+----
+plan-necesidades-de-bienes-2019.pdf
+plan-necesidades-de-bienes-2020.pdf
+plan-necesidades-de-bienes-2021.pdf
+IDCBIS-GGCC-MN-001-V7-MANUAL DE-CONTRATACION-DE -BIENES-Y-SERVICIOS.pdf
+GUIA_ENTIDADES_DE_REGIMEN_ESPECIAL_DE_CONTRATACION-SECOP.pdf
+IDCBIS_Esquema_Publicación.pdf
+Programa_gestion_documental_v2.pdf
+Diagnostico_Integral_de_Archivo.pdf
+Plan_de_Conservacion_Documental_VF.pdf
+Mapa_de_procesos_2023.pdf
+Carta_Descriptiva_de_los_procesos.pdf
+Directorio-IDCBIS.pdf
+Directorio_de_empleados_y_contratistas_2025.pdf
+directorio-de-entidades-que-integran-el-sector.pdf
+IDCBIS-ASG-INS-001_REGISTRO_Y_CONSULTA_DE_PETICIONES_EN_BOGOTÁ_TE_ESCUCHA.pdf
+preguntas-y-respuestas-frecuentes.pdf
+glosario.pdf
+informe-pqrs-2019.pdf
+politicadetransparencia.pdf
+politicaderiesgo.pdf
+matrizderiesgosinsitutcionales.pdf
+Términos_y_condiciones.pdf
+
+
+entidad/
+--------
+Politica_Integrada_de_Gestion.pdf
+POLITICA_DE_GESTIÓN_DE_CALIDAD_v1.pdf
+Politica_administracion_de_riesgos.pdf
+Politica_de_Gestion_del_Conocimiento_2023.pdf
+Politica_de_Gestion_Documental.pdf
+Política_de_relacionamiento_con_grupos_de_interes.pdf
+manual_de_marca_IDCBIS.pdf
+
+
+TI/
+---
+politica_seguridad_de_la_informacion.pdf
+politica_proteccion_de_datos.pdf
+TI-006_politica_seguridad_de_la_informacion_v1.pdf
+politica_tratamiento_de_datos_v2.pdf
+
+
+interes/
+--------
+anexo_4_participacion_instancias_idcbis.pdf
+Anexo-4-Participacion-Instancias-IDCBIS-2020.pdf
+Anexo-4-Participacion-Instancias-IDCBIS-Vigencia-2020-2.pdf
+Anexo-4-Participacion-Instancias-IDCBIS-Vigencia-2021-1.pdf
+Participacion-Instancias-IDCBIS-2021.pdf
+Anexo-4-Participacion-Instancias-IDCBIS-2022-I.pdf
+Anexo-4-Participacion-Instancias-IDCBIS-2022-II.pdf
+Anexo-4-Participacion-Instancias-IDCBIS-2023-I.pdf
+Anexo-4-Participacion-Instancias-IDCBIS-2023-II.pdf
+Anexo-3-Toma-de-Decisiones-IV-Trimestre-2020.pdf
+Anexo_3_Toma_de_decisiones_IDCBIS-I-Trimestre-Junta-2021.pdf
+Anexo-3-Toma-de-Decisiones-IDCBIS-II-Trimestre-2021-Junta Directiva.pdf
+Anexo-3-Toma-de-Decisiones-IDCBIS-III-Trimestre-2021-Junta-Directiva.pdf
+Toma_de_decisiones_IDCBIS_2021-IV-Junta-Oct.pdf
+Toma_de_decisiones_IDCBIS_2021-IV-Junta-Dic.pdf
+Toma_de_decisiones_IDCBIS_2022-I-Junta.pdf
+Anexo_3_Toma_de_decisiones_IDCBIS_2022-II-Junta.pdf
+Anexo_3_Toma_de_decisiones_IDCBIS_2022-III-Junta.pdf
+Anexo_3_Toma_de_decisiones_IDCBIS_2022-IV-Junta.pdf
+Anexo_3_Toma_de_decisiones_IDCBIS_2022-V-Junta.pdf
+Anexo_3_Toma_de_decisiones_IDCBIS_2023-I-Junta.pdf
+Anexo_3_Toma_de_decisiones_IDCBIS_2023-II-Junta.pdf
+Anexo_3_Toma_de_decisiones_IDCBIS_2023-III-Junta.pdf
+Anexo_3_Toma_de_decisiones_IDCBIS-I-Trimestre-Asamblea-2021.pdf
+Toma_de_decisiones_IDCBIS_2021-IV-Asamblea.pdf
+Toma_de_decisiones_IDCBIS_2022-I-Asamblea.pdf
+Anexo_3_Toma_de_decisiones_IDCBIS_2022-II -Asamblea.pdf
+Anexo_3_Toma_de_decisiones_IDCBIS_2023-I-Asamblea.pdf
+Anexo_3_Toma_de_decisiones_IDCBIS_2023-II -Asamblea.pdf
+Anexo_3_Toma_de_decisiones_IDCBIS_2023-III -Asamblea.pdf
+
+
+presupuesto/
+------------
+ACTUALIZACION REGIMEN TRIBUTARIO ESPECIAL.pdf
+ANEXO 1. CERTIFICADO 19 ET.pdf
+ANEXO 2. MEMORIA ECONÓMICA.pdf
+ANEXO 3. INFORME DE GESTION.pdf
+ANEXO 4. ESTADOS FINANCIEROS VIG 2025.pdf
+ANEXO 5. CERTIFICADO ART 364-5 ET.pdf
+ANEXO 6. ESTATUTOS.pdf
+ANEXO 7. CERTIFICADO ART 364-3 ET.pdf
+ANEXO 8. ACTA ASAMBLEA No 022-2026.pdf
+ANEXO 9. ACTA ASAMBLEA No 020-2025.pdf
+Estatutos_IDCBIS.pdf
+Memoria_economica.pdf
+Certificacion_directivos.pdf
+Certificacion_requisitos_RTE.pdf
+Certificaciones_del_representante_legal.pdf
+Presentacion_de_informacion_por_envio_de_archivos-2530.pdf
+Presentacion_de_informacion_por_envio_de_archivos-2531.pdf
+Informe_gestion_vig_2020.pdf
+Solicitud_Regimen_Tributario_Especial.pdf
+CIRCULAR REGLAMENTARIA No. 004 DEL 23-01-2025 - Gestion Ambiental.pdf
+CIRCULAR REGLAMENTARIA No. 023 DEL 05-11-2025 - Gestion Ambiental.pdf
+
+
+registro-bases-de-datos/
+------------------------
+Agenda sistematizada de programacion de donacion de sangre total y aferesis.pdf
+Base proveedores.pdf
+Busquedas_de_donantes.pdf
+Consolidado reactividad resultados -confirmatorios.pdf
+CONTRATOS DE SUMINISTRO DE INSUMOS YO SERVICIOS DEL IDCBIS.pdf
+CREACION DE TERCEROS CONTABILIDAD.pdf
+CRM.pdf
+DARCELULAS.pdf
+Datos_clientes.pdf
+Donaciones_potenciales_No_Colectadas.pdf
+Donantes Banco de tejidos.pdf
+Encuesta de percepción de cliente en el IDCBIS.pdf
+ENCUESTA DE PERCEPCION.pdf
+Encuesta_para_seleccion_y_ficha_clinica_del_donante_de_sangre_y_aferesis.pdf
+ESTRUCTURA2022.pdf
+Formato de información estadística Tejidos.pdf
+Recursos Humanos.pdf
+Registro_de_unidades_no_criopreservadas.pdf
+RNDCPH_DB.pdf
+SIGNUM.pdf
+Sistema de informacion para banco de sangre e-Delphyn.pdf
+Sistema Falcon Cloud.pdf
+Solicitud_de_tipificacion_HLA_pacientes_externos.pdf
+Ubicacion_y_seguimiento_a_donantes_de_BSCU-Editable.pdf
+Unidades_de_BSCU_criopreservadas.pdf
+unidades_scu_criopreservadas.pdf
+
+
+Carpetas listas para documentos que en el CMS aún no tienen archivo
+(PAAC, PTEP, estados financieros, ejecución, contratación bienes y servicios, rendición):
+plan-anticorrupcion/
+programa-transparencia-etica-publica/
+estados-financieros/
+ejecucion-presupuestal/
+contratacion-bienes-servicios/
+rendicion-de-cuentas/
+
+Conserve el nombre exacto del archivo (espacios, tildes y símbolos).
+Después de copiar, ejecute: php artisan page:create-transparencia

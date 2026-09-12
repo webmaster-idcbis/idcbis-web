@@ -46,7 +46,7 @@ En el 2030, seremos un instituto de excelencia en ciencia, tecnología e innovac
                 'links' => [
                     [
                         'id' => 'entidad_link_plan',
-                        'url' => 'https://idcbis.org.co/documentos/planeacion/PLAN-ESTRATEGICO-2021-A-2025.pdf',
+                        'url' => '/documentos/planeacion/PLAN-ESTRATEGICO-2021-A-2025.pdf',
                         'label' => 'Plan estratégico 2021 a 2025',
                         'description' => 'Documento del plan estratégico del IDCBIS.',
                     ],
@@ -102,13 +102,13 @@ i). Las demás actividades que señalen los estatutos y que sean conexas con su 
                 'links' => [
                     [
                         'id' => 'entidad_link_mapas',
-                        'url' => 'https://idcbis.org.co/pdf/Mapa_de_procesos_2023.pdf',
+                        'url' => '/documentos/pdf/Mapa_de_procesos_2023.pdf',
                         'label' => 'Mapas de los procesos',
                         'description' => 'Mapa de procesos institucionales.',
                     ],
                     [
                         'id' => 'entidad_link_cartas',
-                        'url' => 'https://idcbis.org.co/pdf/Carta_Descriptiva_de_los_procesos.pdf',
+                        'url' => '/documentos/pdf/Carta_Descriptiva_de_los_procesos.pdf',
                         'label' => 'Carta Descriptiva de los procesos',
                         'description' => 'Cartas descriptivas de los procesos del IDCBIS.',
                     ],
@@ -121,7 +121,7 @@ i). Las demás actividades que señalen los estatutos y que sean conexas con su 
                 'links' => [
                     [
                         'id' => 'entidad_link_dir_inst',
-                        'url' => 'https://idcbis.org.co/pdf/Directorio-IDCBIS.pdf',
+                        'url' => '/documentos/pdf/Directorio-IDCBIS.pdf',
                         'label' => 'Directorio Institucional',
                         'description' => 'Directorio institucional del IDCBIS.',
                     ],
@@ -146,7 +146,7 @@ Horario de atención: lunes a viernes, 8:00 a. m. – 5:00 p. m.',
                 'links' => [
                     [
                         'id' => 'entidad_link_dir_emp',
-                        'url' => 'https://idcbis.org.co/pdf/Directorio_de_empleados_y_contratistas_2025.pdf',
+                        'url' => '/documentos/pdf/Directorio_de_empleados_y_contratistas_2025.pdf',
                         'label' => 'Directorio de empleados y contratistas',
                         'description' => 'Listado de funcionarios y contratistas del instituto.',
                     ],
@@ -157,6 +157,12 @@ Horario de atención: lunes a viernes, 8:00 a. m. – 5:00 p. m.',
             [
                 'id' => 'entidad_dir_entidades',
                 'links' => [
+                    [
+                        'id' => 'entidad_link_dir_sector',
+                        'url' => '/documentos/pdf/directorio-de-entidades-que-integran-el-sector.pdf',
+                        'label' => 'Directorio de entidades que integran el sector',
+                        'description' => 'Listado de entidades del sector salud relacionadas con el IDCBIS.',
+                    ],
                     [
                         'id' => 'entidad_ent_minsalud',
                         'url' => 'https://www.minsalud.gov.co/',
@@ -347,7 +353,7 @@ Horario de atención: lunes a viernes, 8:00 a. m. – 5:00 p. m.',
                 'links' => [
                     [
                         'id' => 'entidad_link_atencion',
-                        'url' => 'https://idcbis.org.co/atencion-a-usuarios/',
+                        'url' => '/atencion-a-usuarios',
                         'label' => 'Atención y servicio al ciudadano',
                         'description' => 'Canales, horarios y procedimientos de atención.',
                     ],
@@ -359,38 +365,44 @@ Horario de atención: lunes a viernes, 8:00 a. m. – 5:00 p. m.',
                 'id' => 'entidad_politicas',
                 'links' => [
                     [
+                        'id' => 'entidad_pol_integrada',
+                        'url' => '/documentos/entidad/Politica_Integrada_de_Gestion.pdf',
+                        'label' => 'Política Integrada de Gestión',
+                        'description' => '',
+                    ],
+                    [
                         'id' => 'entidad_pol_calidad',
-                        'url' => 'https://idcbis.org.co/documentos/entidad/POLITICA_DE_GESTIÓN_DE_CALIDAD_v1.pdf',
+                        'url' => '/documentos/entidad/POLITICA_DE_GESTIÓN_DE_CALIDAD_v1.pdf',
                         'label' => 'Política de Gestión de Calidad',
                         'description' => '',
                     ],
                     [
                         'id' => 'entidad_pol_riesgos',
-                        'url' => 'https://idcbis.org.co/documentos/entidad/Politica_administracion_de_riesgos.pdf',
+                        'url' => '/documentos/entidad/Politica_administracion_de_riesgos.pdf',
                         'label' => 'Política de Administración de riesgos',
                         'description' => '',
                     ],
                     [
                         'id' => 'entidad_pol_conocimiento',
-                        'url' => 'https://idcbis.org.co/documentos/entidad/Politica_de_Gestion_del_Conocimiento_2023.pdf',
+                        'url' => '/documentos/entidad/Politica_de_Gestion_del_Conocimiento_2023.pdf',
                         'label' => 'Política de Gestión del Conocimiento',
                         'description' => '',
                     ],
                     [
                         'id' => 'entidad_pol_documental',
-                        'url' => 'https://idcbis.org.co/documentos/entidad/Politica_de_Gestion_Documental.pdf',
+                        'url' => '/documentos/entidad/Politica_de_Gestion_Documental.pdf',
                         'label' => 'Política de Gestión Documental',
                         'description' => '',
                     ],
                     [
                         'id' => 'entidad_pol_interes',
-                        'url' => 'https://idcbis.org.co/documentos/entidad/Política_de_relacionamiento_con_grupos_de_interes.pdf',
+                        'url' => '/documentos/entidad/Política_de_relacionamiento_con_grupos_de_interes.pdf',
                         'label' => 'Política de Relacionamiento con Grupos de Interés',
                         'description' => '',
                     ],
                     [
                         'id' => 'entidad_pol_seguridad',
-                        'url' => 'https://idcbis.org.co/documentos/TI/politica_seguridad_de_la_informacion.pdf',
+                        'url' => '/documentos/TI/politica_seguridad_de_la_informacion.pdf',
                         'label' => 'Política de Seguridad y Privacidad de la Información',
                         'description' => '',
                     ],
@@ -403,7 +415,7 @@ Horario de atención: lunes a viernes, 8:00 a. m. – 5:00 p. m.',
                 'links' => [
                     [
                         'id' => 'entidad_link_pqrs',
-                        'url' => 'https://idcbis.org.co/atencion-a-usuarios/',
+                        'url' => '/atencion-a-usuarios',
                         'label' => 'Mecanismo de presentación directa de solicitudes, quejas y reclamos',
                         'description' => 'Canales de atención y radicación de peticiones.',
                     ],
@@ -482,7 +494,7 @@ El Área de Auditoría Interna es la encargada del Sistema de Control Interno en
                 'links' => [
                     [
                         'id' => 'entidad_link_estatutos',
-                        'url' => 'https://idcbis.org.co/documentos/presupuesto/Estatutos_IDCBIS.pdf',
+                        'url' => '/documentos/presupuesto/Estatutos_IDCBIS.pdf',
                         'label' => 'Estatutos IDCBIS',
                         'description' => 'Estatutos de la entidad.',
                     ],
@@ -495,7 +507,7 @@ El Área de Auditoría Interna es la encargada del Sistema de Control Interno en
                 'links' => [
                     [
                         'id' => 'entidad_link_marca',
-                        'url' => 'https://idcbis.org.co/documentos/entidad/manual_de_marca_IDCBIS.pdf',
+                        'url' => '/documentos/entidad/manual_de_marca_IDCBIS.pdf',
                         'label' => 'Manual de marca IDCBIS',
                         'description' => 'Lineamientos de identidad visual institucional.',
                     ],

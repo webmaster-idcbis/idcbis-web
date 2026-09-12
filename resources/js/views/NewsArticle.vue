@@ -98,7 +98,7 @@ watch(() => route.params.slug, loadArticle)
 }
 
 .news-article__hero {
-  padding: 2.5rem 1.5rem 3rem;
+  padding: 3.5rem 1.5rem 3rem;
   color: #fff;
 }
 

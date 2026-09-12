@@ -274,21 +274,21 @@ return [
                 'items' => [
                     [
                         'id' => 'element_1783283824263_t50t2u49v',
-                        'url' => 'https://idcbis.org.co/documentos/entidad/',
+                        'url' => '/documentos/entidad/',
                         'icon' => '📋',
                         'title' => 'Política del Sistema Integrado de Gestión',
                         'description' => 'Lineamientos de calidad y gestión institucional.',
                     ],
                     [
                         'id' => 'element_1783283824263_g8nrcs0yz',
-                        'url' => 'https://idcbis.org.co/documentos/entidad/',
+                        'url' => '/documentos/entidad/',
                         'icon' => '⚠️',
                         'title' => 'Política de Administración de Riesgo',
                         'description' => 'Gestión integral de riesgos institucionales.',
                     ],
                     [
                         'id' => 'element_1783283824263_x8v6u4y85',
-                        'url' => 'https://idcbis.org.co/documentos/entidad/Politica_de_Gestion_del_Conocimiento_2023.pdf',
+                        'url' => '/documentos/entidad/Politica_de_Gestion_del_Conocimiento_2023.pdf',
                         'icon' => '📚',
                         'title' => 'Política de Gestión del Conocimiento',
                         'description' => 'Apropiación y difusión del conocimiento científico.',

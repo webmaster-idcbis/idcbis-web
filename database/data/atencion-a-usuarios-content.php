@@ -35,17 +35,31 @@ return [
             ],
             [
                 'id' => 'atencion_link_registro',
-                'url' => 'https://idcbis.org.co/pdf/IDCBIS-ASG-INS-001_REGISTRO_Y_CONSULTA_DE_PETICIONES_EN_BOGOT%C3%81_TE_ESCUCHA.pdf',
+                'url' => '/documentos/pdf/IDCBIS-ASG-INS-001_REGISTRO_Y_CONSULTA_DE_PETICIONES_EN_BOGOT%C3%81_TE_ESCUCHA.pdf',
                 'icon' => '📝',
                 'label' => 'Registro y consulta de peticiones en el SDQS',
                 'description' => 'Procedimiento para registrar y consultar sus peticiones en Bogotá Te Escucha.',
             ],
             [
                 'id' => 'atencion_link_tramite',
-                'url' => 'https://idcbis.org.co/pdf/IDCBIS-ASG-INS-001_REGISTRO_Y_CONSULTA_DE_PETICIONES_EN_BOGOT%C3%81_TE_ESCUCHA.pdf',
+                'url' => '/documentos/pdf/IDCBIS-ASG-INS-001_REGISTRO_Y_CONSULTA_DE_PETICIONES_EN_BOGOT%C3%81_TE_ESCUCHA.pdf',
                 'icon' => '📋',
                 'label' => 'Recepción, trámite y cierre de peticiones',
                 'description' => 'Procedimiento interno de recepción, trámite y cierre de las peticiones ciudadanas.',
+            ],
+            [
+                'id' => 'atencion_link_faq',
+                'url' => '/documentos/pdf/preguntas-y-respuestas-frecuentes.pdf',
+                'icon' => '❓',
+                'label' => 'Preguntas y respuestas frecuentes',
+                'description' => 'Preguntas frecuentes sobre trámites y atención al ciudadano.',
+            ],
+            [
+                'id' => 'atencion_link_glosario',
+                'url' => '/documentos/pdf/glosario.pdf',
+                'icon' => '📖',
+                'label' => 'Glosario',
+                'description' => 'Términos usados en la información pública del IDCBIS.',
             ],
             [
                 'id' => 'atencion_link_anonimas',

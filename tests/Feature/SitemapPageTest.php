@@ -30,6 +30,7 @@ class SitemapPageTest extends TestCase
         $this->assertContains('banco-distrital-de-tejidos', $slugs);
         $this->assertContains('transparencia', $slugs);
         $this->assertContains('contacto', $slugs);
+        $this->assertContains('investigacion', $slugs);
     }
 
     /** @test */

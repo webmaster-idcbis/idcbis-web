@@ -4,6 +4,8 @@ export default {
     pageNotFound: 'Página no encontrada',
     pageNotFoundHint: 'La página que buscas no existe o ha sido eliminada.',
     backHome: 'Volver al inicio',
+    backToTop: 'Volver arriba',
+    backToTopAria: 'Volver al inicio de la página',
     underConstruction: 'Esta página está en construcción.',
     language: 'Idioma',
     spanish: 'Español',
@@ -106,5 +108,9 @@ export default {
   language: {
     switcherLabel: 'Seleccionar idioma',
     current: 'Idioma actual: {lang}',
+  },
+  breadcrumbs: {
+    aria: 'Ruta de navegación',
+    search: 'Buscar',
   },
 }

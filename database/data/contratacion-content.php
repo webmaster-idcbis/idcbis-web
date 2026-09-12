@@ -46,19 +46,19 @@ Consulta el plan de necesidades, el plan anual de adquisiciones y los procesos c
                 'documents' => [
                     [
                         'id' => 'ctr-pn-2019',
-                        'url' => 'https://idcbis.org.co/pdf/plan-necesidades-de-bienes-2019.pdf',
+                        'url' => '/documentos/pdf/plan-necesidades-de-bienes-2019.pdf',
                         'title' => 'Plan de necesidades de bienes 2019',
                         'publishedAt' => '',
                     ],
                     [
                         'id' => 'ctr-pn-2020',
-                        'url' => 'https://idcbis.org.co/pdf/plan-necesidades-de-bienes-2020.pdf',
+                        'url' => '/documentos/pdf/plan-necesidades-de-bienes-2020.pdf',
                         'title' => 'Plan de necesidades de bienes 2020',
                         'publishedAt' => '',
                     ],
                     [
                         'id' => 'ctr-pn-2021',
-                        'url' => 'https://idcbis.org.co/pdf/plan-necesidades-de-bienes-2021.pdf',
+                        'url' => '/documentos/pdf/plan-necesidades-de-bienes-2021.pdf',
                         'title' => 'Plan de necesidades de bienes 2021',
                         'publishedAt' => '',
                     ],
@@ -118,13 +118,13 @@ Consulta el plan de necesidades, el plan anual de adquisiciones y los procesos c
                 'documents' => [
                     [
                         'id' => 'ctr-man-1',
-                        'url' => 'https://www.idcbis.org.co/pdf/IDCBIS-GGCC-MN-001-V7-MANUAL%20DE-CONTRATACION-DE%20-BIENES-Y-SERVICIOS.pdf',
+                        'url' => '/documentos/pdf/IDCBIS-GGCC-MN-001-V7-MANUAL%20DE-CONTRATACION-DE%20-BIENES-Y-SERVICIOS.pdf',
                         'title' => 'Manual de contratación de bienes y servicios',
                         'publishedAt' => '',
                     ],
                     [
                         'id' => 'ctr-man-2',
-                        'url' => 'https://www.idcbis.org.co/pdf/GUIA_ENTIDADES_DE_REGIMEN_ESPECIAL_DE_CONTRATACION-SECOP.pdf',
+                        'url' => '/documentos/pdf/GUIA_ENTIDADES_DE_REGIMEN_ESPECIAL_DE_CONTRATACION-SECOP.pdf',
                         'title' => 'Guía entidades de régimen especial SECOP',
                         'publishedAt' => '',
                     ],

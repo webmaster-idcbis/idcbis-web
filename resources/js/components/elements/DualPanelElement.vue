@@ -51,6 +51,7 @@ const sectionStyles = computed(() => ({
   color: #fff;
   font-family: var(--font-idcbis);
   cursor: pointer;
+  scroll-margin-top: 96px;
 }
 
 .dual-panel__container {

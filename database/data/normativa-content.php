@@ -46,19 +46,19 @@ Consulta el normograma, el Registro Distrital, SUIN, SUCOP y las denuncias de ac
                 'documents' => [
                     [
                         'id' => 'nrm-ng-matriz',
-                        'url' => 'https://idcbis.org.co/documentos/normatividad/Matriz%20de%20requisitos%20legales%20y%20otros%20requisitos%20IDCBIS_V03%202026.pdf',
+                        'url' => '/documentos/normatividad/Matriz%20de%20requisitos%20legales%20y%20otros%20requisitos%20IDCBIS_V03%202026.pdf',
                         'title' => 'Normograma - Matriz de requisitos legales y otros requisitos',
                         'publishedAt' => '',
                     ],
                     [
                         'id' => 'nrm-ng-761',
-                        'url' => 'https://idcbis.org.co/documentos/normatividad/Acuerdo_761_de_2020_Plan_de_Desarrollo_2020_2024.pdf',
+                        'url' => '/documentos/normatividad/Acuerdo_761_de_2020_Plan_de_Desarrollo_2020_2024.pdf',
                         'title' => 'Acuerdo Distrital 761 de 2020',
                         'publishedAt' => '',
                     ],
                     [
                         'id' => 'nrm-ng-641',
-                        'url' => 'https://idcbis.org.co/documentos/normatividad/acuerdo_641_de_20166.pdf',
+                        'url' => '/documentos/normatividad/acuerdo_641_de_20166.pdf',
                         'title' => 'Acuerdo 641 de 2016',
                         'publishedAt' => '',
                     ],
@@ -106,7 +106,7 @@ Consulta el normograma, el Registro Distrital, SUIN, SUCOP y las denuncias de ac
                 'documents' => [
                     [
                         'id' => 'nrm-asl-2026-06-03',
-                        'url' => 'https://idcbis.org.co/documentos/normatividad/Certificaci%C3%B3n%20Final%20-%20Denuncia%20Acoso%20sexual.pdf',
+                        'url' => '/documentos/normatividad/Certificaci%C3%B3n%20Final%20-%20Denuncia%20Acoso%20sexual.pdf',
                         'title' => 'Denuncia - 3 de junio de 2026',
                         'publishedAt' => '',
                     ],

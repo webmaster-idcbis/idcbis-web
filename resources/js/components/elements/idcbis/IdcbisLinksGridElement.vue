@@ -15,6 +15,7 @@
           :key="link.id || index"
           :href="preview && link.url ? link.url : undefined"
           :target="preview && link.url?.startsWith('http') ? '_blank' : undefined"
+          :rel="preview && link.url?.startsWith('http') ? 'noopener noreferrer' : undefined"
           class="link-card"
           :style="cardStyles"
         >

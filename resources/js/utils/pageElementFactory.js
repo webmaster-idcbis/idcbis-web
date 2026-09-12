@@ -461,6 +461,25 @@ export const createElement = (type) => {
           },
         ],
       }
+    case 'idcbis-tissue-catalog':
+      return {
+        ...baseElement,
+        fullBleed: true,
+        sectionTitle: 'Portafolio de',
+        sectionHighlight: 'tejidos',
+        sectionSubtitle: 'Consulte presentaciones, preservación y usos clínicos de cada tejido.',
+        libraryUrl: '',
+        libraryLabel: 'Abrir biblioteca digital de tejidos',
+        requestEmail: 'bandetejidosycelulas@idcbis.org.co',
+        pdfUrl: 'https://idcbis.org.co/media_up_idcbis/2025/08/Portafolio-Banco-de-Tejidos.pdf',
+        categories: [
+          { id: 'osteomuscular', label: 'Osteomuscular' },
+          { id: 'ocular', label: 'Ocular' },
+          { id: 'piel', label: 'Piel y dermis' },
+          { id: 'membrana', label: 'Membrana amniótica' },
+        ],
+        items: [],
+      }
     case 'idcbis-team-grid':
       return {
         ...baseElement,

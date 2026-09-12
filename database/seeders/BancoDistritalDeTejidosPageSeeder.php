@@ -13,9 +13,9 @@ class BancoDistritalDeTejidosPageSeeder extends Seeder
     {
         $page = $this->seedPageFromDataFiles('banco-distrital-de-tejidos', [
             'title' => 'Banco Distrital de Tejidos | IDCBIS',
-            'meta_title' => 'Banco Distrital de Tejidos IDCBIS — Donación y trasplante',
-            'meta_description' => 'Banco de tejidos IDCBIS: referente latinoamericano en rescate, procesamiento y distribución. Dermis acelular, córnea, piel y membrana amniótica.',
-            'meta_keywords' => 'banco de tejidos, dermis acelular, córnea, donación de tejidos, IDCBIS, Bogotá, INVIMA',
+            'meta_title' => 'Banco Distrital de Tejidos IDCBIS — donación y trasplante',
+            'meta_description' => 'Primer banco multitejidos de Colombia. Suministro de tejidos oculares, piel, dermis y osteomusculares con calidad, seguridad y trazabilidad.',
+            'meta_keywords' => 'banco de tejidos, donación de tejidos, córnea, dermis acelular, membrana amniótica, osteomuscular, IDCBIS, INVIMA, Bogotá',
         ]);
 
         if ($page && $this->command) {

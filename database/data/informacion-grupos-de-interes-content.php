@@ -45,7 +45,7 @@ return [
                 'documents' => [
                     [
                         'id' => 'grupos-nna-1',
-                        'url' => 'https://idcbis.org.co/documentos/datos/cartilla_digital_trasarte.pdf',
+                        'url' => '/documentos/datos/cartilla_digital_trasarte.pdf',
                         'title' => 'Diario de acompañamiento al trasplante de médula ósea',
                         'publishedAt' => '',
                     ],
@@ -57,13 +57,13 @@ return [
                     ],
                     [
                         'id' => 'grupos-nna-3',
-                        'url' => 'https://idcbis.org.co/documentos/datos/Infografia%20Ruta%20del%20trasplante.pdf',
+                        'url' => '/documentos/datos/Infografia%20Ruta%20del%20trasplante.pdf',
                         'title' => 'Ruta del trasplante',
                         'publishedAt' => '',
                     ],
                     [
                         'id' => 'grupos-nna-4',
-                        'url' => 'https://idcbis.org.co/documentos/datos/Folleto%20padres%20v9.pdf',
+                        'url' => '/documentos/datos/Folleto%20padres%20v9.pdf',
                         'title' => 'Padres ¿Por qué vale la pena intentarlo?',
                         'publishedAt' => '',
                     ],
@@ -87,7 +87,7 @@ return [
                     ],
                     [
                         'id' => 'grupos-muj-2',
-                        'url' => 'https://idcbis.org.co/documentos/datos/Procesamos_Tejidos.pdf',
+                        'url' => '/documentos/datos/Procesamos_Tejidos.pdf',
                         'title' => 'Donación de tejidos',
                         'publishedAt' => '',
                     ],

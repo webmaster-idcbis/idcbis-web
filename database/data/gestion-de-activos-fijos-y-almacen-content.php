@@ -31,13 +31,13 @@ return [
                 'documents' => [
                     [
                         'id' => 'activos-acta',
-                        'url' => 'https://idcbis.org.co/documentos/almacen/Acta%20Comite%20de%20inventarios%20y%20baja%20de%20bienes.pdf',
+                        'url' => '/documentos/almacen/Acta%20Comite%20de%20inventarios%20y%20baja%20de%20bienes.pdf',
                         'title' => 'Acta Comite de inventarios y baja de bienes',
                         'publishedAt' => '',
                     ],
                     [
                         'id' => 'activos-anexo1',
-                        'url' => 'https://idcbis.org.co/documentos/almacen/Anexo%201.%20Comite%20de%20inventarios.pdf',
+                        'url' => '/documentos/almacen/Anexo%201.%20Comite%20de%20inventarios.pdf',
                         'title' => 'Anexo 1. Comite de inventarios',
                         'publishedAt' => '',
                     ],

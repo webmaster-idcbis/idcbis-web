@@ -111,6 +111,10 @@ export const PUBLISHED_SITEMAP_SLUGS = new Set([
   'banco-publico-sangre-cordon-umbilical',
   'darcelulas',
   'unidad-de-terapias-avanzadas',
+  // Investigación
+  'investigacion',
+  'investigacion-celulas-progenitoras-hematopoyeticas',
+  'investigacion-medicina-transfusional',
   // Transparencia y gestión
   'transparencia',
   'informacion-de-la-entidad',
@@ -179,6 +183,50 @@ export function findSitemapItemBySlug(slug, items = SITE_SITEMAP) {
   }
 
   return null;
+}
+
+/**
+ * Devuelve la cadena de ancestros + ítem actual para un slug.
+ * Recorre el árbol principal y, si no hay match, los enlaces rápidos.
+ */
+export function findSitemapPath(slug, items = SITE_SITEMAP) {
+  if (!slug || slug === 'inicio') {
+    return [];
+  }
+
+  const matches = [];
+
+  const walk = (list, ancestors) => {
+    for (const item of list) {
+      const path = [...ancestors, item];
+      if (item.slug === slug) {
+        matches.push(path);
+      }
+      if (item.children?.length) {
+        walk(item.children, path);
+      }
+    }
+  };
+
+  walk(items, []);
+
+  if (!matches.length) {
+    for (const group of SITEMAP_QUICK_LINKS) {
+      const found = group.items.find((item) => item.slug === slug);
+      if (found) {
+        return [found];
+      }
+    }
+    return [];
+  }
+
+  matches.sort((a, b) => {
+    const publishedA = a.slice(0, -1).filter((item) => isSitemapPublished(item.slug)).length;
+    const publishedB = b.slice(0, -1).filter((item) => isSitemapPublished(item.slug)).length;
+    return publishedB - publishedA;
+  });
+
+  return matches[0];
 }
 
 export function normalizeSearchText(value) {

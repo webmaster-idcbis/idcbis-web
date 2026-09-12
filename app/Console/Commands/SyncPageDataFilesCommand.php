@@ -68,6 +68,18 @@ class SyncPageDataFilesCommand extends Command
             'source' => 'https://idcbis.org.co/unidad-de-terapias-avanzadas/',
             'monolith' => false,
         ],
+        'investigacion' => [
+            'source' => 'https://idcbis.org.co/investigacion/',
+            'monolith' => false,
+        ],
+        'investigacion-celulas-progenitoras-hematopoyeticas' => [
+            'source' => 'https://idcbis.org.co/banco-de-sangre-cordon-umbilical-investigacion/',
+            'monolith' => false,
+        ],
+        'investigacion-medicina-transfusional' => [
+            'source' => 'https://idcbis.org.co/fenotipos-raros/',
+            'monolith' => false,
+        ],
         'banco-publico-sangre-cordon-umbilical' => [
             'source' => 'https://idcbis.org.co/banco-de-sangre-cordon-umbilical/',
             'monolith' => false,

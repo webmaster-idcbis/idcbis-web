@@ -92,6 +92,14 @@ const routes = [
     redirect: '/',
   },
   {
+    path: '/fenotipos-raros',
+    redirect: '/investigacion-medicina-transfusional',
+  },
+  {
+    path: '/banco-de-sangre-cordon-umbilical-investigacion',
+    redirect: '/investigacion-celulas-progenitoras-hematopoyeticas',
+  },
+  {
     path: '/noticias/:slug',
     name: 'NewsArticle',
     component: () => import('../views/NewsArticle.vue')

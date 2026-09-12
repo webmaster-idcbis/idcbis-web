@@ -130,7 +130,9 @@ const pageTheme = computed(() => {
 const loadPage = async () => {
   loading.value = true;
   page.value = null;
-  scrollToTop();
+  if (!route.hash) {
+    scrollToTop();
+  }
 
   const slug = route.params.slug || 'inicio';
   try {
@@ -140,10 +142,14 @@ const loadPage = async () => {
   } finally {
     loading.value = false;
     await nextTick();
-    scrollToTop();
+    if (route.hash) {
+      document.querySelector(route.hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      scrollToTop();
+    }
   }
 };
 
 onMounted(loadPage);
-watch(() => route.fullPath, loadPage);
+watch(() => route.path, loadPage);
 </script>

@@ -62,6 +62,7 @@ export const paletteCategories = [
       { type: 'idcbis-documents-page', icon: '📁', iconClass: 'text-[#0B4F6C]', label: 'Página de documentos', description: 'Página completa con hero y listado' },
       { type: 'idcbis-documents-list', icon: '📄', iconClass: 'text-[#0B4F6C]', label: 'Listado de documentos', description: 'Secciones y documentos descargables' },
       { type: 'idcbis-team-grid', icon: '👥', iconClass: 'text-[#0B4F6C]', label: 'Equipo con fotos', description: 'Tarjetas de miembros del equipo' },
+      { type: 'idcbis-tissue-catalog', icon: '🦴', iconClass: 'text-[#0B4F6C]', label: 'Portafolio de tejidos', description: 'Catálogo visual filtrable de tejidos' },
       { type: 'idcbis-news-list', icon: '📰', iconClass: 'text-[#0B4F6C]', label: 'Listado de noticias', description: 'Grid con filtros y categorías' },
       { type: 'idcbis-news-carousel', icon: '⇄', iconClass: 'text-[#2C8C99]', label: 'Carrusel de noticias', description: 'Noticias recientes con desplazamiento lateral' },
     ],

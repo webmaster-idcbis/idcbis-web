@@ -36,6 +36,7 @@ import IdcbisDocumentsListElement from '../components/elements/idcbis/IdcbisDocu
 import IdcbisTeamGridElement from '../components/elements/idcbis/IdcbisTeamGridElement.vue'
 import IdcbisNewsListElement from '../components/elements/idcbis/IdcbisNewsListElement.vue'
 import IdcbisNewsCarouselElement from '../components/elements/idcbis/IdcbisNewsCarouselElement.vue'
+import IdcbisTissueCatalogElement from '../components/elements/idcbis/IdcbisTissueCatalogElement.vue'
 import StatsGridElement from '../components/elements/StatsGridElement.vue'
 import ProcessTimelineElement from '../components/elements/ProcessTimelineElement.vue'
 import AccordionElement from '../components/elements/AccordionElement.vue'
@@ -81,6 +82,7 @@ const elementComponents = {
   'idcbis-team-grid': markRaw(IdcbisTeamGridElement),
   'idcbis-news-list': markRaw(IdcbisNewsListElement),
   'idcbis-news-carousel': markRaw(IdcbisNewsCarouselElement),
+  'idcbis-tissue-catalog': markRaw(IdcbisTissueCatalogElement),
   'stats-grid': markRaw(StatsGridElement),
   'process-timeline': markRaw(ProcessTimelineElement),
   accordion: markRaw(AccordionElement),
@@ -107,6 +109,7 @@ const IDCBIS_BLOCK_TYPES = [
   'idcbis-team-grid',
   'idcbis-news-list',
   'idcbis-news-carousel',
+  'idcbis-tissue-catalog',
 ]
 
 export function usePageElements() {

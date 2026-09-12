@@ -7,7 +7,7 @@
         @click.stop="focusPart('about:text', 'Texto Somos IDCBIS', $event)"
       >
         <div v-if="element.leaderName" class="idcbis-about__leader">
-          <span class="idcbis-about__leader-label">Línea de servicio</span>
+          <span class="idcbis-about__leader-label">{{ element.leaderLabel || 'Línea de servicio' }}</span>
           <strong>{{ element.leaderName }}</strong>
           <span v-if="element.leaderContact" class="idcbis-about__leader-contact">{{ element.leaderContact }}</span>
         </div>
@@ -115,6 +115,7 @@ const isLogoImage = computed(() => {
   color: #444;
   text-align: justify;
   line-height: 1.6;
+  white-space: pre-line;
 }
 
 .idcbis-about__image-wrap {
