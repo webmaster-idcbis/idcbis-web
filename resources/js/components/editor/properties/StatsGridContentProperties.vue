@@ -12,6 +12,7 @@
         <input v-model="item.icon" type="text" placeholder="Emoji o ruta SVG" class="editor-field-input">
         <input v-model="item.value" type="text" placeholder="Valor" class="editor-field-input">
         <input v-model="item.label" type="text" placeholder="Etiqueta" class="editor-field-input">
+        <input v-model="item.ariaLabel" type="text" placeholder="Etiqueta para lectores de pantalla" class="editor-field-input">
       </template>
     </PropertyRepeater>
   </div>
@@ -25,7 +26,7 @@ const props = defineProps({ element: { type: Object, required: true } })
 
 const addItem = () => {
   if (!props.element.items) props.element.items = []
-  props.element.items.push({ id: generateId(), icon: '✓', value: '0', label: 'Nueva cifra' })
+  props.element.items.push({ id: generateId(), icon: '✓', value: '0', label: 'Nueva cifra', ariaLabel: '' })
 }
 
 const removeItem = (index) => props.element.items.splice(index, 1)

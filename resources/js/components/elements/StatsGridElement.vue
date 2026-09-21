@@ -1,14 +1,22 @@
 <template>
-  <section class="stats-grid" :class="element.className" :style="sectionStyles" @click.stop="$emit('click', element)">
+  <section
+    :id="element.anchorId || element.id || undefined"
+    class="stats-grid"
+    :class="element.className"
+    :style="sectionStyles"
+    @click.stop="$emit('click', element)"
+  >
     <div class="stats-grid__inner">
       <div
         v-for="(item, index) in items"
         :key="item.id || index"
         class="stat-card"
+        role="group"
+        :aria-label="statAriaLabel(item)"
       >
         <ContentIcon v-if="item.icon" :value="item.icon" class="stat-card__icon" />
-        <span class="stat-card__number">{{ item.value }}</span>
-        <span class="stat-card__label">{{ item.label }}</span>
+        <span class="stat-card__number" aria-hidden="true">{{ item.value }}</span>
+        <span class="stat-card__label" aria-hidden="true">{{ item.label }}</span>
       </div>
     </div>
   </section>
@@ -26,6 +34,8 @@ const props = defineProps({
 defineEmits(['click'])
 
 const items = computed(() => props.element.items || [])
+
+const statAriaLabel = (item) => item.ariaLabel || [item.value, item.label].filter(Boolean).join(' ')
 
 const sectionStyles = computed(() => mergeElementStyles(props.element))
 </script>
@@ -48,19 +58,20 @@ const sectionStyles = computed(() => mergeElementStyles(props.element))
 
 .stat-card {
   text-align: center;
-  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+  background: #fff;
   padding: 2.5rem 2rem;
-  border-radius: 20px;
+  border-radius: 16px;
   min-width: 200px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 28px rgba(11, 79, 108, 0.12);
   transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
-  border: 2px solid transparent;
+  border: 1px solid #b7d0d9;
+  border-top: 5px solid #C4A140;
 }
 
 .stat-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-  border-color: #ff6659;
+  transform: translateY(-8px);
+  box-shadow: 0 18px 36px rgba(11, 79, 108, 0.18);
+  border-color: #005674;
 }
 
 .stat-card__icon {
@@ -71,17 +82,19 @@ const sectionStyles = computed(() => mergeElementStyles(props.element))
 }
 
 .stat-card__number {
+  font-family: var(--font-idcbis-display);
   font-size: 3.2rem;
-  font-weight: 700;
-  color: #1a237e;
+  font-weight: 800;
+  color: #0B4F6C;
   display: block;
   margin-bottom: 0.5rem;
   line-height: 1;
 }
 
 .stat-card__label {
-  color: #607d8b;
+  color: #37474f;
   font-size: 1rem;
+  font-weight: 600;
 }
 
 @media (max-width: 576px) {
@@ -91,6 +104,15 @@ const sectionStyles = computed(() => mergeElementStyles(props.element))
   }
   .stat-card__number {
     font-size: 2.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-card {
+    transition: none;
+  }
+  .stat-card:hover {
+    transform: none;
   }
 }
 </style>

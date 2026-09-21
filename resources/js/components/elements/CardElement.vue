@@ -18,6 +18,16 @@
       <div v-if="element.title" class="card-title" :style="titleStyles">{{ element.title }}</div>
       <div v-if="element.subtitle" class="card-subtitle">{{ element.subtitle }}</div>
       <div v-if="element.content" class="card-content" :style="contentStyles">{{ element.content }}</div>
+      <dl v-if="element.duration || element.frequency" class="card-meta">
+        <div v-if="element.duration">
+          <dt>Duración</dt>
+          <dd>{{ element.duration }}</dd>
+        </div>
+        <div v-if="element.frequency">
+          <dt>Frecuencia</dt>
+          <dd>{{ element.frequency }}</dd>
+        </div>
+      </dl>
       <span v-if="element.linkLabel && preview && element.href" class="card-link-label">{{ element.linkLabel }} →</span>
     </div>
   </component>
@@ -130,6 +140,28 @@ const contentStyles = computed(() => ({
   flex: 1;
 }
 
+.card-meta {
+  margin: 0.5rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid #eceff1;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.card-meta dt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #005674;
+}
+
+.card-meta dd {
+  margin: 0;
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
 .card-link-label {
   font-size: 0.85rem;
   font-weight: 600;
@@ -149,10 +181,10 @@ const contentStyles = computed(() => ({
 }
 
 .card-element.feature {
-  border: none;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  border-top: 5px solid #d32f2f;
+  border: 1px solid #b7d0d9;
+  border-radius: 16px;
+  box-shadow: 0 10px 28px rgba(11, 79, 108, 0.12);
+  border-top: 5px solid #C4A140;
   font-family: var(--font-idcbis);
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
@@ -164,7 +196,7 @@ const contentStyles = computed(() => ({
   left: 0;
   width: 100%;
   height: 5px;
-  background: linear-gradient(to right, #d32f2f, #00acc1);
+  background: #C4A140;
 }
 
 .card-element.feature {
@@ -182,12 +214,12 @@ const contentStyles = computed(() => ({
   align-items: center;
   justify-content: center;
   font-size: 2.5rem;
-  color: #d32f2f;
+  color: #005674;
   padding-top: 1.5rem;
 }
 
 .card-element.feature .card-title {
-  color: #1a237e;
+  color: #0B4F6C;
   font-size: 1.5rem;
 }
 
@@ -209,7 +241,7 @@ const contentStyles = computed(() => ({
   left: 0;
   width: 100%;
   height: 5px;
-  background: linear-gradient(to right, #d32f2f, #00acc1);
+  background: #C4A140;
 }
 
 .card-element.type:hover {
@@ -218,7 +250,7 @@ const contentStyles = computed(() => ({
 }
 
 .card-element.type .card-title {
-  color: #1a237e;
+  color: #0B4F6C;
   font-size: 1.6rem;
   display: flex;
   align-items: center;
@@ -227,19 +259,20 @@ const contentStyles = computed(() => ({
 
 .card-element.type .card-icon {
   font-size: 1.8rem;
-  color: #d32f2f;
+  color: #005674;
 }
 
 .card-element.info {
-  border: none;
-  border-radius: 20px;
+  border: 1px solid #b7d0d9;
+  border-top: 5px solid #C4A140;
+  border-radius: 16px;
   padding: 2.5rem !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 28px rgba(11, 79, 108, 0.12);
   font-family: var(--font-idcbis);
 }
 
 .card-element.info .card-title {
-  color: #1a237e;
+  color: #0B4F6C;
   font-size: 1.8rem;
   display: flex;
   align-items: center;

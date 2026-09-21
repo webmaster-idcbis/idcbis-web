@@ -41,9 +41,9 @@ const elementStyles = computed(() => mergeElementStyles(props.element, {
 }
 
 .heading-section {
-  font-family: var(--font-idcbis);
+  font-family: var(--font-idcbis-display);
   font-size: 2.5rem !important;
-  color: #1a237e !important;
+  color: #0B4F6C !important;
   text-align: center !important;
   position: relative;
   display: block;
@@ -60,7 +60,7 @@ const elementStyles = computed(() => mergeElementStyles(props.element, {
   position: absolute;
   width: 120px;
   height: 5px;
-  background: linear-gradient(to right, #d32f2f, #00acc1);
+  background: #C4A140;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);

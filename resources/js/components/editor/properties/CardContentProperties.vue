@@ -16,6 +16,10 @@
     <input v-model="element.title" type="text" class="editor-field-input" placeholder="Título">
     <input v-model="element.subtitle" type="text" class="editor-field-input" placeholder="Subtítulo">
     <textarea v-model="element.content" rows="4" class="editor-field-input" placeholder="Descripción" />
+    <div class="grid grid-cols-2 gap-2">
+      <input v-model="element.duration" type="text" class="editor-field-input" placeholder="Duración">
+      <input v-model="element.frequency" type="text" class="editor-field-input" placeholder="Frecuencia">
+    </div>
     <input v-model="element.image" type="text" class="editor-field-input" placeholder="URL imagen superior">
     <div class="grid grid-cols-2 gap-2">
       <input v-model="element.href" type="text" class="editor-field-input" placeholder="Enlace (URL)">

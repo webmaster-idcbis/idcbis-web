@@ -54,4 +54,8 @@ const { getComponentType } = usePageElements()
   font-family: var(--font-idcbis);
   background: #f5f7fa;
 }
+
+.page-content.theme-bds .page-element-bleed + .page-element-bleed {
+  box-shadow: inset 0 1px 0 rgba(11, 79, 108, 0.12);
+}
 </style>

@@ -210,8 +210,8 @@ const descriptionStyles = (slide) => {
 const buttonStyles = (slide) => {
   const hero = isHeroFull.value
   const styles = {
-    background: slide.buttonBg || props.element.buttonBg || (hero ? 'linear-gradient(135deg, #d32f2f 0%, #9a0007 100%)' : '#005674'),
-    color: slide.buttonColor || props.element.buttonColor || '#ffffff',
+    background: slide.buttonBg || props.element.buttonBg || (hero ? '#C4A140' : '#005674'),
+    color: slide.buttonColor || props.element.buttonColor || (hero ? '#003C5F' : '#ffffff'),
     borderRadius: slide.buttonRadius || props.element.buttonRadius || '999px',
     fontWeight: slide.buttonWeight || props.element.buttonWeight || '600',
     textTransform: slide.buttonTransform || props.element.buttonTransform || (hero ? 'none' : 'uppercase'),
@@ -220,7 +220,7 @@ const buttonStyles = (slide) => {
     boxSizing: 'border-box',
   }
   if (hero) {
-    styles.boxShadow = '0 8px 25px rgba(211, 47, 47, 0.4)'
+    styles.boxShadow = '0 8px 25px rgba(196, 161, 64, 0.45)'
     styles.display = 'inline-flex'
     styles.alignItems = 'center'
     styles.justifyContent = 'center'
@@ -452,12 +452,12 @@ onUnmounted(stopAutoplay)
 }
 
 .carousel-element--hero-full .carousel-indicator.active {
-  background: #d32f2f;
+  background: #C4A140;
 }
 
 .carousel-element--hero-full .slide-button:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(211, 47, 47, 0.5);
+  box-shadow: 0 15px 30px rgba(196, 161, 64, 0.5);
 }
 
 @media (max-width: 900px) {

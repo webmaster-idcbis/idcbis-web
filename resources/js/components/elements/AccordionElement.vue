@@ -15,13 +15,20 @@
           <button
             type="button"
             class="faq-question"
+            :id="`faq-q-${item.id || index}`"
             :aria-expanded="openIndex === index ? 'true' : 'false'"
+            :aria-controls="`faq-a-${item.id || index}`"
             @click.stop="toggle(index)"
           >
             <span>{{ item.question }}</span>
             <span class="faq-chevron">▼</span>
           </button>
-          <div class="faq-answer">
+          <div
+            class="faq-answer"
+            :id="`faq-a-${item.id || index}`"
+            role="region"
+            :aria-labelledby="`faq-q-${item.id || index}`"
+          >
             <p v-if="item.answer" class="faq-answer__text">{{ item.answer }}</p>
             <img
               v-if="item.image"
@@ -75,11 +82,11 @@ const sectionStyles = computed(() => ({
 }))
 
 const titleColor = computed(() => ({
-  color: props.element.titleColor || '#1a237e',
+  color: props.element.titleColor || '#0B4F6C',
 }))
 
 const subtitleColor = computed(() => ({
-  color: props.element.subtitleColor || '#607d8b',
+  color: props.element.subtitleColor || '#455a64',
 }))
 
 const toggle = (index) => {
@@ -115,7 +122,7 @@ const toggle = (index) => {
   position: absolute;
   width: 120px;
   height: 5px;
-  background: linear-gradient(to right, #0b4f6c, #2c8c99);
+  background: #C4A140;
   bottom: -15px;
   left: 50%;
   transform: translateX(-50%);
@@ -152,7 +159,8 @@ const toggle = (index) => {
   cursor: pointer;
   font-weight: 600;
   font-size: 1.1rem;
-  color: #1a237e;
+  color: #0B4F6C;
+  min-height: 44px;
   background: none;
   border: none;
   text-align: left;
@@ -170,6 +178,14 @@ const toggle = (index) => {
   transform: rotate(180deg);
 }
 
+.faq-question:focus {
+  outline: none;
+}
+
+.faq-question:focus-visible {
+  box-shadow: inset 0 0 0 2px #005674;
+}
+
 .faq-answer {
   max-height: 0;
   overflow: hidden;
@@ -183,7 +199,7 @@ const toggle = (index) => {
 
 .faq-answer p {
   margin: 0;
-  color: #555;
+  color: #37474f;
   line-height: 1.65;
   white-space: pre-line;
 }
@@ -241,5 +257,18 @@ const toggle = (index) => {
   color: #555;
   font-size: 0.9rem;
   line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-answer,
+  .faq-chevron,
+  .faq-link {
+    transition: none;
+  }
+
+  .faq-link:hover,
+  .faq-link:focus-visible {
+    transform: none;
+  }
 }
 </style>

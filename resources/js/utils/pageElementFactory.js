@@ -500,6 +500,75 @@ export const createElement = (type) => {
           },
         ],
       }
+    case 'idcbis-checklist':
+      return {
+        ...baseElement,
+        fullBleed: true,
+        anchorId: 'requisitos',
+        title: '¿Puedo donar?',
+        subtitle: 'Revisa si cumples los requisitos principales antes de agendar tu donación.',
+        backgroundColor: '#E1F0F5',
+        ctaText: 'Cumplo los requisitos, agendar',
+        ctaUrl: 'tel:+5713649620',
+        items: [
+          { id: generateId(), text: 'Tener entre 18 y 65 años.' },
+          { id: generateId(), text: 'Pesar más de 50 kg.' },
+          { id: generateId(), text: 'Sentirte bien de salud el día de la donación.' },
+        ],
+      }
+    case 'idcbis-card-grid':
+      return {
+        ...baseElement,
+        fullBleed: true,
+        title: 'Tipos de donación',
+        subtitle: 'Conoce las diferentes formas en que puedes contribuir a salvar vidas.',
+        backgroundColor: '#E1F0F5',
+        items: [
+          {
+            id: generateId(),
+            icon: 'Droplets',
+            title: 'Sangre total',
+            description: 'La donación más frecuente. Se extraen aproximadamente 450 ml.',
+            duration: '7 a 10 minutos',
+            frequency: 'Cada 3 a 4 meses',
+          },
+        ],
+      }
+    case 'idcbis-info-grid':
+      return {
+        ...baseElement,
+        fullBleed: true,
+        anchorId: 'ubicacion',
+        title: 'Información práctica',
+        subtitle: 'Horarios, dirección y canales de contacto del Banco Distrital de Sangre.',
+        backgroundColor: '#E1F0F5',
+        items: [
+          {
+            id: generateId(),
+            icon: 'MapPin',
+            title: 'Dirección',
+            text: 'Carrera 28 #39 A - 10, Bogotá, Colombia',
+            link: 'https://www.google.com/maps/search/?api=1&query=Carrera+28+%2339A-10,+Bogot%C3%A1,+Colombia',
+            linkLabel: 'Cómo llegar',
+          },
+          {
+            id: generateId(),
+            icon: 'Clock',
+            title: 'Horarios',
+            text: 'Lunes a viernes: 7:00 a. m. - 5:00 p. m.\nSábados: 8:00 a. m. - 2:00 p. m.',
+            link: '',
+            linkLabel: '',
+          },
+          {
+            id: generateId(),
+            icon: 'Phone',
+            title: 'Contacto',
+            text: 'Teléfono: (+57) 1 364 9620\nCorreo: bancodesangre@idcbis.org.co',
+            link: 'tel:+5713649620',
+            linkLabel: 'Llamar ahora',
+          },
+        ],
+      }
     case 'stats-grid':
       return {
         ...baseElement,

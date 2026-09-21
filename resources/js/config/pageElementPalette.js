@@ -49,6 +49,9 @@ export const paletteCategories = [
     items: [
       { type: 'idcbis-hero', icon: '★', iconClass: 'text-[#0B4F6C]', label: 'Hero donación', description: 'Título, botones e imagen' },
       { type: 'idcbis-hero-carousel', icon: '⇄', iconClass: 'text-[#2C8C99]', label: 'Hero carrusel', description: 'Hero en slides' },
+      { type: 'idcbis-checklist', icon: '☑', iconClass: 'text-[#C4A140]', label: 'Requisitos', description: 'Lista con CTA de donación' },
+      { type: 'idcbis-card-grid', icon: '▦', iconClass: 'text-[#005674]', label: 'Tipos de donación', description: 'Tarjetas con duración y frecuencia' },
+      { type: 'idcbis-info-grid', icon: 'ℹ', iconClass: 'text-[#0B4F6C]', label: 'Datos prácticos', description: 'Horario, dirección y contacto' },
       { type: 'idcbis-services', icon: '▦', iconClass: 'text-[#2C8C99]', label: 'Grid servicios', description: 'Tarjetas con imagen' },
       { type: 'idcbis-service-detail', icon: '📄', iconClass: 'text-indigo-600', label: 'Detalle servicio', description: 'Página de servicio' },
       { type: 'idcbis-stats', icon: '#', iconClass: 'text-amber-500', label: 'Cifras IDCBIS', description: 'Números destacados' },

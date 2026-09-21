@@ -38,7 +38,7 @@ defineEmits(['click'])
 const panels = computed(() => props.element.panels || [])
 
 const sectionStyles = computed(() => ({
-  background: resolveBackground(props.element, 'linear-gradient(135deg, #1a237e 0%, #9a0007 100%)'),
+  background: resolveBackground(props.element, 'linear-gradient(135deg, #005674 0%, #003C5F 100%)'),
   borderRadius: props.element.borderRadius || '40px',
   padding: props.element.padding || '6rem 2rem',
   margin: props.element.margin || '4rem auto',
@@ -129,7 +129,7 @@ const sectionStyles = computed(() => ({
   margin-bottom: 1.2rem;
   padding-left: 2rem;
   position: relative;
-  color: rgba(255, 255, 255, 0.9);
+  color: #ffffff;
   line-height: 1.55;
 }
 
@@ -137,7 +137,7 @@ const sectionStyles = computed(() => ({
   content: '✓';
   position: absolute;
   left: 0;
-  color: #00acc1;
+  color: #C4A140;
   font-weight: bold;
   font-size: 1.2rem;
 }
@@ -146,7 +146,7 @@ const sectionStyles = computed(() => ({
   content: '•';
   position: absolute;
   left: 0;
-  color: #ff6659;
+  color: #C4A140;
   font-weight: bold;
   font-size: 1.5rem;
   line-height: 1;

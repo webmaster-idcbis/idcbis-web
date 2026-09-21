@@ -1,5 +1,5 @@
 <template>
-  <section class="process-timeline-block" :style="blockStyles" @click.stop="$emit('click', element)">
+  <section :id="element.anchorId || element.id || undefined" class="process-timeline-block" :style="blockStyles" @click.stop="$emit('click', element)">
     <div class="process-timeline-block__container">
       <div v-if="element.title || element.subtitle" class="section-header">
         <h2 v-if="element.title" class="section-title">{{ element.title }}</h2>
@@ -14,7 +14,7 @@
         >
           <div class="timeline-number">{{ index + 1 }}</div>
           <div class="timeline-content">
-            <h4>{{ step.title }}</h4>
+            <h3>{{ step.title }}</h3>
             <p>{{ step.description }}</p>
           </div>
         </div>
@@ -60,7 +60,7 @@ const blockStyles = computed(() => ({
 
 .section-title {
   font-size: 2.5rem;
-  color: #1a237e;
+  color: #0B4F6C;
   margin-bottom: 1rem;
   position: relative;
   display: inline-block;
@@ -69,20 +69,20 @@ const blockStyles = computed(() => ({
 .section-title::after {
   content: '';
   position: absolute;
-  width: 120px;
-  height: 5px;
-  background: linear-gradient(to right, #d32f2f, #00acc1);
-  bottom: -15px;
+  width: 96px;
+  height: 4px;
+  background: #C4A140;
+  bottom: -12px;
   left: 50%;
   transform: translateX(-50%);
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 .section-subtitle {
-  color: #607d8b;
-  font-size: 1.2rem;
+  color: #37474f;
+  font-size: 1.125rem;
   max-width: 700px;
-  margin: 2rem auto 0;
+  margin: 1.75rem auto 0;
 }
 
 .process-timeline {
@@ -99,7 +99,7 @@ const blockStyles = computed(() => ({
   transform: translateX(-50%);
   width: 4px;
   height: 100%;
-  background: linear-gradient(to bottom, #d32f2f, #00acc1);
+  background: linear-gradient(to bottom, #005674, #C4A140);
   border-radius: 2px;
 }
 
@@ -118,9 +118,10 @@ const blockStyles = computed(() => ({
 .timeline-content {
   width: 45%;
   background: #fff;
+  border: 1px solid #b7d0d9;
   border-radius: 15px;
   padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 28px rgba(11, 79, 108, 0.12);
   position: relative;
 }
 
@@ -142,14 +143,14 @@ const blockStyles = computed(() => ({
   left: -10px;
 }
 
-.timeline-content h4 {
+.timeline-content h3 {
   font-size: 1.25rem;
-  color: #1a237e;
-  margin-bottom: 0.75rem;
+  color: #0B4F6C;
+  margin: 0 0 0.75rem;
 }
 
 .timeline-content p {
-  color: #555;
+  color: #1a1a1a;
   line-height: 1.65;
   margin: 0;
 }
@@ -161,7 +162,7 @@ const blockStyles = computed(() => ({
   transform: translateX(-50%);
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #d32f2f, #00acc1);
+  background: #005674;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -193,6 +194,13 @@ const blockStyles = computed(() => ({
   .timeline-number {
     left: 30px;
     transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-item,
+  .timeline-content {
+    transition: none;
   }
 }
 </style>

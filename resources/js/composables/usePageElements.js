@@ -26,6 +26,9 @@ import IdcbisBubblesElement from '../components/elements/idcbis/IdcbisBubblesEle
 import IdcbisAboutElement from '../components/elements/idcbis/IdcbisAboutElement.vue'
 import IdcbisContactElement from '../components/elements/idcbis/IdcbisContactElement.vue'
 import IdcbisHeroCarouselElement from '../components/elements/idcbis/IdcbisHeroCarouselElement.vue'
+import IdcbisChecklistElement from '../components/elements/idcbis/IdcbisChecklistElement.vue'
+import IdcbisCardGridElement from '../components/elements/idcbis/IdcbisCardGridElement.vue'
+import IdcbisInfoGridElement from '../components/elements/idcbis/IdcbisInfoGridElement.vue'
 import IdcbisServiceDetailElement from '../components/elements/idcbis/IdcbisServiceDetailElement.vue'
 import IdcbisFaqElement from '../components/elements/idcbis/IdcbisFaqElement.vue'
 import IdcbisLinksGridElement from '../components/elements/idcbis/IdcbisLinksGridElement.vue'
@@ -72,6 +75,9 @@ const elementComponents = {
   'idcbis-about': markRaw(IdcbisAboutElement),
   'idcbis-contact': markRaw(IdcbisContactElement),
   'idcbis-hero-carousel': markRaw(IdcbisHeroCarouselElement),
+  'idcbis-checklist': markRaw(IdcbisChecklistElement),
+  'idcbis-card-grid': markRaw(IdcbisCardGridElement),
+  'idcbis-info-grid': markRaw(IdcbisInfoGridElement),
   'idcbis-service-detail': markRaw(IdcbisServiceDetailElement),
   'idcbis-faq': markRaw(IdcbisFaqElement),
   'idcbis-links': markRaw(IdcbisLinksGridElement),
@@ -94,6 +100,9 @@ const elementComponents = {
 const IDCBIS_BLOCK_TYPES = [
   'idcbis-hero',
   'idcbis-hero-carousel',
+  'idcbis-checklist',
+  'idcbis-card-grid',
+  'idcbis-info-grid',
   'idcbis-services',
   'idcbis-stats',
   'idcbis-bubbles',

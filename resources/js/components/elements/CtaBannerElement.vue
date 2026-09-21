@@ -1,20 +1,28 @@
 <template>
-  <section class="cta-banner" @click.stop="$emit('click', element)">
+  <section
+    :id="element.anchorId || element.id || undefined"
+    class="cta-banner"
+    @click.stop="$emit('click', element)"
+  >
     <div class="cta-banner__inner" :style="bannerStyles">
       <h2 v-if="element.title">{{ element.title }}</h2>
       <p v-if="element.subtitle">{{ element.subtitle }}</p>
       <div v-if="buttons.length" class="cta-buttons">
-        <a
+        <component
           v-for="(btn, index) in buttons"
           :key="btn.id || index"
-          :href="preview ? (btn.url || '#') : '#'"
+          :is="linkProps(btn.url).is"
+          :href="linkProps(btn.url).href"
+          :type="linkProps(btn.url).type"
+          :target="linkProps(btn.url).target"
+          :rel="linkProps(btn.url).rel"
           class="btn"
           :class="btn.variant === 'outline' ? 'btn-outline' : 'btn-primary'"
           @click.stop="!preview && $event.preventDefault()"
         >
-          <ContentIcon v-if="btn.icon" :value="btn.icon" />
+          <ContentIcon v-if="btn.icon" :value="btn.icon" decorative />
           {{ btn.label }}
-        </a>
+        </component>
       </div>
     </div>
   </section>
@@ -23,6 +31,7 @@
 <script setup>
 import { computed } from 'vue'
 import { resolveBackground } from '../../composables/useElementStyles'
+import { previewLinkProps } from '../../utils/previewLink'
 import ContentIcon from './ContentIcon.vue'
 
 const props = defineProps({
@@ -34,8 +43,10 @@ defineEmits(['click'])
 
 const buttons = computed(() => props.element.buttons || [])
 
+const linkProps = (url) => previewLinkProps(props.preview, url)
+
 const bannerStyles = computed(() => ({
-  background: resolveBackground(props.element, 'linear-gradient(135deg, #1a237e 0%, #283593 100%)'),
+  background: resolveBackground(props.element, 'linear-gradient(135deg, #005674 0%, #003C5F 100%)'),
 }))
 </script>
 
@@ -44,6 +55,7 @@ const bannerStyles = computed(() => ({
   padding: 3rem 2rem 6rem;
   font-family: var(--font-idcbis);
   cursor: pointer;
+  background: #ffffff;
 }
 
 .cta-banner__inner {
@@ -65,7 +77,7 @@ const bannerStyles = computed(() => ({
   font-size: 1.3rem;
   max-width: 700px;
   margin: 0 auto 3rem;
-  opacity: 0.9;
+  color: #ffffff;
   line-height: 1.6;
 }
 
@@ -78,6 +90,7 @@ const bannerStyles = computed(() => ({
 
 .btn {
   padding: 1.1rem 2.5rem;
+  min-height: 44px;
   border-radius: 50px;
   text-decoration: none;
   font-weight: 600;
@@ -85,30 +98,44 @@ const bannerStyles = computed(() => ({
   transition: all 0.4s ease;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.7rem;
+  cursor: pointer;
+  font-family: inherit;
+  border: 2px solid transparent;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn:focus-visible {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #d32f2f 0%, #9a0007 100%);
-  color: #fff;
-  box-shadow: 0 8px 25px rgba(211, 47, 47, 0.4);
+  background: #C4A140;
+  color: #003C5F;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(196, 161, 64, 0.4);
 }
 
 .btn-primary:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(211, 47, 47, 0.5);
+  background: #D9B85A;
+  transform: translateY(-3px);
 }
 
 .btn-outline {
   background: transparent;
   color: #fff;
-  border: 2px solid rgba(255, 255, 255, 0.7);
+  border: 2px solid #C4A140;
 }
 
 .btn-outline:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: #fff;
-  transform: translateY(-5px);
+  background: #C4A140;
+  color: #003C5F;
+  border-color: #C4A140;
+  transform: translateY(-3px);
 }
 
 @media (max-width: 768px) {
@@ -138,6 +165,15 @@ const bannerStyles = computed(() => ({
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .btn-primary:hover,
+  .btn-outline:hover {
+    transition: none;
+    transform: none;
   }
 }
 </style>
