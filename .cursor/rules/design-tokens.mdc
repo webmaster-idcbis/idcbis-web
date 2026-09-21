@@ -1,0 +1,63 @@
+---
+description: Tokens de diseño IDCBIS
+globs: ["**/*.vue", "**/*.css"]
+alwaysApply: true
+---
+
+# Tokens de diseño — IDCBIS
+
+Referencia esencial. Detalle completo en `@.cursor/skills/web-design/idcbis-tokens.md`.
+
+## Paleta institucional (sitio público)
+
+| Token | Hex | Uso |
+|-------|-----|-----|
+| `brand-primary` | `#005674` | Links, focus, acentos, header gradient inicio |
+| `brand-primary-dark` | `#003C5F` | Footer, hover botones |
+| `brand-secondary` | `#008996` | Header gradient fin |
+| `brand-deep` | `#0B4F6C` | Bloques idcbis, títulos |
+| `brand-deep-alt` | `#003d52` | Gradientes hero |
+| `brand-accent` | `#C4A140` | Acento dorado (stats, CTAs footer) |
+| `accent-red` | `#d32f2f` | Donación / subrayados acordeón |
+| `text-body` | `#1a1a1a` | Body |
+| `text-muted` | `#607d8b` | Texto secundario |
+| `surface-light` | `#eceff1` | Fondos suaves |
+| `surface-page` | `#f8f9fa` / `bg-gray-50` | Layout |
+
+**No** usar azul genérico (`#3b82f6`, `blue-500`) en UI pública nueva.
+
+## Tipografía
+
+| Rol | Variable | Familia | Peso |
+|-----|----------|---------|------|
+| Cuerpo | `--font-idcbis` | Museo Sans Condensed | 500 |
+| Títulos | `--font-idcbis-display` | Museo Sans Condensed | 700–900 |
+
+JS: `SITE_TYPOGRAPHY` / `fontFamily` desde `@/config/siteTypography`.
+
+## Layout
+
+- Contenedor estándar: `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`
+- Bloques idcbis full-bleed: max-width interno `1200px`–`1400px` centrado
+
+## Estados interactivos
+
+| Contexto | Patrón |
+|----------|--------|
+| Focus público | `focus:ring-2 focus:ring-[#005674]` |
+| Focus admin | `dark:focus:ring-[#58a6ff]` |
+| Hover link footer/acento | `hover:text-[#D9B85A]` sobre `#C4A140` |
+| Spinner | `border-b-2 border-[#005674]` |
+
+## Tema admin (oscuro)
+
+| Token | Valor |
+|-------|-------|
+| `--color-dark-bg` | `#0f1419` |
+| `--color-dark-surface` | `#161b22` |
+| `--color-dark-elevated` | `#21262d` |
+| `--color-dark-border` | `#30363d` |
+| `--color-dark-text` | `#e6edf3` |
+| `--color-dark-text-secondary` | `#8b949e` |
+| `--color-dark-accent` | `#58a6ff` |
+| `--color-dark-accent-hover` | `#79c0ff` |

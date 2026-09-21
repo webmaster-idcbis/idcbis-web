@@ -7,5 +7,6 @@ export const IDCBIS_THEME = {
   highlight: '#C4A140',
   pageBg: '#f5f8fa',
   cardBgs: ['#E1F0F5', '#D4F0F0', '#E5F2F2', '#D1E9F2', '#E0F2F5', '#C9E9F2'],
-  bubbleColors: ['#4ECDC4', '#2C8C99', '#0B4F6C', '#1E88E5'],
+  bubbleColor: '#0B4F6C',
+  bubbleColors: ['#0B4F6C'],
 }

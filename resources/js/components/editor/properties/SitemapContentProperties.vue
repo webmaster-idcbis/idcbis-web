@@ -17,8 +17,8 @@
       Mostrar nota al pie
     </label>
     <p class="text-xs text-gray-500 leading-relaxed">
-      El mapa se organiza en tarjetas y grupos. Los enlaces se generan desde
-      <code class="text-[11px]">siteSitemap.js</code>. Puedes personalizar título, subtítulo y visibilidad de la cabecera.
+      El mapa se muestra como un directorio en lista, con categorías y subpáginas.
+      Los enlaces se generan desde <code class="text-[11px]">siteSitemap.js</code>.
     </p>
   </div>
 </template>

@@ -1,0 +1,66 @@
+---
+description: Patrones page builder IDCBIS
+globs: ["resources/js/components/elements/**/*.vue", "resources/js/composables/**/*.js"]
+alwaysApply: false
+---
+
+# Patrones page builder — IDCBIS
+
+Detalle en `@.cursor/skills/web-design/component-patterns.md`.
+
+## Props estándar de elementos
+
+```js
+defineProps({
+  element: { type: Object, required: true },
+  preview: { type: Boolean, default: false },
+  focusedPart: { type: String, default: null },
+})
+defineEmits(['click', 'focus-part'])
+```
+
+- `preview: true` → sitio público (links activos, demos).
+- `preview: false` → modo editor; click selecciona el bloque.
+
+## Registrar un elemento nuevo
+
+1. `utils/pageElementFactory.js` — `createElement('mi-tipo')` con defaults.
+2. `config/pageElementPalette.js` — entrada (categoría `idcbis` si es institucional).
+3. `composables/usePageElements.js` — mapeo tipo → componente Vue.
+4. `components/editor/properties/` — `MiTipoContentProperties.vue` (+ panel si hace falta).
+
+## Estilos dinámicos
+
+Usar `composables/useElementStyles.js`:
+
+```js
+import { mergeElementStyles, resolveBackgroundColor } from '../../composables/useElementStyles'
+
+const sectionStyles = computed(() => ({
+  backgroundColor: resolveBackgroundColor(props.element.backgroundColor, '#eceff1'),
+  padding: props.element.padding || '5rem 2rem',
+  ...mergeElementStyles(props.element),
+}))
+```
+
+Campos comunes: `backgroundColor`, `padding`, `margin`, `maxWidth`, `borderRadius`, `titleColor`, `fullBleed`.
+
+## Bloques IDCBIS editables por partes
+
+```js
+import { useIdcbisEditorParts } from '../../../composables/useIdcbisEditorParts'
+
+const { partClasses, focusPart } = useIdcbisEditorParts(props, emit)
+```
+
+- Subpartes emiten `focus-part` para panel contextual.
+- Prefijo BEM-like en scoped CSS: `idcbis-*__*`.
+- Cursor `pointer` + `@click.stop` en editor para selección.
+
+## Referencias de calidad
+
+| Patrón | Archivo |
+|--------|---------|
+| ARIA carrusel | `IdcbisHeroCarouselElement.vue` |
+| ARIA documentos | `IdcbisDocumentsListElement.vue` |
+| Full-bleed | `IdcbisContactElement.vue` |

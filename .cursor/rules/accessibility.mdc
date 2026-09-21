@@ -1,0 +1,28 @@
+---
+description: Checklist accesibilidad WCAG 2.1 AA
+globs: ["**/*.vue"]
+alwaysApply: false
+---
+
+# Accesibilidad — checklist mínimo (WCAG 2.1 AA)
+
+Versión completa: `@.cursor/skills/web-design/checklist.md`.
+
+## Obligatorio antes de cerrar un cambio de UI
+
+- [ ] **Contraste** ≥ 4.5:1 texto normal sobre fondo (texto grande ≥ 3:1).
+- [ ] **Focus visible**: nunca `outline: none` sin reemplazo (`:focus-visible` o `focus:ring-[#005674]` / admin `dark:focus:ring-[#58a6ff]`).
+- [ ] **Botones reales**: `<button type="button">`, no `<div @click>`.
+- [ ] **Imágenes**: `alt` descriptivo; decorativas → `alt=""`; slides con `imageAlt`.
+- [ ] **Acordeón / carrusel**: `aria-expanded`, `aria-controls`, `aria-label` en prev/next/indicators.
+- [ ] **Touch targets** ≥ 44×44 px en móvil.
+- [ ] **`prefers-reduced-motion`**: respetar en carruseles, acordeones y transforms largos.
+- [ ] **Sin overflow-x** accidental en móvil.
+- [ ] **Logos**: variante correcta (`IDCBIS_BRAND_LOGO` vs `IDCBIS_BRAND_LOGO_ON_BLUE`).
+
+## Recordatorios rápidos
+
+- Un solo `h1` por vista; no saltar niveles de heading.
+- Labels visibles en formularios; placeholder no sustituye label.
+- Iconos decorativos: `aria-hidden="true"`; botones solo-icono: `aria-label`.
+- Modales admin: `role="dialog"`, `aria-modal="true"`, `aria-labelledby`.

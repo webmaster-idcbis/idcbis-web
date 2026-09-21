@@ -1,0 +1,99 @@
+---
+description: Reglas de diseño web IDCBIS
+globs: ["resources/js/**/*.vue", "resources/css/**/*.css"]
+alwaysApply: false
+---
+
+# Diseño web — IDCBIS CMS
+
+Sitio institucional colombiano con **Vue 3 + Tailwind CSS 4 + Laravel**. Priorizar claridad, accesibilidad y consistencia con los patrones existentes.
+
+## Antes de implementar
+
+1. Reutilizar componentes en `resources/js/components/` (layout, elements, elements/idcbis).
+2. Consultar tokens en `@.cursor/skills/web-design/idcbis-tokens.md` (regla `design-tokens.mdc`).
+3. Seguir patrones Vue en `@.cursor/skills/web-design/component-patterns.md` (regla `cms-elements.mdc`).
+4. No romper el page builder: props `element`, `preview`, `focusedPart` cuando aplique.
+5. Textos en español, tono institucional claro.
+
+## Stack rápido
+
+| Área | Ubicación |
+|------|-----------|
+| Layout público | `components/layout/` |
+| Bloques CMS / IDCBIS | `components/elements/`, `elements/idcbis/` |
+| Editor | `components/editor/` |
+| Admin | `views/admin/` |
+| Estilos globales | `resources/css/app.css`, `fonts.css` |
+
+## Reglas clave
+
+- **Colores**: paleta institucional (`#005674`, `#008996`, `#003C5F`, `#0B4F6C`, `#C4A140`). Sin `#3b82f6` en UI pública nueva.
+- **Tipografía**: `var(--font-idcbis)` cuerpo; `var(--font-idcbis-display)` títulos. No fuentes externas fuera de `fonts.css`.
+- **Layout**: `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`. Mobile-first (`md:`, `lg:`).
+- **Iconos**: `lucide-vue-next` o `@heroicons/vue`; `aria-hidden` en decorativos.
+- **Logos** (`config/siteLogos.js`): `IDCBIS_BRAND_LOGO_ON_BLUE` en azul institucional; `IDCBIS_BRAND_LOGO` en fondos claros/admin.
+- **Público vs admin**: público claro + `#005674`; admin oscuro `--color-dark-*` + `#58a6ff`. No mezclar.
+
+## No hacer (a menos que se pida explícitamente)
+
+- No introducir `#3b82f6`, `blue-500` ni azules genéricos en UI pública.
+- No cambiar `--font-idcbis` ni añadir fuentes externas.
+- No mezclar tokens admin (`--color-dark-*`) en componentes públicos.
+- No usar `<div @click>` para acciones; siempre `<button>`.
+- No quitar `@click.stop` de contenedores editor.
+- No modificar la estructura `element` / `preview` / `focusedPart`.
+- No hardcodear rutas a `public/images/logo/`; usar `config/siteLogos.js`.
+- No ensanchar más allá de `max-w-7xl` salvo full-bleed intencional.
+
+## Ejemplos antes / después
+
+```vue
+<!-- ❌ Incorrecto: div clickeable + azul genérico -->
+<div
+  @click="submit"
+  class="px-6 py-2 rounded bg-blue-500 text-white"
+>
+  Enviar
+</div>
+
+<!-- ✅ Botón primario institucional -->
+<button
+  type="button"
+  class="px-6 py-3 min-h-[44px] rounded-lg bg-[#005674] text-white
+         hover:bg-[#003C5F] focus:outline-none focus:ring-2
+         focus:ring-[#005674] focus:ring-offset-2 transition-colors"
+>
+  Enviar
+</button>
+```
+
+```vue
+<!-- ❌ Incorrecto: outline eliminado sin reemplazo -->
+<input class="outline-none border rounded px-3 py-2" />
+
+<!-- ✅ Correcto: focus ring institucional -->
+<input
+  class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#005674]"
+/>
+```
+
+```vue
+<!-- ❌ Incorrecto: logo hardcodeado / variante equivocada -->
+<img src="/images/logo/logo.png" alt="logo" />
+
+<!-- ✅ Correcto: constante según fondo -->
+<img :src="IDCBIS_BRAND_LOGO_ON_BLUE" alt="IDCBIS" />
+```
+
+## Feedback al revisar UI
+
+- **Crítico**: bloquea accesibilidad, usabilidad o coherencia institucional.
+- **Mejora**: claridad, consistencia o mantenibilidad.
+- **Opcional**: pulido visual menor.
+
+## Referencias
+
+- Tokens: `@.cursor/skills/web-design/idcbis-tokens.md` · regla `design-tokens.mdc`
+- Patrones CMS: `@.cursor/skills/web-design/component-patterns.md` · regla `cms-elements.mdc`
+- Accesibilidad: `@.cursor/skills/web-design/checklist.md` · regla `accessibility.mdc`

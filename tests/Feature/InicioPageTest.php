@@ -62,6 +62,41 @@ class InicioPageTest extends TestCase
     }
 
     /** @test */
+    public function inicio_hero_carousel_includes_service_page_banners(): void
+    {
+        $content = require database_path('data/propuesta-azul-content.php');
+        $hero = $content[0];
+
+        $this->assertTrue($hero['autoPlay']);
+        $this->assertTrue($hero['showArrows']);
+        $this->assertTrue($hero['showIndicators']);
+        $this->assertCount(6, $hero['slides']);
+        $this->assertSame('Tú puedes', $hero['slides'][0]['titleLight']);
+        $this->assertSame('Sangre de cordón', $hero['slides'][1]['titleLight']);
+        $this->assertSame('Banco Distrital', $hero['slides'][2]['titleLight']);
+        $this->assertSame('de tejidos', $hero['slides'][2]['titleBold']);
+
+        $this->assertSame(
+            [
+                '/img/Banners WEB/Baner-Pagina-WEB-1920x700-HOME.jpg',
+                '/img/Banners WEB/Baner-Pagina-WEB-1920x700-CU.jpg',
+                '/img/Banners WEB/Baner-Pagina-WEB-1920x700-BT.jpg',
+                '/img/Banners WEB/Baner-Pagina-WEB-1920x700-BS.jpg',
+                '/img/Banners WEB/Baner-Pagina-WEB-1920x700-TA.jpg',
+                '/img/Banners WEB/Baner-Pagina-WEB-1920x700-DC.jpg',
+            ],
+            array_column($hero['slides'], 'backgroundImage')
+        );
+
+        $this->assertSame('/servicios', $hero['slides'][0]['button1Url']);
+        $this->assertSame('/banco-publico-sangre-cordon-umbilical', $hero['slides'][1]['button1Url']);
+        $this->assertSame('/banco-distrital-de-tejidos', $hero['slides'][2]['button1Url']);
+        $this->assertSame('/banco-de-sangre', $hero['slides'][3]['button1Url']);
+        $this->assertSame('/unidad-de-terapias-avanzadas', $hero['slides'][4]['button1Url']);
+        $this->assertSame('/darcelulas', $hero['slides'][5]['button1Url']);
+    }
+
+    /** @test */
     public function public_inicio_endpoint_returns_split_element_content(): void
     {
         User::factory()->create();

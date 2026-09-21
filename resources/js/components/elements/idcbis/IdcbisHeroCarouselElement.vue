@@ -1,7 +1,13 @@
 <template>
   <section
     class="idcbis-hero-carousel"
+    :aria-roledescription="preview ? 'carrusel' : undefined"
+    aria-label="Servicios del IDCBIS"
     @click.stop="$emit('click', element)"
+    @mouseenter="isHovered = true"
+    @mouseleave="isHovered = false"
+    @focusin="isFocused = true"
+    @focusout="onFocusOut"
   >
     <div class="idcbis-hero-carousel__viewport">
       <div class="idcbis-hero-carousel__track" :style="trackStyles">
@@ -14,14 +20,16 @@
             { 'idcbis-hero--with-bg': hasSlideBackground(slide) },
           ]"
           :style="slideBackgroundStyle(slide)"
+          :aria-hidden="currentSlide !== index"
+          :inert="currentSlide !== index || undefined"
           @click.stop="onSlideClick(slide, index, $event)"
         >
           <div class="idcbis-hero__content">
             <div class="idcbis-hero__text">
-              <h1>
+              <component :is="index === 0 ? 'h1' : 'h2'">
                 <span class="light">{{ slide.titleLight || 'Tú puedes' }}</span>
                 {{ slide.titleBold || 'salvar vidas' }}
-              </h1>
+              </component>
               <p v-if="slide.subtitle">{{ slide.subtitle }}</p>
               <div class="idcbis-hero__cta">
                 <component
@@ -85,6 +93,8 @@
       <div
         v-if="slides.length > 1 && element.showIndicators !== false"
         class="idcbis-hero-carousel__dots"
+        role="group"
+        aria-label="Elegir servicio"
       >
         <button
           v-for="(slide, index) in slides"
@@ -92,7 +102,8 @@
           type="button"
           class="idcbis-hero-carousel__dot"
           :class="{ 'idcbis-hero-carousel__dot--active': currentSlide === index }"
-          :aria-label="`Ir al slide ${index + 1}`"
+          :aria-label="`Ir a ${slideLabel(slide, index)}`"
+          :aria-current="currentSlide === index ? 'true' : undefined"
           @click.stop="goToSlide(index)"
         />
       </div>
@@ -116,6 +127,9 @@ const emit = defineEmits(['click', 'focus-part'])
 const { partClasses, focusPart } = useIdcbisEditorParts(props, emit)
 
 const currentSlide = ref(0)
+const isHovered = ref(false)
+const isFocused = ref(false)
+const prefersReducedMotion = ref(false)
 let autoplayInterval = null
 
 const slides = computed(() => props.element.slides || [])
@@ -172,11 +186,17 @@ const goToSlide = (index) => {
   currentSlide.value = index
 }
 
+const canAutoplay = computed(() => (
+  props.preview
+  && props.element.autoPlay !== false
+  && slides.value.length > 1
+  && !prefersReducedMotion.value
+))
+
 const startAutoplay = () => {
   stopAutoplay()
-  if (props.preview && props.element.autoPlay !== false && slides.value.length > 1) {
-    autoplayInterval = setInterval(nextSlide, props.element.interval || 5000)
-  }
+  if (!canAutoplay.value || isHovered.value || isFocused.value) return
+  autoplayInterval = setInterval(nextSlide, props.element.interval || 5000)
 }
 
 const stopAutoplay = () => {
@@ -186,9 +206,21 @@ const stopAutoplay = () => {
   }
 }
 
-watch(() => [props.element.autoPlay, props.element.interval, slides.value.length], startAutoplay)
+const onFocusOut = (event) => {
+  if (!event.currentTarget.contains(event.relatedTarget)) {
+    isFocused.value = false
+  }
+}
 
-onMounted(startAutoplay)
+watch(
+  () => [props.element.autoPlay, props.element.interval, slides.value.length, isHovered.value, isFocused.value, canAutoplay.value],
+  startAutoplay,
+)
+
+onMounted(() => {
+  prefersReducedMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  startAutoplay()
+})
 onUnmounted(stopAutoplay)
 </script>
 
@@ -289,17 +321,18 @@ onUnmounted(stopAutoplay)
   max-width: 100%;
 }
 
-.idcbis-hero__text h1 {
-  font-size: clamp(1.75rem, 5vw, 4.5rem);
+.idcbis-hero__text :is(h1, h2) {
+  font-size: clamp(1.75rem, 5vw, 3.6rem);
   font-weight: 600;
   line-height: 1.15;
   margin-bottom: 1rem;
   text-transform: uppercase;
-  overflow-wrap: anywhere;
-  word-break: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
 }
 
-.idcbis-hero__text h1 .light {
+.idcbis-hero__text :is(h1, h2) .light {
   font-weight: 300;
   display: block;
   font-size: clamp(1.5rem, 4vw, 3rem);
@@ -307,11 +340,12 @@ onUnmounted(stopAutoplay)
 }
 
 .idcbis-hero__text p {
-  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
   margin-bottom: 2rem;
   opacity: 0.95;
-  max-width: 600px;
+  max-width: 640px;
   overflow-wrap: break-word;
+  line-height: 1.5;
 }
 
 .idcbis-hero__cta {
@@ -337,6 +371,11 @@ onUnmounted(stopAutoplay)
   box-sizing: border-box;
   text-align: center;
   max-width: 100%;
+}
+
+.btn-big:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
 }
 
 .btn-big.orange {
@@ -399,8 +438,8 @@ onUnmounted(stopAutoplay)
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 50%;
@@ -411,6 +450,12 @@ onUnmounted(stopAutoplay)
   cursor: pointer;
   opacity: 0.55;
   transition: opacity 0.25s ease, background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.idcbis-hero-carousel__nav:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+  opacity: 1;
 }
 
 .idcbis-hero-carousel__nav-icon {
@@ -461,18 +506,39 @@ onUnmounted(stopAutoplay)
 .idcbis-hero-carousel__dot {
   width: 12px;
   height: 12px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.25);
+  border: 2px solid transparent;
+  background: transparent;
   padding: 0;
   cursor: pointer;
   transition: all 0.2s;
+  position: relative;
 }
 
-.idcbis-hero-carousel__dot--active {
+.idcbis-hero-carousel__dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.25);
+  transform: translate(-50%, -50%);
+}
+
+.idcbis-hero-carousel__dot--active::after {
   background: white;
   border-color: white;
-  transform: scale(1.15);
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.idcbis-hero-carousel__dot:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
 }
 
 @media (max-width: 900px) {
@@ -525,10 +591,10 @@ onUnmounted(stopAutoplay)
   }
 
   .idcbis-hero-carousel__nav {
-    width: 28px;
-    height: 28px;
+    width: 44px;
+    height: 44px;
     bottom: 2.5rem;
-    opacity: 0.45;
+    opacity: 0.75;
   }
 
   .idcbis-hero-carousel__nav-icon {
@@ -551,11 +617,11 @@ onUnmounted(stopAutoplay)
     padding: 2.5rem 1rem 4rem;
   }
 
-  .idcbis-hero__text h1 {
+  .idcbis-hero__text :is(h1, h2) {
     font-size: clamp(1.6rem, 9vw, 2.25rem);
   }
 
-  .idcbis-hero__text h1 .light {
+  .idcbis-hero__text :is(h1, h2) .light {
     font-size: clamp(1.35rem, 7vw, 1.85rem);
   }
 

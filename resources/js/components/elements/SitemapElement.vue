@@ -1,58 +1,63 @@
 <template>
-  <section class="sitemap" @click.stop="!preview && $emit('click', element)">
-    <!-- Cabecera -->
+  <section
+    class="sitemap"
+    :class="{ 'sitemap--editor': !preview }"
+    @click.stop="!preview && $emit('click', element)"
+  >
     <header v-if="showHero" class="sitemap__hero">
       <div class="sitemap__hero-inner">
         <p class="sitemap__eyebrow">Navegación</p>
         <h1 class="sitemap__title">{{ element.title || 'Mapa del sitio' }}</h1>
         <p v-if="element.subtitle" class="sitemap__subtitle">{{ element.subtitle }}</p>
+      </div>
+    </header>
 
+    <div class="sitemap__sheet">
+      <div class="sitemap__panel">
+        <div class="sitemap__toolbar">
         <div class="sitemap__search-wrap">
+          <label class="sitemap__search-label" :for="searchFieldId">Buscar en el mapa del sitio</label>
           <Search class="sitemap__search-icon" aria-hidden="true" />
           <input
+            :id="searchFieldId"
             v-model="searchQuery"
             type="search"
             class="sitemap__search-input"
             placeholder="Buscar sección o página…"
-            aria-label="Filtrar mapa del sitio"
+            autocomplete="off"
+            @click.stop
           >
           <button
             v-if="searchQuery"
             type="button"
             class="sitemap__search-clear"
             aria-label="Limpiar búsqueda"
-            @click="searchQuery = ''"
+            @click.stop="searchQuery = ''"
           >
-            <X class="h-4 w-4" />
+            <X class="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
 
-        <div class="sitemap__stats">
-          <span><strong>{{ totalPages }}</strong> páginas</span>
-          <span class="sitemap__stats-dot" aria-hidden="true">·</span>
-          <span><strong>{{ publishedCount }}</strong> disponibles</span>
-        </div>
-      </div>
-    </header>
-
-    <!-- Accesos rápidos -->
-    <div v-if="!searchQuery && quickAnchors.length" class="sitemap__anchors">
-      <div class="sitemap__anchors-inner">
-        <button
-          v-for="anchor in quickAnchors"
-          :key="anchor.id"
-          type="button"
-          class="sitemap__anchor"
-          @click="scrollTo(anchor.id)"
+        <nav
+          v-if="!searchQuery && quickAnchors.length"
+          class="sitemap__index"
+          aria-label="Ir a una sección del mapa"
         >
-          <ContentIcon :value="anchor.icon" />
-          {{ anchor.label }}
-        </button>
+          <span class="sitemap__index-label">Índice</span>
+          <ul class="sitemap__index-list">
+            <li v-for="anchor in quickAnchors" :key="anchor.id">
+              <button
+                type="button"
+                class="sitemap__index-link"
+                @click.stop="scrollTo(anchor.id)"
+              >
+                {{ anchor.label }}
+              </button>
+            </li>
+          </ul>
+        </nav>
       </div>
-    </div>
 
-    <div class="sitemap__body">
-      <!-- Sin resultados -->
       <div v-if="isEmpty" class="sitemap__empty">
         <p>No hay resultados para «{{ searchQuery }}».</p>
         <button type="button" class="sitemap__empty-btn" @click="searchQuery = ''">
@@ -60,93 +65,70 @@
         </button>
       </div>
 
-      <!-- Secciones principales -->
-      <div v-if="filtered.sections.length" class="sitemap__main-grid">
-        <article
+      <nav v-else class="sitemap__directory" aria-label="Mapa del sitio">
+        <section
           v-for="section in filtered.sections"
-          :id="`sitemap-${section.slug}`"
-          :key="section.slug"
-          class="sitemap__card"
+          :id="branchId(section)"
+          :key="branchId(section)"
+          class="sitemap__branch"
         >
-          <div class="sitemap__card-head">
-            <ContentIcon :value="section.icon || '📄'" class="sitemap__card-icon" />
-            <div class="sitemap__card-head-text">
-              <SitemapLink
-                :slug="section.slug"
-                :preview="preview"
-                class="sitemap__card-title"
-                @navigate="onLinkClick"
-              >
-                {{ section.title }}
-              </SitemapLink>
-              <p v-if="section.description" class="sitemap__card-desc">{{ section.description }}</p>
-            </div>
-            <span
-              class="sitemap__status"
-              :class="isPublished(section.slug) ? 'sitemap__status--live' : 'sitemap__status--soon'"
+          <h2 class="sitemap__branch-title">
+            <SitemapLink
+              v-if="section.slug"
+              :slug="section.slug"
+              :preview="preview"
+              class="sitemap__branch-link"
+              @navigate="onLinkClick"
             >
-              {{ isPublished(section.slug) ? 'Disponible' : 'En preparación' }}
+              <ContentIcon v-if="section.icon" :value="section.icon" class="sitemap__branch-icon" />
+              <span>{{ section.title }}</span>
+            </SitemapLink>
+            <span v-else class="sitemap__branch-label">
+              <ContentIcon v-if="section.icon" :value="section.icon" class="sitemap__branch-icon" />
+              <span>{{ section.title }}</span>
             </span>
-          </div>
+          </h2>
+          <p v-if="section.description" class="sitemap__branch-desc">{{ section.description }}</p>
 
-          <ul v-if="section.children?.length" class="sitemap__child-list">
-            <li v-for="child in section.children" :key="child.slug">
+          <ul v-if="section.children?.length" class="sitemap__list">
+            <li v-for="child in section.children" :key="child.slug" class="sitemap__item">
               <SitemapLink
                 :slug="child.slug"
                 :preview="preview"
-                class="sitemap__child-link"
+                class="sitemap__link"
+                :class="{ 'sitemap__link--pending': !isPublished(child.slug) }"
                 @navigate="onLinkClick"
               >
-                <ContentIcon v-if="child.icon" :value="child.icon" class="sitemap__child-icon" />
-                <span class="sitemap__child-label">{{ child.title }}</span>
-                <span
-                  class="sitemap__quick-dot"
-                  :class="isPublished(child.slug) ? 'sitemap__quick-dot--live' : ''"
-                  :title="isPublished(child.slug) ? 'Disponible' : 'En preparación'"
-                />
-                <ChevronRight class="sitemap__child-arrow" aria-hidden="true" />
+                <span class="sitemap__bullet" aria-hidden="true" />
+                <span class="sitemap__link-text">{{ child.title }}</span>
+                <span v-if="!isPublished(child.slug)" class="sitemap__soon">En preparación</span>
               </SitemapLink>
+
+              <ul v-if="child.children?.length" class="sitemap__list sitemap__list--nested">
+                <li v-for="grand in child.children" :key="grand.slug" class="sitemap__item">
+                  <SitemapLink
+                    :slug="grand.slug"
+                    :preview="preview"
+                    class="sitemap__link"
+                    :class="{ 'sitemap__link--pending': !isPublished(grand.slug) }"
+                    @navigate="onLinkClick"
+                  >
+                    <span class="sitemap__bullet sitemap__bullet--nested" aria-hidden="true" />
+                    <span class="sitemap__link-text">{{ grand.title }}</span>
+                    <span v-if="!isPublished(grand.slug)" class="sitemap__soon">En preparación</span>
+                  </SitemapLink>
+                </li>
+              </ul>
             </li>
           </ul>
-        </article>
-      </div>
-
-      <!-- Enlaces agrupados -->
-      <div
-        v-for="group in filtered.quickLinks"
-        :id="`sitemap-group-${slugify(group.group)}`"
-        :key="group.group"
-        class="sitemap__group"
-      >
-        <div class="sitemap__group-head">
-          <ContentIcon :value="group.icon" class="sitemap__group-icon" />
-          <h2 class="sitemap__group-title">{{ group.group }}</h2>
-        </div>
-        <ul class="sitemap__quick-grid">
-          <li v-for="item in group.items" :key="item.slug">
-            <SitemapLink
-              :slug="item.slug"
-              :preview="preview"
-              class="sitemap__quick-link"
-              @navigate="onLinkClick"
-            >
-              <ContentIcon v-if="item.icon" :value="item.icon" class="sitemap__quick-icon" />
-              <span>{{ item.title }}</span>
-              <span
-                class="sitemap__quick-dot"
-                :class="isPublished(item.slug) ? 'sitemap__quick-dot--live' : ''"
-                :title="isPublished(item.slug) ? 'Disponible' : 'En preparación'"
-              />
-            </SitemapLink>
-          </li>
-        </ul>
+        </section>
+      </nav>
       </div>
 
       <aside v-if="element.showNote !== false && !searchQuery" class="sitemap__help">
         <Info class="sitemap__help-icon" aria-hidden="true" />
         <p>
-          Usa el buscador para encontrar rápidamente una sección.
-          Las páginas «En preparación» se irán publicando progresivamente.
+          Las páginas marcadas como «En preparación» se irán publicando de forma progresiva.
         </p>
       </aside>
     </div>
@@ -156,15 +138,11 @@
 <script setup>
 import { computed, ref, defineComponent, h } from 'vue';
 import { RouterLink } from 'vue-router';
-import { Search, X, ChevronRight, Info } from 'lucide-vue-next';
+import { Search, X, Info } from 'lucide-vue-next';
 import ContentIcon from './ContentIcon.vue';
 import {
-  SITE_SITEMAP,
-  SITEMAP_QUICK_LINKS,
   isSitemapPublished,
   sitemapItemUrl,
-  countSitemapPages,
-  countPublishedPages,
   filterSitemapTree,
 } from '../../config/siteSitemap';
 
@@ -206,39 +184,36 @@ defineEmits(['click']);
 
 const searchQuery = ref('');
 const showHero = computed(() => props.element.showHero !== false);
+const searchFieldId = computed(() => `sitemap-search-${props.element.id || 'main'}`);
 
 const filtered = computed(() => filterSitemapTree(searchQuery.value));
-const totalPages = countSitemapPages();
-const publishedCount = countPublishedPages();
 const isPublished = isSitemapPublished;
 
-const isEmpty = computed(
-  () => !filtered.value.sections.length && !filtered.value.quickLinks.length,
-);
-
-const quickAnchors = computed(() => [
-  ...SITE_SITEMAP.map((s) => ({ id: `sitemap-${s.slug}`, label: s.title, icon: s.icon || '📄' })),
-  ...SITEMAP_QUICK_LINKS.map((g) => ({
-    id: `sitemap-group-${slugify(g.group)}`,
-    label: g.group,
-    icon: g.icon,
-  })),
-]);
+const isEmpty = computed(() => !filtered.value.sections.length);
 
 const slugify = (text) =>
-  text
+  (text || '')
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
+const branchId = (section) => `sitemap-${section.slug || slugify(section.title)}`;
+
+const quickAnchors = computed(() =>
+  (filtered.value.sections || []).map((section) => ({
+    id: branchId(section),
+    label: section.title,
+  })),
+);
+
 const scrollTo = (id) => {
   if (!props.preview) return;
   const el = document.getElementById(id);
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  if (!el) return;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
 };
 
 const onLinkClick = (event) => {
@@ -252,14 +227,18 @@ const onLinkClick = (event) => {
 <style scoped>
 .sitemap {
   font-family: var(--font-idcbis);
-  background: #f0f5f8;
+  background: #f8f9fa;
+  color: #1a1a1a;
+}
+
+.sitemap--editor {
   cursor: pointer;
 }
 
 .sitemap__hero {
-  background: linear-gradient(145deg, #0b4f6c 0%, #2c8c99 55%, #4ecdc4 100%);
+  background: linear-gradient(135deg, #005674 0%, #003d52 100%);
   color: #fff;
-  padding: 3rem 1.5rem 2.75rem;
+  padding: 3rem 1.5rem 2.5rem;
 }
 
 .sitemap__hero-inner {
@@ -278,6 +257,7 @@ const onLinkClick = (event) => {
 }
 
 .sitemap__title {
+  font-family: var(--font-idcbis-display);
   font-size: clamp(1.875rem, 4vw, 2.75rem);
   font-weight: 800;
   line-height: 1.15;
@@ -287,385 +267,341 @@ const onLinkClick = (event) => {
 .sitemap__subtitle {
   color: rgba(255, 255, 255, 0.88);
   line-height: 1.6;
-  margin-bottom: 1.75rem;
+  margin: 0;
   font-size: 1.0625rem;
+}
+
+.sitemap__sheet {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3.5rem;
+}
+
+@media (min-width: 640px) {
+  .sitemap__sheet {
+    padding: 2rem 1.25rem 4rem;
+  }
+}
+
+.sitemap__panel {
+  background: #fff;
+  border: 1px solid #e4ecef;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.sitemap__toolbar {
+  padding: 1.25rem 1.25rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .sitemap__toolbar {
+    padding: 1.5rem 1.75rem 1.15rem;
+  }
 }
 
 .sitemap__search-wrap {
   position: relative;
-  max-width: 480px;
-  margin: 0 auto 1rem;
+  max-width: 36rem;
+}
+
+.sitemap__search-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .sitemap__search-icon {
   position: absolute;
-  left: 1rem;
+  left: 0.9rem;
   top: 50%;
   transform: translateY(-50%);
   width: 1.125rem;
   height: 1.125rem;
-  color: #64748b;
+  color: #607d8b;
   pointer-events: none;
 }
 
 .sitemap__search-input {
   width: 100%;
-  height: 48px;
+  min-height: 48px;
   padding: 0 2.75rem 0 2.75rem;
-  border: 0;
-  border-radius: 9999px;
+  border: 1px solid #d4e0e6;
+  border-radius: 8px;
   font-size: 1rem;
-  color: #1e293b;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  color: #1a1a1a;
+  background: #fff;
   outline: none;
 }
 
 .sitemap__search-input:focus {
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), 0 0 0 3px rgba(255, 209, 102, 0.45);
+  border-color: #005674;
+  box-shadow: 0 0 0 3px rgba(0, 86, 116, 0.18);
 }
 
 .sitemap__search-clear {
   position: absolute;
-  right: 0.75rem;
+  right: 0.5rem;
   top: 50%;
   transform: translateY(-50%);
-  display: flex;
-  color: #94a3b8;
-  padding: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: #607d8b;
+  border-radius: 8px;
 }
 
 .sitemap__search-clear:hover {
-  color: #475569;
+  color: #003c5f;
 }
 
-.sitemap__stats {
+.sitemap__search-clear:focus-visible {
+  outline: 2px solid #005674;
+  outline-offset: 2px;
+}
+
+.sitemap__index {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.85);
+  align-items: flex-start;
+  gap: 0.75rem 1rem;
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid #e8eef2;
 }
 
-.sitemap__stats strong {
-  color: #C4A140;
-  font-weight: 700;
-}
-
-.sitemap__stats-dot {
-  opacity: 0.5;
-}
-
-.sitemap__anchors {
-  background: #fff;
-  border-bottom: 1px solid #e2e8f0;
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-}
-
-.sitemap__anchors-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0.75rem 1rem;
-  display: flex;
-  gap: 0.5rem;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.sitemap__anchors-inner::-webkit-scrollbar {
-  display: none;
-}
-
-.sitemap__anchor {
+.sitemap__index-label {
   flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.5rem 1rem;
-  border-radius: 9999px;
-  border: 1px solid #e2e8f0;
-  background: #f8fafc;
-  color: #0b4f6c;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #607d8b;
+  padding-top: 0.55rem;
+}
+
+.sitemap__index-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.15rem;
+}
+
+.sitemap__index-link {
+  min-height: 44px;
+  padding: 0.35rem 0.7rem;
+  border: 0;
+  background: transparent;
+  color: #005674;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s, transform 0.15s;
-  white-space: nowrap;
+  border-radius: 6px;
 }
 
-.sitemap__anchor:hover {
-  background: #e8f4f8;
-  border-color: #2c8c99;
-  transform: translateY(-1px);
+.sitemap__index-link:hover {
+  background: #eef6f8;
+  color: #003c5f;
 }
 
-.sitemap__body {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1rem 3rem;
+.sitemap__index-link:focus-visible {
+  outline: 2px solid #005674;
+  outline-offset: 2px;
 }
 
-.sitemap__main-grid {
+.sitemap__directory {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.25rem;
-  margin-bottom: 2.5rem;
+  gap: 2.25rem 3.5rem;
+  align-items: start;
+  padding: 0.5rem 1.25rem 1.75rem;
+  border-top: 1px solid #e8eef2;
 }
 
-@media (min-width: 768px) {
-  .sitemap__main-grid {
-    grid-template-columns: repeat(2, 1fr);
+@media (min-width: 640px) {
+  .sitemap__directory {
+    padding: 0.75rem 1.75rem 2rem;
   }
 }
 
-.sitemap__card {
-  background: #fff;
-  border-radius: 20px;
-  border: 1px solid #e8eef2;
-  box-shadow: 0 4px 20px rgba(11, 79, 108, 0.06);
-  overflow: hidden;
-  scroll-margin-top: 5rem;
-  transition: box-shadow 0.25s ease, transform 0.25s ease;
+@media (min-width: 900px) {
+  .sitemap__directory {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
-.sitemap__card:hover {
-  box-shadow: 0 12px 32px rgba(11, 79, 108, 0.1);
-  transform: translateY(-2px);
+.sitemap__branch {
+  scroll-margin-top: 5.5rem;
+  min-width: 0;
 }
 
-.sitemap__card-head {
+.sitemap__branch-title {
+  font-family: var(--font-idcbis-display);
+  font-size: 1.125rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: #003c5f;
+  margin: 0 0 0.4rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 2px solid #005674;
+}
+
+.sitemap__branch-link,
+.sitemap__branch-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.sitemap__branch-link:hover {
+  color: #008996;
+}
+
+.sitemap__branch-link:focus-visible {
+  outline: 2px solid #005674;
+  outline-offset: 3px;
+}
+
+.sitemap__branch-icon {
+  font-size: 1.2rem;
+  color: #005674;
+}
+
+.sitemap__branch-desc {
+  margin: 0 0 0.65rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: #607d8b;
+}
+
+.sitemap__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sitemap__list--nested {
+  margin: 0 0 0.25rem 1.35rem;
+  padding-left: 0.85rem;
+  border-left: 1px solid #d4e4ea;
+}
+
+.sitemap__item + .sitemap__item {
+  border-top: 1px solid #f0f4f6;
+}
+
+.sitemap__link {
   display: flex;
-  align-items: flex-start;
-  gap: 0.875rem;
-  padding: 1.25rem 1.25rem 1rem;
-  border-bottom: 1px solid #f1f5f9;
-  background: linear-gradient(180deg, #fafcfd 0%, #fff 100%);
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 44px;
+  padding: 0.35rem 0.4rem 0.35rem 0.15rem;
+  color: #1a1a1a;
+  text-decoration: none;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  border-radius: 6px;
 }
 
-.sitemap__card-icon {
-  font-size: 1.75rem;
-  line-height: 1;
-  flex-shrink: 0;
+.sitemap__link:hover {
+  color: #005674;
+  background: #eef6f8;
 }
 
-.sitemap__card-head-text {
+.sitemap__link:focus-visible {
+  outline: 2px solid #005674;
+  outline-offset: 2px;
+}
+
+.sitemap__link--pending {
+  color: #4a5d66;
+}
+
+.sitemap__link-text {
   flex: 1;
   min-width: 0;
 }
 
-.sitemap__card-title {
-  display: block;
-  font-size: 1.125rem;
-  font-weight: 800;
-  color: #0b4f6c;
-  text-decoration: none;
-  line-height: 1.3;
-  margin-bottom: 0.25rem;
-}
-
-.sitemap__card-title:hover {
-  color: #2c8c99;
-}
-
-.sitemap__card-desc {
-  font-size: 0.8125rem;
-  color: #64748b;
-  line-height: 1.45;
-  margin: 0;
-}
-
-.sitemap__status {
-  flex-shrink: 0;
-  font-size: 0.625rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-}
-
-.sitemap__status--live {
-  background: #dcfce7;
-  color: #166534;
-}
-
-.sitemap__status--soon {
-  background: #f1f5f9;
-  color: #64748b;
-}
-
-.sitemap__child-list {
-  list-style: none;
-  margin: 0;
-  padding: 0.5rem 0;
-}
-
-.sitemap__child-link {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.7rem 1.25rem;
-  color: #334155;
-  text-decoration: none;
-  font-size: 0.9rem;
-  line-height: 1.4;
-  transition: background 0.15s, color 0.15s, padding-left 0.15s;
-}
-
-.sitemap__child-link:hover {
-  background: #f0f9fb;
-  color: #0b4f6c;
-  padding-left: 1.5rem;
-}
-
-.sitemap__child-icon {
-  flex-shrink: 0;
-  font-size: 1rem;
-}
-
-.sitemap__child-label {
-  flex: 1;
-}
-
-.sitemap__child-arrow {
-  width: 1rem;
-  height: 1rem;
-  color: #94a3b8;
-  flex-shrink: 0;
-  transition: transform 0.15s, color 0.15s;
-}
-
-.sitemap__child-link:hover .sitemap__child-arrow {
-  color: #2c8c99;
-  transform: translateX(3px);
-}
-
-.sitemap__group {
-  margin-bottom: 2rem;
-  scroll-margin-top: 5rem;
-}
-
-.sitemap__group-head {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 2px solid #e2e8f0;
-}
-
-.sitemap__group-icon {
-  font-size: 1.5rem;
-}
-
-.sitemap__group-title {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #0b4f6c;
-  margin: 0;
-}
-
-.sitemap__quick-grid {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.5rem;
-}
-
-@media (min-width: 640px) {
-  .sitemap__quick-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .sitemap__quick-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.sitemap__quick-link {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 1rem;
-  background: #fff;
-  border: 1px solid #e8eef2;
-  border-radius: 12px;
-  color: #334155;
-  text-decoration: none;
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1.35;
-  transition: border-color 0.2s, background 0.2s, color 0.2s, box-shadow 0.2s;
-}
-
-.sitemap__quick-link:hover {
-  border-color: #2c8c99;
-  background: #f0f9fb;
-  color: #0b4f6c;
-  box-shadow: 0 4px 12px rgba(44, 140, 153, 0.12);
-}
-
-.sitemap__quick-icon {
+.sitemap__bullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  background: #c4a140;
   flex-shrink: 0;
 }
 
-.sitemap__quick-dot {
-  width: 7px;
-  height: 7px;
+.sitemap__bullet--nested {
+  background: #008996;
   border-radius: 50%;
-  background: #cbd5e1;
-  margin-left: auto;
-  flex-shrink: 0;
 }
 
-.sitemap__quick-dot--live {
-  background: #22c55e;
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+.sitemap__soon {
+  flex-shrink: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #607d8b;
 }
 
 .sitemap__empty {
   text-align: center;
   padding: 3rem 1rem;
-  color: #64748b;
+  color: #607d8b;
+  border-top: 1px solid #e8eef2;
 }
 
 .sitemap__empty-btn {
   margin-top: 1rem;
+  min-height: 44px;
   padding: 0.625rem 1.25rem;
-  border-radius: 9999px;
+  border-radius: 8px;
   border: 0;
-  background: #0b4f6c;
+  background: #005674;
   color: #fff;
   font-weight: 600;
   font-size: 0.875rem;
   cursor: pointer;
 }
 
+.sitemap__empty-btn:hover {
+  background: #003c5f;
+}
+
+.sitemap__empty-btn:focus-visible {
+  outline: 2px solid #005674;
+  outline-offset: 3px;
+}
+
 .sitemap__help {
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  margin-top: 2rem;
-  padding: 1rem 1.25rem;
-  background: #fff;
-  border-radius: 14px;
-  border: 1px dashed #cbd5e1;
-  color: #64748b;
+  margin-top: 1.25rem;
+  padding: 1rem 1.15rem;
+  background: transparent;
+  border-radius: 0;
+  border: 0;
+  color: #607d8b;
   font-size: 0.875rem;
   line-height: 1.55;
 }
 
 .sitemap__help-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: #2c8c99;
+  width: 1.15rem;
+  height: 1.15rem;
+  color: #005674;
   flex-shrink: 0;
   margin-top: 0.1rem;
 }
@@ -677,5 +613,13 @@ const onLinkClick = (event) => {
 :deep(.sitemap-link) {
   text-decoration: none;
   color: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sitemap__link,
+  .sitemap__index-link,
+  .sitemap__branch-link {
+    transition: none;
+  }
 }
 </style>

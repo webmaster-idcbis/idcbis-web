@@ -64,6 +64,10 @@
       <input v-model="slide.image" type="text" placeholder="/img/foto.jpg" class="field-input">
       <input v-model="slide.imageAlt" type="text" placeholder="Texto alternativo de la imagen" class="field-input">
       <input v-model="slide.imageBadge" type="text" placeholder="Emoji decorativo (ej. 🔬)" class="field-input">
+      <label class="block text-xs text-gray-600">
+        Imagen de fondo del slide
+        <input v-model="slide.backgroundImage" type="text" placeholder="/img/Banners WEB/banner.jpg" class="field-input mt-1">
+      </label>
     </div>
   </div>
 </template>

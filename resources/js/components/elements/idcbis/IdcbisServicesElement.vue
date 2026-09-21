@@ -1,5 +1,9 @@
 <template>
-  <section class="idcbis-services" @click.stop="$emit('click', element)">
+  <section
+    class="idcbis-services"
+    :id="element.sectionAnchor || undefined"
+    @click.stop="$emit('click', element)"
+  >
     <div class="idcbis-services__container">
       <div
         class="idcbis-services__header"
@@ -70,6 +74,7 @@ const onCardClick = (card, index, event) => {
   background: #f5f8fa;
   cursor: pointer;
   font-family: var(--font-idcbis);
+  scroll-margin-top: 88px;
 }
 
 .idcbis-services__container {

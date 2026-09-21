@@ -1,29 +1,33 @@
 <template>
-  <section class="idcbis-bubbles" @click.stop="$emit('click', element)">
+  <section
+    class="idcbis-bubbles"
+    :aria-labelledby="titleId"
+    @click.stop="$emit('click', element)"
+  >
     <div class="idcbis-bubbles__container">
       <div
         class="idcbis-bubbles__header"
         :class="partClasses('bubbles:header')"
         @click.stop="focusPart('bubbles:header', 'Título de investigación', $event)"
       >
-        <h2>
+        <h2 :id="titleId">
           {{ element.sectionTitle || 'Programas de' }}
           <span>{{ element.sectionHighlight || 'investigación' }}</span>
         </h2>
       </div>
-      <div class="idcbis-bubbles__grid">
-        <div
+      <ul class="idcbis-bubbles__grid">
+        <li
           v-for="(item, index) in items"
           :key="item.id || index"
           class="bubble-item"
           :class="partClasses(bubbleAnchor(item, index))"
-          :style="{ background: item.color || bubbleColors[index % bubbleColors.length] }"
+          :style="{ backgroundColor: cardColor }"
           @click.stop="onItemClick(item, index, $event)"
         >
-          <h4>{{ item.title }}</h4>
+          <h3>{{ item.title }}</h3>
           <p>{{ item.description }}</p>
-        </div>
-      </div>
+        </li>
+      </ul>
     </div>
   </section>
 </template>
@@ -31,6 +35,7 @@
 <script setup>
 import { computed } from 'vue'
 import { IDCBIS_THEME } from '../../../config/idcbisTheme'
+import { resolveBackgroundColor } from '../../../composables/useElementStyles'
 import { useIdcbisEditorParts } from '../../../composables/useIdcbisEditorParts'
 import { buildBubbleFocusAnchor } from '../../../utils/editorPartFocus'
 
@@ -43,8 +48,9 @@ const props = defineProps({
 const emit = defineEmits(['click', 'focus-part'])
 const { partClasses, focusPart } = useIdcbisEditorParts(props, emit)
 
-const bubbleColors = IDCBIS_THEME.bubbleColors
 const items = computed(() => props.element.items || [])
+const cardColor = computed(() => resolveBackgroundColor(props.element.cardColor, IDCBIS_THEME.bubbleColor))
+const titleId = computed(() => `idcbis-bubbles-title-${props.element.id || 'section'}`)
 
 const bubbleAnchor = (item, index) => buildBubbleFocusAnchor(item.id || `index-${index}`)
 
@@ -73,6 +79,7 @@ const onItemClick = (item, index, event) => {
 }
 
 .idcbis-bubbles__header h2 {
+  font-family: var(--font-idcbis-display);
   font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 800;
   text-transform: uppercase;
@@ -87,42 +94,82 @@ const onItemClick = (item, index, event) => {
 }
 
 .idcbis-bubbles__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 1.5rem;
 }
 
 .bubble-item {
-  color: white;
-  padding: 2rem;
-  border-radius: 70% 30% 70% 30% / 30% 70% 30% 70%;
+  color: #ffffff;
+  background-color: #0b4f6c;
+  padding: 2.25rem 1.5rem;
+  border-radius: 20px;
   text-align: center;
-  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 180px;
+  box-shadow: 0 10px 28px rgba(11, 79, 108, 0.16);
+  border-top: 4px solid #c4a140;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .bubble-item:hover {
-  border-radius: 30% 70% 30% 70% / 70% 30% 70% 30%;
+  transform: translateY(-6px);
+  box-shadow: 0 18px 36px rgba(11, 79, 108, 0.24);
 }
 
-.bubble-item h4 {
-  font-size: 1.4rem;
-  margin-bottom: 0.5rem;
+.bubble-item:focus-visible {
+  outline: 3px solid #c4a140;
+  outline-offset: 3px;
+}
+
+.bubble-item h3 {
+  font-family: var(--font-idcbis-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.3;
+  margin: 0 0 0.6rem;
 }
 
 .bubble-item p {
-  font-size: 0.9rem;
-  opacity: 0.9;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 @media (max-width: 900px) {
   .idcbis-bubbles__grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 600px) {
+  .idcbis-bubbles {
+    padding: 4rem 1.25rem;
+  }
+
   .idcbis-bubbles__grid {
     grid-template-columns: 1fr;
+  }
+
+  .bubble-item {
+    min-height: 148px;
+    padding: 1.75rem 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bubble-item,
+  .bubble-item:hover {
+    transition: none;
+    transform: none;
   }
 }
 </style>

@@ -4,6 +4,12 @@
  */
 export const SITE_SITEMAP = [
   {
+    title: 'Inicio',
+    slug: 'inicio',
+    icon: '/img/Iconos/IDCBIS.svg',
+    description: 'Página principal del IDCBIS',
+  },
+  {
     title: 'Quiénes Somos',
     slug: 'quienes-somos',
     icon: '/img/Iconos/IDCBIS.svg',
@@ -244,11 +250,26 @@ export function itemMatchesQuery(item, query) {
   return haystack.includes(normalizeSearchText(query));
 }
 
-export function filterSitemapTree(query) {
-  const q = normalizeSearchText(query.trim());
-  if (!q) return { sections: SITE_SITEMAP, quickLinks: SITEMAP_QUICK_LINKS };
+/** Directorio unificado: secciones principales + grupos complementarios. */
+export function getSitemapDirectory() {
+  return [
+    ...SITE_SITEMAP,
+    ...SITEMAP_QUICK_LINKS.map((group) => ({
+      title: group.group,
+      slug: '',
+      icon: group.icon,
+      isGroup: true,
+      children: group.items,
+    })),
+  ];
+}
 
-  const sections = SITE_SITEMAP.map((section) => {
+export function filterSitemapTree(query) {
+  const directory = getSitemapDirectory();
+  const q = normalizeSearchText(query.trim());
+  if (!q) return { sections: directory, quickLinks: [] };
+
+  const sections = directory.map((section) => {
     const children = (section.children || []).filter((child) => itemMatchesQuery(child, q));
     const sectionMatch = itemMatchesQuery(section, q);
     if (sectionMatch || children.length) {
@@ -257,10 +278,5 @@ export function filterSitemapTree(query) {
     return null;
   }).filter(Boolean);
 
-  const quickLinks = SITEMAP_QUICK_LINKS.map((group) => ({
-    ...group,
-    items: group.items.filter((item) => itemMatchesQuery(item, q)),
-  })).filter((group) => group.items.length);
-
-  return { sections, quickLinks };
+  return { sections, quickLinks: [] };
 }

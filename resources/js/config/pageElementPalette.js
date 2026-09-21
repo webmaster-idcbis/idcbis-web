@@ -52,7 +52,7 @@ export const paletteCategories = [
       { type: 'idcbis-services', icon: '▦', iconClass: 'text-[#2C8C99]', label: 'Grid servicios', description: 'Tarjetas con imagen' },
       { type: 'idcbis-service-detail', icon: '📄', iconClass: 'text-indigo-600', label: 'Detalle servicio', description: 'Página de servicio' },
       { type: 'idcbis-stats', icon: '#', iconClass: 'text-amber-500', label: 'Cifras IDCBIS', description: 'Números destacados' },
-      { type: 'idcbis-bubbles', icon: '○', iconClass: 'text-teal-500', label: 'Investigación', description: 'Burbujas de programas' },
+      { type: 'idcbis-bubbles', icon: '○', iconClass: 'text-[#0B4F6C]', label: 'Investigación', description: 'Tarjetas de programas' },
       { type: 'idcbis-about', icon: 'ℹ', iconClass: 'text-indigo-600', label: 'Sobre nosotros', description: 'Texto + imagen' },
       { type: 'idcbis-contact', icon: '✉', iconClass: 'text-[#0B4F6C]', label: 'Contacto', description: 'Sede, teléfono, mail' },
       { type: 'idcbis-faq', icon: '?', iconClass: 'text-amber-600', label: 'FAQ IDCBIS', description: 'Preguntas frecuentes' },

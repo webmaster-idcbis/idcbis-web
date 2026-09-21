@@ -25,6 +25,7 @@ export const createIdcbisHeroSlide = (overrides = {}) => ({
   image: '/img/banco-distrital-de-tejidos-01.jpg',
   imageAlt: 'IDCBIS',
   imageBadge: '🔬',
+  backgroundImage: '',
   ...overrides,
 })
 
@@ -299,7 +300,8 @@ export const createElement = (type) => {
         fullBleed: true,
         sectionTitle: 'Programas de',
         sectionHighlight: 'investigación',
-        items: [{ title: 'Programa', description: 'Descripción', color: '#4ECDC4', id: generateId() }],
+        cardColor: '#0B4F6C',
+        items: [{ title: 'Programa', description: 'Descripción', id: generateId() }],
       }
     case 'idcbis-about':
       return {
