@@ -80,17 +80,15 @@ const onItemClick = (item, index, event) => {
 
 .idcbis-bubbles__header h2 {
   font-family: var(--font-idcbis-display);
-  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 800;
+  line-height: 1.2;
   text-transform: uppercase;
   color: #0b4f6c;
 }
 
 .idcbis-bubbles__header h2 span {
-  background: linear-gradient(135deg, #0b4f6c, #2c8c99);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #005674;
 }
 
 .idcbis-bubbles__grid {
@@ -138,10 +136,10 @@ const onItemClick = (item, index, event) => {
 }
 
 .bubble-item p {
-  font-size: 0.95rem;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.65;
   margin: 0;
-  color: rgba(255, 255, 255, 0.92);
+  color: #ffffff;
 }
 
 @media (max-width: 900px) {
@@ -157,6 +155,10 @@ const onItemClick = (item, index, event) => {
 
   .idcbis-bubbles__grid {
     grid-template-columns: 1fr;
+  }
+
+  .idcbis-bubbles__header h2 {
+    font-size: 1.75rem;
   }
 
   .bubble-item {

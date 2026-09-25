@@ -2,8 +2,13 @@
   <div class="space-y-3">
     <h4 class="text-sm font-semibold text-gray-900">Carrusel Hero IDCBIS</h4>
     <p class="text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded p-2">
-      Haz clic en un slide del lienzo para editarlo aquí. Mismo diseño de la propuesta azul: texto a la izquierda, imagen orgánica a la derecha y dos botones por slide.
+      El primer pantallazo responde qué es el IDCBIS, qué hace y qué puede hacer la persona. El video (si existe) o la secuencia de imágenes queda detrás del texto.
     </p>
+
+    <label class="block text-xs text-gray-600">
+      Video mp4 (opcional). Vacío = secuencia de imágenes.
+      <input v-model="element.videoSrc" type="text" placeholder="/videos/hero-idcbis.mp4" class="field-input mt-1">
+    </label>
 
     <div class="grid grid-cols-2 gap-2">
       <div>
@@ -59,6 +64,8 @@
         <input v-model="slide.button1Url" type="text" placeholder="URL botón 1" class="field-input">
         <input v-model="slide.button2Text" type="text" placeholder="Botón 2" class="field-input">
         <input v-model="slide.button2Url" type="text" placeholder="URL botón 2" class="field-input">
+        <input v-model="slide.button3Text" type="text" placeholder="Botón 3 (contorno)" class="field-input">
+        <input v-model="slide.button3Url" type="text" placeholder="URL botón 3" class="field-input">
       </div>
 
       <input v-model="slide.image" type="text" placeholder="/img/foto.jpg" class="field-input">

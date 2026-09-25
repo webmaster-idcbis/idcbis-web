@@ -16,7 +16,9 @@
       :class="{ 'ring-2 ring-[#0B4F6C]': activeFocus === statAnchor(item, i) }"
     >
       <input v-model="item.value" type="text" placeholder="+3.000" class="field-input">
-      <input v-model="item.label" type="text" placeholder="donaciones/año" class="field-input">
+      <input v-model="item.icon" type="text" placeholder="droplet, users, award" class="field-input">
+      <input v-model="item.label" type="text" placeholder="donaciones al año" class="field-input col-span-2">
+      <input v-model="item.caption" type="text" placeholder="Cada gota cuenta." class="field-input col-span-2">
       <button type="button" class="col-span-2 text-xs text-red-600" @click="element.items.splice(i, 1)">Quitar</button>
     </div>
     <button type="button" class="w-full py-2 text-sm border border-dashed rounded" @click="addItem">+ Agregar cifra</button>

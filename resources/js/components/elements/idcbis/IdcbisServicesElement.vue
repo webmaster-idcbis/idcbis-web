@@ -25,14 +25,29 @@
           class="service-card"
           :class="partClasses(cardAnchor(card, index))"
           :style="{ backgroundColor: card.bgColor || cardBgs[index % cardBgs.length] }"
+          :aria-labelledby="cardTitleId(card, index)"
           @click.stop="onCardClick(card, index, $event)"
         >
-          <div
-            class="service-card__image"
-            :style="card.image ? { backgroundImage: `url('${card.image}')` } : {}"
-          />
+          <div class="service-card__media">
+            <picture v-if="card.image">
+              <source
+                type="image/webp"
+                :srcset="cardSrcSet(card.image)"
+                sizes="(max-width: 640px) 100vw, (max-width: 900px) 50vw, 33vw"
+              />
+              <img
+                class="service-card__image"
+                :src="card.image"
+                :alt="card.imageAlt || card.title || ''"
+                width="1200"
+                height="800"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+          </div>
           <div class="service-card__content">
-            <h3>{{ card.title }}</h3>
+            <h3 :id="cardTitleId(card, index)">{{ card.title }}</h3>
             <p>{{ card.description }}</p>
             <span v-if="card.tag" class="service-card__tag">{{ card.tag }}</span>
           </div>
@@ -47,6 +62,7 @@ import { computed } from 'vue'
 import { IDCBIS_THEME } from '../../../config/idcbisTheme'
 import { useIdcbisEditorParts } from '../../../composables/useIdcbisEditorParts'
 import { buildServiceCardFocusAnchor } from '../../../utils/editorPartFocus'
+import { CARD_WIDTHS, buildSrcSet } from '../../../utils/responsiveImages'
 
 const props = defineProps({
   element: { type: Object, required: true },
@@ -61,6 +77,10 @@ const cardBgs = IDCBIS_THEME.cardBgs
 const cards = computed(() => props.element.cards || [])
 
 const cardAnchor = (card, index) => buildServiceCardFocusAnchor(card.id || `index-${index}`)
+
+const cardTitleId = (card, index) => `service-card-title-${card.id || index}`
+
+const cardSrcSet = (src) => buildSrcSet(src, CARD_WIDTHS)
 
 const onCardClick = (card, index, event) => {
   focusPart(cardAnchor(card, index), card.title || `Tarjeta ${index + 1}`, event)
@@ -88,22 +108,21 @@ const onCardClick = (card, index, event) => {
 }
 
 .idcbis-services__header h2 {
-  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 800;
+  line-height: 1.2;
   text-transform: uppercase;
   color: #0b4f6c;
 }
 
 .idcbis-services__header h2 span {
-  background: linear-gradient(135deg, #0b4f6c, #2c8c99);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #005674;
 }
 
 .idcbis-services__header p {
-  font-size: 1.3rem;
-  color: #555;
+  font-size: 1.125rem;
+  line-height: 1.65;
+  color: #333333;
   max-width: 700px;
   margin: 0.5rem auto 0;
 }
@@ -118,7 +137,7 @@ const onCardClick = (card, index, event) => {
 .service-card {
   border-radius: 40px 20px 40px 20px;
   padding: 0;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.1);
   border: 2px solid transparent;
   display: flex;
@@ -130,25 +149,28 @@ const onCardClick = (card, index, event) => {
 }
 
 .service-card:hover {
-  transform: rotate(1deg) scale(1.02);
+  transform: translateY(-4px);
   border-color: #0b4f6c;
   box-shadow: 0 30px 40px -10px rgba(11, 79, 108, 0.3);
 }
 
-.service-card__image {
-  height: 240px;
-  background-size: cover;
-  background-position: center;
-  border-radius: 38px 18px 0 0;
-  position: relative;
-  background-color: #d1e9f2;
+.service-card:focus-visible {
+  outline: 3px solid #005674;
+  outline-offset: 3px;
 }
 
-.service-card__image::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+.service-card__media {
+  aspect-ratio: 3 / 2;
+  background-color: #d1e9f2;
+  overflow: hidden;
+}
+
+.service-card__media picture,
+.service-card__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .service-card__content {
@@ -168,7 +190,7 @@ const onCardClick = (card, index, event) => {
 
 .service-card p {
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.65;
   margin-bottom: 2rem;
   color: #333;
   flex-grow: 1;
@@ -201,8 +223,20 @@ const onCardClick = (card, index, event) => {
     grid-template-columns: 1fr;
   }
 
+  .idcbis-services__header h2 {
+    font-size: 1.75rem;
+  }
+
   .service-card h3 {
     font-size: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-card,
+  .service-card:hover {
+    transition: none;
+    transform: none;
   }
 }
 </style>

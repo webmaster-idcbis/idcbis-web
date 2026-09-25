@@ -122,12 +122,8 @@ const infoPublica = computed(() => [
 ]);
 
 const informate = computed(() => [
-  { name: t('footer.learnLinks.jobs'), href: '/trabaje-con-nosotros' },
-  { name: t('footer.learnLinks.funding'), href: '/apoyo-financiero' },
   { name: t('footer.learnLinks.news'), href: '/noticias' },
-  { name: t('footer.learnLinks.publications'), href: '/publicaciones-cientificas' },
   { name: t('footer.learnLinks.userCare'), href: '/atencion-a-usuarios' },
-  { name: t('footer.learnLinks.suppliers'), href: '/informacion-a-proveedores' },
   { name: t('footer.learnLinks.contact'), href: '/contacto' },
 ]);
 </script>

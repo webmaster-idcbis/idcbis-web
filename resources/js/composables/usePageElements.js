@@ -22,6 +22,7 @@ import QuoteElement from '../components/elements/QuoteElement.vue'
 import IdcbisHeroElement from '../components/elements/idcbis/IdcbisHeroElement.vue'
 import IdcbisServicesElement from '../components/elements/idcbis/IdcbisServicesElement.vue'
 import IdcbisStatsElement from '../components/elements/idcbis/IdcbisStatsElement.vue'
+import IdcbisAudiencesElement from '../components/elements/idcbis/IdcbisAudiencesElement.vue'
 import IdcbisBubblesElement from '../components/elements/idcbis/IdcbisBubblesElement.vue'
 import IdcbisAboutElement from '../components/elements/idcbis/IdcbisAboutElement.vue'
 import IdcbisContactElement from '../components/elements/idcbis/IdcbisContactElement.vue'
@@ -71,6 +72,7 @@ const elementComponents = {
   'idcbis-hero': markRaw(IdcbisHeroElement),
   'idcbis-services': markRaw(IdcbisServicesElement),
   'idcbis-stats': markRaw(IdcbisStatsElement),
+  'idcbis-audiences': markRaw(IdcbisAudiencesElement),
   'idcbis-bubbles': markRaw(IdcbisBubblesElement),
   'idcbis-about': markRaw(IdcbisAboutElement),
   'idcbis-contact': markRaw(IdcbisContactElement),
@@ -105,6 +107,7 @@ const IDCBIS_BLOCK_TYPES = [
   'idcbis-info-grid',
   'idcbis-services',
   'idcbis-stats',
+  'idcbis-audiences',
   'idcbis-bubbles',
   'idcbis-about',
   'idcbis-contact',

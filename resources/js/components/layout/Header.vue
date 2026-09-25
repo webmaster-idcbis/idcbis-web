@@ -139,9 +139,11 @@
           <!-- Mobile toggle -->
           <div class="flex items-center gap-3 shrink-0 md:hidden">
             <button
+              ref="menuToggle"
               type="button"
-              class="p-2 rounded-md hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A140]"
+              class="inline-flex items-center justify-center min-h-11 min-w-11 p-2 rounded-md hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A140]"
               :aria-expanded="mobileMenuOpen"
+              aria-controls="mobile-main-nav"
               :aria-label="mobileMenuOpen ? t('header.closeMenu') : t('header.openMenu')"
               @click="mobileMenuOpen = !mobileMenuOpen"
             >
@@ -154,11 +156,11 @@
     </div>
 
     <!-- Mobile Navigation -->
-    <div v-show="mobileMenuOpen" class="md:hidden bg-[#005674] border-t border-white/10">
+    <div v-show="mobileMenuOpen" id="mobile-main-nav" ref="mobileNav" class="md:hidden bg-[#005674] border-t border-white/10">
       <div class="px-4 py-3">
         <SiteSearch compact class="max-w-none mb-3" />
       </div>
-      <div class="px-4 pb-3 space-y-1">
+      <div class="mobile-nav-links px-4 pb-3 flex flex-col gap-2">
         <template v-for="item in menuItems" :key="item.href">
           <div v-if="item.children?.length">
             <button
@@ -176,12 +178,12 @@
                 aria-hidden="true"
               />
             </button>
-            <div v-show="mobileServicesOpen" class="ml-3 mt-1 space-y-0.5 border-l border-white/20 pl-2">
+            <div v-show="mobileServicesOpen" class="ml-3 mt-2 flex flex-col gap-2 border-l border-white/20 pl-2">
               <router-link
                 v-for="child in item.children"
                 :key="child.href"
                 :to="child.href"
-                class="block px-3 py-2.5 rounded-md text-sm font-medium text-white/90 hover:bg-white/10 hover:text-[#C4A140] transition-colors"
+                class="flex items-center min-h-11 px-3 py-2.5 rounded-md text-sm font-medium text-white/90 hover:bg-white/10 hover:text-[#C4A140] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#C4A140]"
                 :class="{ 'bg-white/10 text-[#C4A140]': isActive(child.href) }"
                 @click="mobileMenuOpen = false"
               >
@@ -192,7 +194,7 @@
           <router-link
             v-else
             :to="item.href"
-            class="block px-3 py-2.5 rounded-md text-base font-medium hover:bg-white/10 hover:text-[#C4A140] transition-colors"
+            class="flex items-center min-h-11 px-3 py-2.5 rounded-md text-base font-medium hover:bg-white/10 hover:text-[#C4A140] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#C4A140]"
             :class="{ 'bg-white/10': isActive(item.href) }"
             @click="mobileMenuOpen = false"
           >
@@ -200,7 +202,7 @@
           </router-link>
         </template>
       </div>
-      <div class="px-4 pb-3 border-t border-white/10 pt-3">
+      <div class="px-4 pb-3 border-t border-white/10 pt-3 flex flex-col gap-2">
         <p class="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-white/70">
           {{ t('header.institutionalNav') }}
         </p>
@@ -208,7 +210,7 @@
           v-for="item in institutionalLinks"
           :key="item.href"
           :to="item.href"
-          class="block px-3 py-2.5 rounded-md text-base font-medium hover:bg-white/10 hover:text-[#C4A140] transition-colors"
+          class="flex items-center min-h-11 px-3 py-2.5 rounded-md text-base font-medium hover:bg-white/10 hover:text-[#C4A140] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#C4A140]"
           :class="{ 'bg-white/10': isActive(item.href) }"
           @click="mobileMenuOpen = false"
         >
@@ -226,7 +228,7 @@
           :aria-label="social.name"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center justify-center p-2.5 rounded-md text-white hover:text-[#C4A140] hover:bg-white/10 transition-colors"
+          class="inline-flex items-center justify-center min-h-11 min-w-11 p-2.5 rounded-md text-white hover:text-[#C4A140] hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A140]"
         >
           <component :is="social.icon" class="h-4 w-4" aria-hidden="true" />
         </a>
@@ -237,7 +239,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { ref, computed, nextTick, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useMenusStore } from '../../stores/menus';
 import { Menu, X, Facebook, Instagram, Linkedin, ChevronDown } from 'lucide-vue-next';
@@ -253,6 +255,8 @@ const route = useRoute();
 const menusStore = useMenusStore();
 const { t, locale } = useI18n();
 const mobileMenuOpen = ref(false);
+const menuToggle = ref(null);
+const mobileNav = ref(null);
 const mobileServicesOpen = ref(false);
 const servicesDropdownOpen = ref(false);
 let closeDropdownTimer = null;
@@ -386,6 +390,15 @@ const loadMenu = async () => {
       : undefined,
   }));
 };
+
+watch(mobileMenuOpen, async (open) => {
+  await nextTick();
+  if (open) {
+    mobileNav.value?.querySelector('.mobile-nav-links a, .mobile-nav-links button')?.focus();
+    return;
+  }
+  menuToggle.value?.focus();
+});
 
 watch(
   () => route.fullPath,

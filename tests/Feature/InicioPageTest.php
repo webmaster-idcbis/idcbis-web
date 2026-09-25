@@ -17,14 +17,16 @@ class InicioPageTest extends TestCase
     {
         $content = require database_path('data/propuesta-azul-content.php');
 
-        $this->assertCount(6, $content);
+        $this->assertCount(8, $content);
 
         $expected = [
             ['type' => 'idcbis-hero-carousel', 'blockLabel' => 'Hero principal (carrusel)'],
             ['type' => 'idcbis-services', 'blockLabel' => 'Grid de servicios'],
+            ['type' => 'idcbis-audiences', 'blockLabel' => 'Accesos según tu perfil'],
             ['type' => 'idcbis-stats', 'blockLabel' => 'Cifras destacadas'],
             ['type' => 'idcbis-bubbles', 'blockLabel' => 'Programas de investigación'],
             ['type' => 'idcbis-about', 'blockLabel' => 'Somos IDCBIS'],
+            ['type' => 'html', 'blockLabel' => 'Qué está pasando en Bogotá'],
             ['type' => 'idcbis-contact', 'blockLabel' => 'Contacto'],
         ];
 
@@ -46,15 +48,17 @@ class InicioPageTest extends TestCase
 
         $this->assertNotNull($page);
         $this->assertSame('published', $page->status);
-        $this->assertCount(6, $page->content);
+        $this->assertCount(8, $page->content);
         $this->assertSame([], $page->sections);
         $this->assertSame(
             [
                 'idcbis-hero-carousel',
                 'idcbis-services',
+                'idcbis-audiences',
                 'idcbis-stats',
                 'idcbis-bubbles',
                 'idcbis-about',
+                'html',
                 'idcbis-contact',
             ],
             array_column($page->content, 'type')
@@ -67,33 +71,21 @@ class InicioPageTest extends TestCase
         $content = require database_path('data/propuesta-azul-content.php');
         $hero = $content[0];
 
-        $this->assertTrue($hero['autoPlay']);
-        $this->assertTrue($hero['showArrows']);
-        $this->assertTrue($hero['showIndicators']);
-        $this->assertCount(6, $hero['slides']);
-        $this->assertSame('Tú puedes', $hero['slides'][0]['titleLight']);
-        $this->assertSame('Sangre de cordón', $hero['slides'][1]['titleLight']);
-        $this->assertSame('Banco Distrital', $hero['slides'][2]['titleLight']);
-        $this->assertSame('de tejidos', $hero['slides'][2]['titleBold']);
-
-        $this->assertSame(
-            [
-                '/img/Banners WEB/Baner-Pagina-WEB-1920x700-HOME.jpg',
-                '/img/Banners WEB/Baner-Pagina-WEB-1920x700-CU.jpg',
-                '/img/Banners WEB/Baner-Pagina-WEB-1920x700-BT.jpg',
-                '/img/Banners WEB/Baner-Pagina-WEB-1920x700-BS.jpg',
-                '/img/Banners WEB/Baner-Pagina-WEB-1920x700-TA.jpg',
-                '/img/Banners WEB/Baner-Pagina-WEB-1920x700-DC.jpg',
-            ],
-            array_column($hero['slides'], 'backgroundImage')
-        );
-
-        $this->assertSame('/servicios', $hero['slides'][0]['button1Url']);
-        $this->assertSame('/banco-publico-sangre-cordon-umbilical', $hero['slides'][1]['button1Url']);
-        $this->assertSame('/banco-distrital-de-tejidos', $hero['slides'][2]['button1Url']);
-        $this->assertSame('/banco-de-sangre', $hero['slides'][3]['button1Url']);
-        $this->assertSame('/unidad-de-terapias-avanzadas', $hero['slides'][4]['button1Url']);
-        $this->assertSame('/darcelulas', $hero['slides'][5]['button1Url']);
+        $this->assertFalse($hero['autoPlay']);
+        $this->assertFalse($hero['showArrows']);
+        $this->assertFalse($hero['showIndicators']);
+        $this->assertCount(1, $hero['slides']);
+        $this->assertSame('Ciencia que', $hero['slides'][0]['titleLight']);
+        $this->assertSame('transforma vidas', $hero['slides'][0]['titleBold']);
+        $this->assertSame('Quiero donar sangre', $hero['slides'][0]['button1Text']);
+        $this->assertSame('/banco-de-sangre', $hero['slides'][0]['button1Url']);
+        $this->assertSame('Registrarme en DarCélulas', $hero['slides'][0]['button2Text']);
+        $this->assertSame('/darcelulas', $hero['slides'][0]['button2Url']);
+        $this->assertSame('Conocer nuestros servicios', $hero['slides'][0]['button3Text']);
+        $this->assertSame('#servicios', $hero['slides'][0]['button3Url']);
+        $this->assertCount(3, $hero['quickAnswers']);
+        $this->assertCount(3, $hero['visualFrames']);
+        $this->assertStringNotContainsString('cordón', json_encode($hero, JSON_UNESCAPED_UNICODE));
     }
 
     /** @test */
@@ -105,8 +97,10 @@ class InicioPageTest extends TestCase
         $this->getJson('/api/pages/slug/inicio')
             ->assertOk()
             ->assertJsonPath('data.slug', 'inicio')
-            ->assertJsonCount(6, 'data.content')
+            ->assertJsonCount(8, 'data.content')
             ->assertJsonPath('data.content.0.type', 'idcbis-hero-carousel')
-            ->assertJsonPath('data.content.5.type', 'idcbis-contact');
+            ->assertJsonPath('data.content.2.type', 'idcbis-audiences')
+            ->assertJsonPath('data.content.6.type', 'html')
+            ->assertJsonPath('data.content.7.type', 'idcbis-contact');
     }
 }

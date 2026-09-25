@@ -47,6 +47,10 @@ export function buildServiceCardFocusAnchor(cardId) {
   return `card:${cardId}`
 }
 
+export function buildAudienceFocusAnchor(itemId) {
+  return `audience:${itemId}`
+}
+
 export function buildStatFocusAnchor(itemId) {
   return `stat:${itemId}`
 }

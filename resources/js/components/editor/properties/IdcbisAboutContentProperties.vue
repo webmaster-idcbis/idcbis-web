@@ -10,6 +10,11 @@
       <input v-model="element.leaderName" type="text" class="field-input" placeholder="Nombre del líder (opcional)">
       <textarea v-model="element.leaderContact" rows="2" class="field-input" placeholder="Correo y teléfono"></textarea>
       <textarea v-model="element.content" rows="6" class="field-input"></textarea>
+      <textarea v-model="element.quote" rows="2" class="field-input" placeholder="Testimonio del equipo"></textarea>
+      <input v-model="element.quoteAuthor" type="text" class="field-input" placeholder="Nombre (solo si está confirmado)">
+      <input v-model="element.quoteRole" type="text" class="field-input" placeholder="Cargo">
+      <input v-model="element.buttonText" type="text" class="field-input" placeholder="Conoce a nuestro equipo">
+      <input v-model="element.buttonUrl" type="text" class="field-input" placeholder="/quienes-somos#equipo">
     </div>
     <div data-editor-focus="about:image" :class="{ 'ring-2 ring-[#0B4F6C] rounded-lg p-2': activeFocus === 'about:image' }" class="space-y-2">
       <input v-model="element.image" type="text" class="field-input" placeholder="URL imagen">

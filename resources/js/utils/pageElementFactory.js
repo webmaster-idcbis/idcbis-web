@@ -15,13 +15,15 @@ export const createSlide = (overrides = {}) => ({
 /** Slide del carrusel hero estilo Propuesta Azul */
 export const createIdcbisHeroSlide = (overrides = {}) => ({
   id: generateId(),
-  titleLight: 'Tú puedes',
-  titleBold: 'salvar vidas',
-  subtitle: 'Donar sangre, tejidos o cordón umbilical es fácil, rápido y necesario. La ciencia te necesita.',
-  button1Text: 'Quiero donar',
-  button1Url: '/servicios',
-  button2Text: 'Conocer servicios',
-  button2Url: '/servicios',
+  titleLight: 'Ciencia que',
+  titleBold: 'transforma vidas',
+  subtitle: 'En el IDCBIS convertimos ciencia, innovación y capacidades especializadas en soluciones para la salud y la vida de los colombianos.',
+  button1Text: 'Quiero donar sangre',
+  button1Url: '/banco-de-sangre',
+  button2Text: 'Registrarme en DarCélulas',
+  button2Url: '/darcelulas',
+  button3Text: 'Conocer nuestros servicios',
+  button3Url: '#servicios',
   image: '/img/banco-distrital-de-tejidos-01.jpg',
   imageAlt: 'IDCBIS',
   imageBadge: '🔬',
@@ -287,12 +289,20 @@ export const createElement = (type) => {
         sectionSubtitle: '',
         cards: [],
       }
+    case 'idcbis-audiences':
+      return {
+        ...baseElement,
+        fullBleed: true,
+        sectionTitle: 'Encuentra lo que necesitas según tu perfil',
+        sectionSubtitle: 'Cada persona tiene una razón para visitarnos. Te ayudamos a llegar más rápido.',
+        cards: [{ id: generateId(), icon: 'users', title: 'Soy Ciudadano', description: 'Información, participación y contacto.', url: '/participa', linkText: 'Ir a mi sección' }],
+      }
     case 'idcbis-stats':
       return {
         ...baseElement,
         fullBleed: true,
         backgroundColor: '#C4A140',
-        items: [{ value: '100', label: 'métrica', id: generateId() }],
+        items: [{ value: '100', label: 'métrica', caption: '', icon: 'award', id: generateId() }],
       }
     case 'idcbis-bubbles':
       return {

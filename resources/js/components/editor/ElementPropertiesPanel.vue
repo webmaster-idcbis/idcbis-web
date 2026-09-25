@@ -76,6 +76,7 @@ import CtaBannerContentProperties from './properties/CtaBannerContentProperties.
 import IdcbisHeroContentProperties from './properties/IdcbisHeroContentProperties.vue'
 import IdcbisServicesContentProperties from './properties/IdcbisServicesContentProperties.vue'
 import IdcbisStatsContentProperties from './properties/IdcbisStatsContentProperties.vue'
+import IdcbisAudiencesContentProperties from './properties/IdcbisAudiencesContentProperties.vue'
 import IdcbisBubblesContentProperties from './properties/IdcbisBubblesContentProperties.vue'
 import IdcbisAboutContentProperties from './properties/IdcbisAboutContentProperties.vue'
 import IdcbisContactContentProperties from './properties/IdcbisContactContentProperties.vue'
@@ -137,6 +138,7 @@ const panels = {
   'idcbis-info-grid': IdcbisInfoGridContentProperties,
   'idcbis-services': IdcbisServicesContentProperties,
   'idcbis-stats': IdcbisStatsContentProperties,
+  'idcbis-audiences': IdcbisAudiencesContentProperties,
   'idcbis-bubbles': IdcbisBubblesContentProperties,
   'idcbis-about': IdcbisAboutContentProperties,
   'idcbis-contact': IdcbisContactContentProperties,

@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="root"
     class="html-element"
     :style="wrapperStyles"
     @click.stop="$emit('click', element)"
@@ -17,7 +18,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { mergeElementStyles } from '../../composables/useElementStyles'
 
 const props = defineProps({
@@ -27,7 +28,30 @@ const props = defineProps({
 
 defineEmits(['click'])
 
+const root = ref(null)
 const hasContent = computed(() => !!(props.element.htmlCode || '').trim())
+
+// v-html inserta <script> sin ejecutarlo. En la página pública se vuelve a crear
+// para que widgets externos, como el bloque de Bogotá, sí arranquen.
+const activateScripts = async () => {
+  if (!props.preview) return
+  await nextTick()
+  const host = root.value
+  if (!host) return
+  host.querySelectorAll('script').forEach((oldScript) => {
+    const script = document.createElement('script')
+    if (oldScript.src) {
+      script.src = oldScript.src
+      script.async = true
+    } else {
+      script.text = oldScript.textContent || ''
+    }
+    oldScript.replaceWith(script)
+  })
+}
+
+onMounted(activateScripts)
+watch(() => props.element.htmlCode, activateScripts)
 
 const wrapperStyles = computed(() => mergeElementStyles(props.element, {
   width: props.element.width || '100%',
