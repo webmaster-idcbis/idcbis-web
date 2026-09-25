@@ -21,6 +21,8 @@ class DarCelulasPageTest extends TestCase
 
         $types = array_column($content, 'type');
         $this->assertContains('process-timeline', $types);
+        $this->assertContains('idcbis-checklist', $types);
+        $this->assertContains('idcbis-info-grid', $types);
         $this->assertContains('dual-panel', $types);
         $this->assertContains('accordion', $types);
         $this->assertContains('cta-banner', $types);
@@ -34,6 +36,11 @@ class DarCelulasPageTest extends TestCase
 
         $this->assertStringContainsString('idcbis.darcelulas.com.co/preinscribete', $encoded);
         $this->assertStringContainsString('captacionregistro@idcbis.org.co', $encoded);
+        $this->assertGreaterThanOrEqual(4, preg_match_all('/inscribir/i', $encoded));
+
+        $slide = $content[0]['slides'][0] ?? [];
+        $this->assertSame('https://idcbis.darcelulas.com.co/preinscribete', $slide['buttonUrl'] ?? null);
+        $this->assertSame('Quiero inscribirme', $slide['buttonText'] ?? null);
     }
 
     /** @test */

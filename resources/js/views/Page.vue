@@ -122,10 +122,10 @@ const hasSections = computed(() => {
 const hasElementContent = computed(() => pageContent.value.length > 0);
 
 const pageTheme = computed(() => {
-  const slug = displayPage.value?.slug || '';
-  if (slug === 'banco-de-sangre') return 'bds';
-  return displayPage.value?.theme || null;
-});
+  const slug = displayPage.value?.slug || ''
+  if (slug === 'banco-de-sangre' || slug === 'darcelulas') return 'bds'
+  return displayPage.value?.theme || null
+})
 
 const loadPage = async () => {
   loading.value = true;
