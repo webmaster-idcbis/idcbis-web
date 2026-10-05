@@ -115,8 +115,23 @@
                   >
                     <span class="sitemap__bullet sitemap__bullet--nested" aria-hidden="true" />
                     <span class="sitemap__link-text">{{ grand.title }}</span>
-                    <span v-if="!isPublished(grand.slug)" class="sitemap__soon">En preparación</span>
-                  </SitemapLink>
+                <span v-if="!isPublished(grand.slug)" class="sitemap__soon">En preparación</span>
+              </SitemapLink>
+                  <ul v-if="grand.children?.length" class="sitemap__list sitemap__list--nested">
+                    <li v-for="leaf in grand.children" :key="leaf.slug" class="sitemap__item">
+                      <SitemapLink
+                        :slug="leaf.slug"
+                        :preview="preview"
+                        class="sitemap__link"
+                        :class="{ 'sitemap__link--pending': !isPublished(leaf.slug) }"
+                        @navigate="onLinkClick"
+                      >
+                        <span class="sitemap__bullet sitemap__bullet--nested" aria-hidden="true" />
+                        <span class="sitemap__link-text">{{ leaf.title }}</span>
+                        <span v-if="!isPublished(leaf.slug)" class="sitemap__soon">En preparación</span>
+                      </SitemapLink>
+                    </li>
+                  </ul>
                 </li>
               </ul>
             </li>

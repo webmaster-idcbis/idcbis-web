@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="titulo">
+  <title id="titulo">Espacio para imagen</title>
+  <rect width="1200" height="800" fill="#E1F0F5"/>
+  <rect x="36" y="36" width="1128" height="728" fill="none" stroke="#005674" stroke-width="4" stroke-dasharray="18 14" rx="32"/>
+  <circle cx="600" cy="330" r="54" fill="none" stroke="#008996" stroke-width="4"/>
+  <path d="M572 338l28-36 22 24 16-18 28 40H572z" fill="none" stroke="#005674" stroke-width="4" stroke-linejoin="round"/>
+  <text x="600" y="460" text-anchor="middle" fill="#003C5F" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700">Espacio para imagen</text>
+  <text x="600" y="512" text-anchor="middle" fill="#005674" font-family="Arial, Helvetica, sans-serif" font-size="24">Pendiente en el documento del grupo</text>
+</svg>

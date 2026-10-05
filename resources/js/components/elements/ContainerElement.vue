@@ -1,5 +1,6 @@
 <template>
   <div
+    :id="element.anchorId || undefined"
     :class="['container-element', element.className, { 'container-preview': preview, 'container-empty': !hasChildren }]"
     :style="containerStyles"
     @click.stop="onContainerClick"
@@ -158,6 +159,7 @@ const onDrop = (event) => {
 .container-element {
   position: relative;
   transition: outline 0.15s ease;
+  scroll-margin-top: 96px;
 }
 
 .container-element:not(.container-preview):hover {

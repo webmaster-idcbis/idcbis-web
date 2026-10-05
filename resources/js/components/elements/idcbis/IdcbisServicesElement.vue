@@ -1,6 +1,7 @@
 <template>
   <section
     class="idcbis-services"
+    :class="{ 'is-plain': element.variant === 'plain' }"
     :id="element.sectionAnchor || undefined"
     @click.stop="$emit('click', element)"
   >
@@ -48,7 +49,7 @@
           </div>
           <div class="service-card__content">
             <h3 :id="cardTitleId(card, index)">{{ card.title }}</h3>
-            <p>{{ card.description }}</p>
+            <p v-if="card.description">{{ card.description }}</p>
             <span v-if="card.tag" class="service-card__tag">{{ card.tag }}</span>
           </div>
         </component>
@@ -171,6 +172,29 @@ const onCardClick = (card, index, event) => {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.idcbis-services.is-plain {
+  background: #fff;
+}
+
+.idcbis-services.is-plain .service-card {
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(11, 79, 108, 0.08);
+}
+
+.idcbis-services.is-plain .service-card:hover {
+  box-shadow: 0 16px 28px rgba(11, 79, 108, 0.14);
+}
+
+.idcbis-services.is-plain .service-card__media {
+  background-color: transparent;
+}
+
+.idcbis-services.is-plain .service-card__image {
+  object-fit: contain;
+  background: transparent;
 }
 
 .service-card__content {

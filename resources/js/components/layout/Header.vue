@@ -62,36 +62,39 @@
                 <div
                   v-if="item.children?.length"
                   class="relative"
-                  @mouseenter="openServicesDropdown"
-                  @mouseleave="closeServicesDropdown"
+                  @mouseenter="openDropdown(item.href)"
+                  @mouseleave="scheduleCloseDropdown(item.href)"
+                  @focusout="onDropdownFocusOut($event, item.href)"
                 >
                   <button
                     type="button"
                     class="inline-flex items-center gap-1 text-sm font-medium hover:text-[#C4A140] transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A140] focus-visible:ring-offset-2 focus-visible:ring-offset-[#005674] rounded-sm"
-                    :class="{ 'text-white/90': isServiceChildActive }"
-                    :aria-expanded="servicesDropdownOpen"
+                    :class="{ 'text-white/90': hasActiveChild(item) }"
+                    :aria-expanded="isDropdownOpen(item.href)"
+                    :aria-controls="dropdownId(item.href)"
                     aria-haspopup="true"
-                    @focus="openServicesDropdown"
+                    @focus="openDropdown(item.href)"
                     @click.prevent
                   >
                     {{ item.name }}
                     <ChevronDown
-                      class="h-3.5 w-3.5 transition-transform duration-200"
-                      :class="{ 'rotate-180': servicesDropdownOpen }"
+                      class="h-3.5 w-3.5 transition-transform duration-200 motion-reduce:transition-none"
+                      :class="{ 'rotate-180': isDropdownOpen(item.href) }"
                       aria-hidden="true"
                     />
                   </button>
 
                   <div
-                    v-show="servicesDropdownOpen"
+                    v-show="isDropdownOpen(item.href)"
                     class="absolute left-1/2 top-full z-50 pt-2 -translate-x-1/2"
-                    @mouseenter="openServicesDropdown"
-                    @mouseleave="closeServicesDropdown"
+                    @mouseenter="openDropdown(item.href)"
+                    @mouseleave="scheduleCloseDropdown(item.href)"
                   >
                     <ul
-                      class="min-w-[240px] rounded-lg bg-white py-2 shadow-lg ring-1 ring-black/10"
+                      :id="dropdownId(item.href)"
+                      class="min-w-[280px] rounded-lg bg-white py-2 shadow-lg ring-1 ring-black/10"
                       role="menu"
-                      :aria-label="t('header.servicesMenu.label')"
+                      :aria-label="menuPanelLabel(item)"
                     >
                       <li v-for="child in item.children" :key="child.href" role="none">
                         <router-link
@@ -99,7 +102,7 @@
                           role="menuitem"
                           class="block px-4 py-2.5 text-sm font-medium text-[#005674] hover:bg-[#005674]/10 hover:text-[#003C5F] focus-visible:bg-[#005674]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#005674] transition-colors"
                           :class="{ 'bg-[#005674]/10 text-[#003C5F]': isActive(child.href) }"
-                          @click="closeServicesDropdown(true)"
+                          @click="closeDropdown(item.href)"
                         >
                           {{ child.name }}
                         </router-link>
@@ -166,19 +169,24 @@
             <button
               type="button"
               class="flex w-full items-center justify-between gap-2 px-3 py-2.5 rounded-md text-base font-medium hover:bg-white/10 hover:text-[#C4A140] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#C4A140] min-h-11"
-              :class="{ 'bg-white/10': isServiceChildActive }"
-              :aria-expanded="mobileServicesOpen"
-              :aria-label="t('header.servicesMenu.open')"
-              @click="mobileServicesOpen = !mobileServicesOpen"
+              :class="{ 'bg-white/10': hasActiveChild(item) }"
+              :aria-expanded="isMobileSubmenuOpen(item.href)"
+              :aria-controls="mobileDropdownId(item.href)"
+              :aria-label="menuToggleLabel(item)"
+              @click="toggleMobileSubmenu(item.href)"
             >
               <span>{{ item.name }}</span>
               <ChevronDown
-                class="h-4 w-4 shrink-0 transition-transform duration-200"
-                :class="{ 'rotate-180': mobileServicesOpen }"
+                class="h-4 w-4 shrink-0 transition-transform duration-200 motion-reduce:transition-none"
+                :class="{ 'rotate-180': isMobileSubmenuOpen(item.href) }"
                 aria-hidden="true"
               />
             </button>
-            <div v-show="mobileServicesOpen" class="ml-3 mt-2 flex flex-col gap-2 border-l border-white/20 pl-2">
+            <div
+              v-show="isMobileSubmenuOpen(item.href)"
+              :id="mobileDropdownId(item.href)"
+              class="ml-3 mt-2 flex flex-col gap-2 border-l border-white/20 pl-2"
+            >
               <router-link
                 v-for="child in item.children"
                 :key="child.href"
@@ -245,6 +253,7 @@ import { useMenusStore } from '../../stores/menus';
 import { Menu, X, Facebook, Instagram, Linkedin, ChevronDown } from 'lucide-vue-next';
 import { SITE_LOGOS, INSTITUTIONAL_LOGOS } from '../../config/siteLogos';
 import { HOME_SERVICES, isServicesMenuItem } from '../../config/homeServices';
+import { RESEARCH_MENU, isResearchMenuItem } from '../../config/researchMenu';
 import { useI18n } from '../../i18n';
 import { localizeLabel } from '../../utils/localizeContent';
 import SiteSearch from './SiteSearch.vue';
@@ -257,8 +266,8 @@ const { t, locale } = useI18n();
 const mobileMenuOpen = ref(false);
 const menuToggle = ref(null);
 const mobileNav = ref(null);
-const mobileServicesOpen = ref(false);
-const servicesDropdownOpen = ref(false);
+const openDropdownHref = ref(null);
+const mobileOpenHrefs = ref({});
 let closeDropdownTimer = null;
 
 const logos = {
@@ -303,6 +312,13 @@ const serviceChildren = computed(() =>
   })),
 );
 
+const researchChildren = computed(() =>
+  RESEARCH_MENU.map((item) => ({
+    name: t(item.titleKey),
+    href: item.href,
+  })),
+);
+
 const fallbackMenuItems = computed(() => [
   { name: t('header.fallbackMenu.home'), href: '/' },
   { name: t('header.fallbackMenu.about'), href: '/quienes-somos' },
@@ -311,7 +327,11 @@ const fallbackMenuItems = computed(() => [
     href: '/servicios',
     children: serviceChildren.value,
   },
-  { name: t('header.fallbackMenu.research'), href: '/investigacion' },
+  {
+    name: t('header.fallbackMenu.research'),
+    href: '/investigacion',
+    children: researchChildren.value,
+  },
   { name: t('header.fallbackMenu.contact'), href: '/contacto' },
 ]);
 
@@ -326,11 +346,19 @@ const menuItems = computed(() => {
     : fallbackMenuItems.value;
 
   return base.map((item) => {
-    if (!isServicesMenuItem(item)) return item;
-    return {
-      ...item,
-      children: item.children?.length ? item.children : serviceChildren.value,
-    };
+    if (isServicesMenuItem(item)) {
+      return {
+        ...item,
+        children: serviceChildren.value,
+      };
+    }
+    if (isResearchMenuItem(item)) {
+      return {
+        ...item,
+        children: researchChildren.value,
+      };
+    }
+    return item;
   });
 });
 
@@ -341,37 +369,81 @@ const isActive = (href) => {
   return route.path === href || route.path.startsWith(`${href}/`);
 };
 
-const isServiceChildActive = computed(() =>
-  HOME_SERVICES.some((service) => isActive(service.href)),
-);
+const hasActiveChild = (item) =>
+  item.children?.some((child) => isActive(child.href)) ?? false;
 
-const openServicesDropdown = () => {
-  if (closeDropdownTimer) {
-    clearTimeout(closeDropdownTimer);
-    closeDropdownTimer = null;
-  }
-  servicesDropdownOpen.value = true;
+const dropdownId = (href) => `nav-submenu-${String(href).replace(/[^a-z0-9]+/gi, '-')}`;
+
+const mobileDropdownId = (href) => `mobile-submenu-${String(href).replace(/[^a-z0-9]+/gi, '-')}`;
+
+const isDropdownOpen = (href) => openDropdownHref.value === href;
+
+const isMobileSubmenuOpen = (href) => Boolean(mobileOpenHrefs.value[href]);
+
+const menuToggleLabel = (item) => {
+  if (isServicesMenuItem(item)) return t('header.servicesMenu.open');
+  if (isResearchMenuItem(item)) return t('header.researchMenu.open');
+  return item.name;
 };
 
-const closeServicesDropdown = (immediate = false) => {
+const menuPanelLabel = (item) => {
+  if (isServicesMenuItem(item)) return t('header.servicesMenu.label');
+  if (isResearchMenuItem(item)) return t('header.researchMenu.label');
+  return item.name;
+};
+
+const openDropdown = (href) => {
   if (closeDropdownTimer) {
     clearTimeout(closeDropdownTimer);
     closeDropdownTimer = null;
   }
-  if (immediate === true) {
-    servicesDropdownOpen.value = false;
-    return;
+  openDropdownHref.value = href;
+};
+
+const scheduleCloseDropdown = (href) => {
+  if (closeDropdownTimer) {
+    clearTimeout(closeDropdownTimer);
+    closeDropdownTimer = null;
   }
   closeDropdownTimer = setTimeout(() => {
-    servicesDropdownOpen.value = false;
+    if (openDropdownHref.value === href) {
+      openDropdownHref.value = null;
+    }
     closeDropdownTimer = null;
   }, 120);
 };
 
+const closeDropdown = (href) => {
+  if (closeDropdownTimer) {
+    clearTimeout(closeDropdownTimer);
+    closeDropdownTimer = null;
+  }
+  if (!href || openDropdownHref.value === href) {
+    openDropdownHref.value = null;
+  }
+};
+
+const onDropdownFocusOut = (event, href) => {
+  const next = event.relatedTarget;
+  if (next && event.currentTarget?.contains(next)) return;
+  closeDropdown(href);
+};
+
+const toggleMobileSubmenu = (href) => {
+  mobileOpenHrefs.value = {
+    ...mobileOpenHrefs.value,
+    [href]: !mobileOpenHrefs.value[href],
+  };
+};
+
+const closeMobileSubmenus = () => {
+  mobileOpenHrefs.value = {};
+};
+
 const onDocumentKeydown = (event) => {
   if (event.key === 'Escape') {
-    servicesDropdownOpen.value = false;
-    mobileServicesOpen.value = false;
+    openDropdownHref.value = null;
+    closeMobileSubmenus();
   }
 };
 
@@ -403,7 +475,8 @@ watch(mobileMenuOpen, async (open) => {
 watch(
   () => route.fullPath,
   () => {
-    servicesDropdownOpen.value = false;
+    openDropdownHref.value = null;
+    closeMobileSubmenus();
     mobileMenuOpen.value = false;
   },
 );

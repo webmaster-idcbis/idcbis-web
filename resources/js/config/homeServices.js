@@ -10,12 +10,6 @@ export const HOME_SERVICES = [
     href: '/banco-de-sangre',
   },
   {
-    id: 'card_cordon',
-    titleKey: 'header.servicesMenu.cord',
-    title: 'Cordón umbilical',
-    href: '/banco-publico-sangre-cordon-umbilical',
-  },
-  {
     id: 'card_tejidos',
     titleKey: 'header.servicesMenu.tissues',
     title: 'Tejidos',

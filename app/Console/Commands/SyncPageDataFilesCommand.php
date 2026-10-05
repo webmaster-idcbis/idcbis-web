@@ -80,6 +80,54 @@ class SyncPageDataFilesCommand extends Command
             'source' => 'https://idcbis.org.co/fenotipos-raros/',
             'monolith' => false,
         ],
+        'investigacion-terapias-avanzadas' => [
+            'source' => 'Sección general de la Unidad de Terapias Avanzadas',
+            'monolith' => false,
+        ],
+        'investigacion-neurociencias' => [
+            'source' => 'Entrada de Neurociencias, Unidad de Terapias Avanzadas',
+            'monolith' => false,
+        ],
+        'investigacion-neurociencias-trauma-raquimedular' => [
+            'source' => 'Proyecto Trauma raquimedular, Neurociencias',
+            'monolith' => false,
+        ],
+        'investigacion-neurociencias-cannabis-terapeutico' => [
+            'source' => 'Proyecto Cannabis terapéutico, Neurociencias',
+            'monolith' => false,
+        ],
+        'investigacion-neurociencias-biomarcadores-alzheimer' => [
+            'source' => 'Proyecto Biomarcadores en Alzheimer, Neurociencias',
+            'monolith' => false,
+        ],
+        'investigacion-neurociencias-progenitores-neurales' => [
+            'source' => 'Proyecto Progenitores neurales, Neurociencias',
+            'monolith' => false,
+        ],
+        'investigacion-neurociencias-bioensambles-parkinson' => [
+            'source' => 'Proyecto Bioensambles en Parkinson, Neurociencias',
+            'monolith' => false,
+        ],
+        'investigacion-neurociencias-isquemia-cerebral' => [
+            'source' => 'Proyecto Isquemia cerebral, Neurociencias',
+            'monolith' => false,
+        ],
+        'investigacion-neurociencias-injerto-nervioso-acelular' => [
+            'source' => 'Proyecto Injerto nervioso acelular, Neurociencias',
+            'monolith' => false,
+        ],
+        'investigacion-ingenieria-tisular' => [
+            'source' => 'Entrada de Ingeniería tisular, Unidad de Terapias Avanzadas',
+            'monolith' => false,
+        ],
+        'investigacion-innovacion-produccion' => [
+            'source' => 'Entrada de Innovación y producción, Unidad de Terapias Avanzadas',
+            'monolith' => false,
+        ],
+        'investigacion-inmunoterapia' => [
+            'source' => 'Entrada de Inmunoterapia, Unidad de Terapias Avanzadas',
+            'monolith' => false,
+        ],
         'banco-publico-sangre-cordon-umbilical' => [
             'source' => 'https://idcbis.org.co/banco-de-sangre-cordon-umbilical/',
             'monolith' => false,

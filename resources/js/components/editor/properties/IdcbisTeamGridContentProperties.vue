@@ -6,6 +6,7 @@
 
     <div data-editor-focus="team:header" :class="{ 'ring-2 ring-[#0B4F6C] rounded-lg p-2': activeFocus === 'team:header' }" class="space-y-2">
       <input v-model="element.sectionTitle" type="text" placeholder="Título de la sección" class="editor-field-input">
+      <textarea v-model="element.sectionSubtitle" rows="3" placeholder="Texto de apoyo" class="editor-field-input"></textarea>
       <input v-model="element.sectionIcon" type="text" placeholder="Emoji (👥)" class="editor-field-input">
     </div>
 

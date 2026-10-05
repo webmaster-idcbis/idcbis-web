@@ -50,27 +50,28 @@ const sectionStyles = computed(() => mergeElementStyles(props.element))
 .stats-grid__inner {
   max-width: 1200px;
   margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 2.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 1.25rem;
+  align-items: stretch;
 }
 
 .stat-card {
   text-align: center;
   background: #fff;
-  padding: 2.5rem 2rem;
+  padding: 1.75rem 1.25rem;
   border-radius: 16px;
-  min-width: 200px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
   box-shadow: 0 10px 28px rgba(11, 79, 108, 0.12);
-  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
   border: 1px solid #b7d0d9;
   border-top: 5px solid #C4A140;
 }
 
 .stat-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 18px 36px rgba(11, 79, 108, 0.18);
+  box-shadow: 0 14px 28px rgba(11, 79, 108, 0.16);
   border-color: #005674;
 }
 
@@ -99,8 +100,7 @@ const sectionStyles = computed(() => mergeElementStyles(props.element))
 
 @media (max-width: 576px) {
   .stat-card {
-    min-width: 160px;
-    padding: 2rem 1.5rem;
+    padding: 1.5rem 1rem;
   }
   .stat-card__number {
     font-size: 2.5rem;
@@ -110,9 +110,6 @@ const sectionStyles = computed(() => mergeElementStyles(props.element))
 @media (prefers-reduced-motion: reduce) {
   .stat-card {
     transition: none;
-  }
-  .stat-card:hover {
-    transform: none;
   }
 }
 </style>

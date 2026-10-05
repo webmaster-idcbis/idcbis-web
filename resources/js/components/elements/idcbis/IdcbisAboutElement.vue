@@ -1,5 +1,6 @@
 <template>
   <section
+    :id="element.anchorId || undefined"
     class="idcbis-about"
     :class="{ 'idcbis-about--clean': element.variant === 'clean' }"
     @click.stop="$emit('click', element)"
@@ -16,7 +17,7 @@
           <span v-if="element.leaderContact" class="idcbis-about__leader-contact">{{ element.leaderContact }}</span>
         </div>
         <h2>{{ element.title || 'Somos IDCBIS' }}</h2>
-        <div class="idcbis-about__body">{{ element.content }}</div>
+        <div class="idcbis-about__body" :style="bodyStyle">{{ element.content }}</div>
         <blockquote v-if="element.quote" class="idcbis-about__quote">
           <p>{{ element.quote }}</p>
           <footer v-if="element.quoteAuthor">
@@ -60,6 +61,10 @@ const props = defineProps({
 const emit = defineEmits(['click', 'focus-part'])
 const { partClasses, focusPart } = useIdcbisEditorParts(props, emit)
 
+const bodyStyle = computed(() => (
+  props.element.contentSize ? { fontSize: props.element.contentSize, lineHeight: '1.7' } : {}
+))
+
 const isLogoImage = computed(() => {
   const src = props.element.image || ''
   return src.includes('/images/logo/') || src.includes('logo-IDCBIS') || src.includes('Logo%20IDCBIS') || src.includes('Logo IDCBIS')
@@ -72,6 +77,7 @@ const isLogoImage = computed(() => {
   background: #f5f8fa;
   cursor: pointer;
   font-family: var(--font-idcbis);
+  scroll-margin-top: 96px;
 }
 
 .idcbis-about__flex {

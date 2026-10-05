@@ -55,7 +55,7 @@ const sectionStyles = computed(() => ({
 }
 
 .dual-panel__container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -82,7 +82,7 @@ const sectionStyles = computed(() => ({
 
 .dual-panel__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 480px));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   justify-content: center;
   align-items: stretch;
   gap: 3rem;

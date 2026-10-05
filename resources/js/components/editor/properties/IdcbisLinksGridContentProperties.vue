@@ -4,6 +4,13 @@
     <input v-model="element.sectionTitle" class="field-input" placeholder="Recursos">
     <input v-model="element.sectionHighlight" class="field-input" placeholder="y enlaces">
     <input v-model="element.sectionSubtitle" class="field-input" placeholder="Subtítulo">
+    <div>
+      <label class="block text-xs text-gray-600 mb-1">Presentación</label>
+      <select class="field-input" :value="element.layout || ''" @change="element.layout = $event.target.value">
+        <option value="">Cuadrícula</option>
+        <option value="expand">Expandir al pasar el cursor</option>
+      </select>
+    </div>
 
     <div class="grid grid-cols-2 gap-2">
       <div>

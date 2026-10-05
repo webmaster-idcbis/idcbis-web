@@ -8,7 +8,7 @@
         </h2>
         <p v-if="element.sectionSubtitle">{{ element.sectionSubtitle }}</p>
       </div>
-      <div class="idcbis-service-detail__list">
+      <div class="idcbis-service-detail__list" :class="{ 'is-pair': items.length === 2 }">
         <article
           v-for="(item, index) in items"
           :key="item.id || index"
@@ -56,7 +56,7 @@ const items = computed(() => props.element.items || [])
 }
 
 .idcbis-service-detail__container {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -89,18 +89,26 @@ const items = computed(() => props.element.items || [])
 }
 
 .idcbis-service-detail__list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.idcbis-service-detail__list.is-pair {
+  grid-template-columns: 1fr;
 }
 
 .detail-card {
   display: flex;
   gap: 1.25rem;
+  height: 100%;
+  box-sizing: border-box;
   background: #f5f8fa;
-  border-radius: 24px;
-  padding: 1.75rem;
-  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid #b7d0d9;
+  border-top: 5px solid #C4A140;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -123,6 +131,11 @@ const items = computed(() => props.element.items || [])
   justify-content: center;
 }
 
+.detail-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
 .detail-card__body h3 {
   font-size: 1.5rem;
   font-weight: 700;
@@ -141,7 +154,7 @@ const items = computed(() => props.element.items || [])
   padding: 1rem;
   background: white;
   border-radius: 12px;
-  border-left: 4px solid #4ecdc4;
+  border-left: 4px solid #008996;
 }
 
 .detail-block--access {
@@ -168,6 +181,12 @@ const items = computed(() => props.element.items || [])
 .detail-access :deep(a) {
   color: #0b4f6c;
   font-weight: 600;
+}
+
+@media (min-width: 900px) {
+  .idcbis-service-detail__list.is-pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 640px) {

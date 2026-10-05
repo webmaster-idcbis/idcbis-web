@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use Database\Seeders\InvestigacionCelulasProgenitorasPageSeeder;
 use Database\Seeders\InvestigacionMedicinaTransfusionalPageSeeder;
+use Database\Seeders\InvestigacionNeurocienciasPageSeeder;
+use Database\Seeders\InvestigacionTerapiasAvanzadasPageSeeder;
 use Database\Seeders\InvestigacionPageSeeder;
 use Illuminate\Console\Command;
 
@@ -19,6 +21,8 @@ class CreateInvestigacionPagesCommand extends Command
             InvestigacionPageSeeder::class,
             InvestigacionCelulasProgenitorasPageSeeder::class,
             InvestigacionMedicinaTransfusionalPageSeeder::class,
+            InvestigacionTerapiasAvanzadasPageSeeder::class,
+            InvestigacionNeurocienciasPageSeeder::class,
         ] as $seeder) {
             $this->call($seeder);
         }

@@ -1,5 +1,5 @@
 <template>
-  <section class="team-grid" @click.stop="!preview && $emit('click', element)">
+  <section :id="element.anchorId || undefined" class="team-grid" @click.stop="!preview && $emit('click', element)">
     <div class="team-grid__container">
       <header
         v-if="element.sectionTitle"
@@ -9,6 +9,7 @@
       >
         <span v-if="element.sectionIcon" class="team-grid__icon" aria-hidden="true">{{ element.sectionIcon }}</span>
         <h2>{{ element.sectionTitle }}</h2>
+        <p v-if="element.sectionSubtitle" class="team-grid__subtitle">{{ element.sectionSubtitle }}</p>
       </header>
 
       <div class="team-grid__grid">
@@ -83,6 +84,7 @@ const onMemberClick = (member, index, event) => {
   background: #fff;
   font-family: var(--font-idcbis);
   cursor: pointer;
+  scroll-margin-top: 96px;
 }
 
 .team-grid__container { max-width: 1200px; margin: 0 auto; }
@@ -99,14 +101,23 @@ const onMemberClick = (member, index, event) => {
   text-transform: uppercase;
 }
 
+.team-grid__subtitle {
+  max-width: 42rem;
+  margin: 1rem auto 0;
+  color: #37474f;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  text-transform: none;
+  font-weight: 500;
+}
+
 .team-grid__icon { display: block; font-size: 2rem; margin-bottom: 0.5rem; }
 
 .team-grid__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 280px));
-  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
   align-items: stretch;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .team-card {

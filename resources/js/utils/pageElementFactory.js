@@ -313,6 +313,21 @@ export const createElement = (type) => {
         cardColor: '#0B4F6C',
         items: [{ title: 'Programa', description: 'Descripción', id: generateId() }],
       }
+    case 'idcbis-news-press':
+      return {
+        ...baseElement,
+        fullBleed: true,
+        sectionTitle: 'Noticias y Prensa',
+        sectionSubtitle: 'Lo último del IDCBIS y nuestros aliados.',
+        news: [],
+        podcastTitle: 'Nuestro Podcast',
+        podcastDescription: '',
+        podcastUrl: '',
+        episodeTitle: '',
+        creators: [],
+        buttonText: 'Ver todas las noticias',
+        buttonUrl: '/noticias',
+      }
     case 'idcbis-about':
       return {
         ...baseElement,

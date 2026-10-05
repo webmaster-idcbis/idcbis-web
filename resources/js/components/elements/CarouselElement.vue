@@ -343,6 +343,11 @@ onUnmounted(stopAutoplay)
   background: #003d52;
 }
 
+.slide-button:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+}
+
 .slide-title {
   font-size: 1.75rem;
   font-weight: 700;

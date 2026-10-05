@@ -87,14 +87,6 @@ return [
                 'description' => 'Es rápida, segura y salva hasta 3 vidas. Necesitamos todos los grupos sanguíneos.',
             ],
             [
-                'id' => 'card_cordon',
-                'tag' => '#FUTURO',
-                'url' => '/banco-publico-sangre-cordon-umbilical',
-                'image' => '/img/Servicios%20Home/B-Cordon-1200x800.png',
-                'title' => 'Sangre de Cordón umbilical',
-                'description' => 'Las células del cordón son un tesoro. Ayudan a pacientes pediátricos con enfermedades graves.',
-            ],
-            [
                 'id' => 'card_tejidos',
                 'tag' => '#REGALAVIDA',
                 'url' => '/banco-distrital-de-tejidos',
@@ -334,35 +326,59 @@ Somos un Instituto Distrital reconocido por MinCiencias, pero sobre todo, somos 
         'width' => '100%',
         'fullBleed' => true,
     ],
+    // No existe aún la sección "Ciencia para Todos". Este bloque queda
+    // como última pieza del home, inmediatamente antes del footer.
     [
-        'id' => 'idcbis_contact_inicio',
-        'type' => 'idcbis-contact',
+        'id' => 'idcbis_news_press_inicio',
+        'type' => 'idcbis-news-press',
         'color' => '#000000',
-        'items' => [
-            [
-                'id' => 'contact_1',
-                'icon' => '/img/Iconos/IDCBIS.svg',
-                'text' => 'Carrera 32 #12-81, Bogotá',
-                'title' => 'Sede',
-            ],
-            [
-                'id' => 'contact_2',
-                'icon' => '/img/Iconos/contacto.svg',
-                'text' => '(+57) 1 3649620',
-                'link' => 'tel:+5713649620',
-                'title' => 'Teléfono',
-            ],
-            [
-                'id' => 'contact_3',
-                'icon' => '/img/Iconos/correo.svg',
-                'text' => 'contacto@idcbis.org.co',
-                'link' => 'mailto:contacto@idcbis.org.co',
-                'title' => 'Mail',
-            ],
-        ],
         'content' => '',
         'fontSize' => '16px',
         'fullBleed' => true,
-        'blockLabel' => 'Contacto',
+        'blockLabel' => 'Noticias y prensa',
+        'sectionTitle' => 'Noticias y Prensa',
+        'sectionSubtitle' => 'Lo último del IDCBIS y nuestros aliados.',
+        // Tres notas ya listadas en /noticias. No son piezas nuevas.
+        'news' => [
+            [
+                'id' => 'news-001',
+                'slug' => 'idcbis-fortalece-investigacion-terapias-avanzadas',
+                'image' => '/img/banner_6.jpg',
+                'imageAlt' => 'Investigación en terapias avanzadas del IDCBIS',
+                'category' => 'Investigación',
+                'title' => 'IDCBIS fortalece la investigación en terapias avanzadas',
+                'date' => '12 marzo 2025',
+            ],
+            [
+                'id' => 'news-002',
+                'slug' => 'campana-donacion-sangre-marzo-2025',
+                'image' => '/img/banner-sangre.jpg',
+                'imageAlt' => 'Campaña de donación de sangre del Banco Distrital de Sangre',
+                'category' => 'Donación',
+                'title' => 'Campaña de donación de sangre: tu aporte salva vidas',
+                'date' => '8 marzo 2025',
+            ],
+            [
+                'id' => 'news-003',
+                'slug' => 'convenio-red-tejidos-2025',
+                'image' => '/img/banco-distrital-de-tejidos-01.jpg',
+                'imageAlt' => 'Convenio de la red de tejidos del IDCBIS',
+                'category' => 'Alianzas',
+                'title' => 'Nuevo convenio para fortalecer la red de tejidos',
+                'date' => '28 febrero 2025',
+            ],
+        ],
+        'podcastTitle' => 'Nuestro Podcast',
+        'podcastDescription' => 'Conversaciones sobre ciencia, donación y las personas que hacen posible el trabajo del IDCBIS.',
+        // Pendiente el enlace oficial. No incrustar un reproductor sin URL.
+        'podcastUrl' => '',
+        'episodeTitle' => '',
+        // Pendiente piezas de creadores. No se inventan nombres.
+        'creators' => [
+            ['id' => 'creator_1', 'name' => ''],
+            ['id' => 'creator_2', 'name' => ''],
+        ],
+        'buttonText' => 'Ver todas las noticias',
+        'buttonUrl' => '/noticias',
     ],
 ];

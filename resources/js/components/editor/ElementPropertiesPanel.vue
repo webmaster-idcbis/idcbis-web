@@ -77,6 +77,7 @@ import IdcbisHeroContentProperties from './properties/IdcbisHeroContentPropertie
 import IdcbisServicesContentProperties from './properties/IdcbisServicesContentProperties.vue'
 import IdcbisStatsContentProperties from './properties/IdcbisStatsContentProperties.vue'
 import IdcbisAudiencesContentProperties from './properties/IdcbisAudiencesContentProperties.vue'
+import IdcbisNewsPressContentProperties from './properties/IdcbisNewsPressContentProperties.vue'
 import IdcbisBubblesContentProperties from './properties/IdcbisBubblesContentProperties.vue'
 import IdcbisAboutContentProperties from './properties/IdcbisAboutContentProperties.vue'
 import IdcbisContactContentProperties from './properties/IdcbisContactContentProperties.vue'
@@ -139,6 +140,7 @@ const panels = {
   'idcbis-services': IdcbisServicesContentProperties,
   'idcbis-stats': IdcbisStatsContentProperties,
   'idcbis-audiences': IdcbisAudiencesContentProperties,
+  'idcbis-news-press': IdcbisNewsPressContentProperties,
   'idcbis-bubbles': IdcbisBubblesContentProperties,
   'idcbis-about': IdcbisAboutContentProperties,
   'idcbis-contact': IdcbisContactContentProperties,

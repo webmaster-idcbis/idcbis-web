@@ -65,11 +65,10 @@ export function buildPropuestaAzulPage() {
     sectionSubtitle: 'Elige el que más se adapte a ti. Todos son importantes.',
     cards: [
       { title: 'Banco Distrital de Sangre', description: 'Es rápida, segura y salva hasta 3 vidas. Necesitamos todos los grupos sanguíneos.', image: IMG.services[0], tag: '#DONARVIDA', url: HOME_SERVICES[0].href },
-      { title: 'Sangre de Cordón umbilical', description: 'Las células del cordón son un tesoro. Ayudan a pacientes pediátricos con enfermedades graves.', image: IMG.services[1], tag: '#FUTURO', url: HOME_SERVICES[1].href },
-      { title: 'Banco Distrital de Tejidos', description: 'Piel, huesos, córneas... Tu donación puede devolver la vista o la movilidad a alguien.', image: IMG.services[2], tag: '#REGALAVIDA', url: HOME_SERVICES[2].href },
-      { title: 'Terapias avanzadas', description: 'Tratamos enfermedades autoinmunes con células. Somos pioneros en Latinoamérica.', image: IMG.services[3], tag: '#INNOVACIÓN', url: HOME_SERVICES[3].href },
-      { title: 'Registro Nacional de donantes', description: '¿Tienes sangre rara? Tu tipo puede ser clave para alguien. Inscribite.', image: IMG.services[4], tag: '#SANGREUNICA', url: HOME_SERVICES[4].href },
-      { title: 'Bienestar', description: 'Charlas, hábitos, comunidad. Porque la salud también es prevenir.', image: IMG.services[5], tag: '#SENTIRSEBIEN', url: HOME_SERVICES[5].href },
+      { title: 'Banco Distrital de Tejidos', description: 'Piel, huesos, córneas... Tu donación puede devolver la vista o la movilidad a alguien.', image: IMG.services[2], tag: '#REGALAVIDA', url: HOME_SERVICES[1].href },
+      { title: 'Terapias avanzadas', description: 'Tratamos enfermedades autoinmunes con células. Somos pioneros en Latinoamérica.', image: IMG.services[3], tag: '#INNOVACIÓN', url: HOME_SERVICES[2].href },
+      { title: 'Registro Nacional de donantes', description: '¿Tienes sangre rara? Tu tipo puede ser clave para alguien. Inscribite.', image: IMG.services[4], tag: '#SANGREUNICA', url: HOME_SERVICES[3].href },
+      { title: 'Bienestar', description: 'Charlas, hábitos, comunidad. Porque la salud también es prevenir.', image: IMG.services[5], tag: '#SENTIRSEBIEN', url: HOME_SERVICES[4].href },
     ].map((c, i) => ({ ...c, id: HOME_SERVICES[i]?.id || `card_${i}` })),
   })
 
@@ -125,17 +124,6 @@ export function buildPropuestaAzulPage() {
     htmlCode: '<section id="portal-bogota-block" data-cat="Salud"></section><script src="https://bogota.gov.co/2025/queestapasando/main-block.js"></script>',
   })
 
-  const contact = createElement('idcbis-contact')
-  Object.assign(contact, {
-    blockLabel: 'Contacto',
-    fullBleed: true,
-    items: [
-      { icon: '📍', title: 'Sede', text: 'Carrera 32 #12-81, Bogotá' },
-      { icon: '📞', title: 'Teléfono', text: '(+57) 1 3649620' },
-      { icon: '📧', title: 'Mail', text: 'contacto@idcbis.org.co' },
-    ].map((it, i) => ({ ...it, id: `contact_${i}` })),
-  })
-
   const audiences = createElement('idcbis-audiences')
   Object.assign(audiences, {
     blockLabel: 'Accesos según tu perfil',
@@ -155,5 +143,19 @@ export function buildPropuestaAzulPage() {
     ],
   })
 
-  return [heroCarousel, services, audiences, stats, bubbles, about, portalBogota, contact]
+  const newsPress = createElement('idcbis-news-press')
+  Object.assign(newsPress, {
+    blockLabel: 'Noticias y prensa',
+    fullBleed: true,
+    sectionTitle: 'Noticias y Prensa',
+    sectionSubtitle: 'Lo último del IDCBIS y nuestros aliados.',
+    buttonText: 'Ver todas las noticias',
+    buttonUrl: '/noticias',
+    podcastTitle: 'Nuestro Podcast',
+    podcastDescription: 'Conversaciones sobre ciencia, donación y las personas que hacen posible el trabajo del IDCBIS.',
+    podcastUrl: '',
+    episodeTitle: '',
+  })
+
+  return [heroCarousel, services, audiences, stats, bubbles, about, portalBogota, newsPress]
 }

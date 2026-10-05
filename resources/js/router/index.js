@@ -97,7 +97,7 @@ const routes = [
   },
   {
     path: '/banco-de-sangre-cordon-umbilical-investigacion',
-    redirect: '/investigacion-celulas-progenitoras-hematopoyeticas',
+    redirect: '/banco-publico-sangre-cordon-umbilical',
   },
   {
     path: '/noticias/:slug',

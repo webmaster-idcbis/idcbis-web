@@ -11,7 +11,11 @@
         <p v-if="element.subtitle">{{ element.subtitle }}</p>
       </div>
 
-      <div v-if="items.length" class="idcbis-card-grid__grid">
+      <div
+        v-if="items.length"
+        class="idcbis-card-grid__grid"
+        :data-columns="element.columns || undefined"
+      >
         <article
           v-for="(item, index) in items"
           :key="item.id || index"
@@ -209,7 +213,13 @@ const sectionStyles = computed(() => ({
 @media (min-width: 768px) {
   .idcbis-card-grid__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.75rem;
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .idcbis-card-grid__grid[data-columns="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 </style>

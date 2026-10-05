@@ -39,7 +39,7 @@ const items = computed(() => props.element.items || [])
 }
 
 .idcbis-highlights__container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -56,7 +56,7 @@ const items = computed(() => props.element.items || [])
 }
 
 .idcbis-highlights__header h2 span {
-  color: #2c8c99;
+  color: #008996;
 }
 
 .idcbis-highlights__grid {
@@ -64,7 +64,7 @@ const items = computed(() => props.element.items || [])
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 1rem;
 }
 
@@ -84,7 +84,7 @@ const items = computed(() => props.element.items || [])
   flex-shrink: 0;
   width: 28px;
   height: 28px;
-  background: #4ecdc4;
+  background: #005674;
   color: white;
   border-radius: 50%;
   display: flex;

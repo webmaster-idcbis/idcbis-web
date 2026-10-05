@@ -54,7 +54,7 @@ return [
                 'id' => 'cph_a_p',
                 'type' => 'text',
                 'color' => '#475569',
-                'content' => 'El banco público de sangre de cordón nació para ofrecer búsqueda de compatibilidad a pacientes sin donante familiar. La línea «Banco de sangre de cordón umbilical y trasplante de progenitores hematopoyéticos», del grupo GIMTTyC, investiga factores biológicos, moleculares y psicosociales del trasplante.',
+                'content' => 'El banco público conserva un inventario de sangre de cordón umbilical como fuente de células madre hematopoyéticas para el trasplante cuando no hay un familiar compatible. La línea del grupo GIMTTyC estudia los factores biológicos, moleculares y psicosociales del trasplante de médula ósea.',
                 'fontSize' => '1.125rem',
                 'textAlign' => 'center',
             ],

@@ -27,7 +27,7 @@ class InicioPageTest extends TestCase
             ['type' => 'idcbis-bubbles', 'blockLabel' => 'Programas de investigación'],
             ['type' => 'idcbis-about', 'blockLabel' => 'Somos IDCBIS'],
             ['type' => 'html', 'blockLabel' => 'Qué está pasando en Bogotá'],
-            ['type' => 'idcbis-contact', 'blockLabel' => 'Contacto'],
+            ['type' => 'idcbis-news-press', 'blockLabel' => 'Noticias y prensa'],
         ];
 
         foreach ($expected as $index => $block) {
@@ -59,7 +59,7 @@ class InicioPageTest extends TestCase
                 'idcbis-bubbles',
                 'idcbis-about',
                 'html',
-                'idcbis-contact',
+                'idcbis-news-press',
             ],
             array_column($page->content, 'type')
         );
@@ -101,6 +101,6 @@ class InicioPageTest extends TestCase
             ->assertJsonPath('data.content.0.type', 'idcbis-hero-carousel')
             ->assertJsonPath('data.content.2.type', 'idcbis-audiences')
             ->assertJsonPath('data.content.6.type', 'html')
-            ->assertJsonPath('data.content.7.type', 'idcbis-contact');
+            ->assertJsonPath('data.content.7.type', 'idcbis-news-press');
     }
 }

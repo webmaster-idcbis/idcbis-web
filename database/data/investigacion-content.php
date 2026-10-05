@@ -73,7 +73,7 @@ return [
                 'id' => 'inv_intro_p',
                 'type' => 'text',
                 'color' => '#334155',
-                'content' => 'El IDCBIS realiza investigación en salud poblacional a través de seis líneas. Aquí encuentra el panorama del grupo y el acceso a cada línea con página propia.',
+                'content' => 'El IDCBIS realiza investigación en salud poblacional a través del GIMTTyC. La Unidad de Terapias Avanzadas reúne neurociencias, ingeniería tisular, innovación y producción, e inmunoterapia.',
                 'fontSize' => '1.125rem',
                 'textAlign' => 'center',
             ],
@@ -90,24 +90,24 @@ return [
         'links' => [
             [
                 'id' => 'inv_l1',
-                'url' => '/unidad-de-terapias-avanzadas',
+                'url' => '/investigacion-terapias-avanzadas',
                 'icon' => '🧬',
-                'label' => 'Terapias avanzadas',
-                'description' => 'Terapia celular, génica e ingeniería tisular. Sala blanca BPM, OmiMed y ensayos clínicos.',
+                'label' => 'Unidad de Terapias Avanzadas',
+                'description' => 'Neurociencias, ingeniería tisular, innovación y producción, e inmunoterapia.',
             ],
             [
-                'id' => 'inv_l2',
-                'url' => '/unidad-de-terapias-avanzadas',
-                'icon' => '🦴',
-                'label' => 'Ingeniería de tejidos y medicina regenerativa',
-                'description' => 'Productos biotecnológicos, andamios biológicos y medicina tisular en la UTA.',
+                'id' => 'inv_l_bscu',
+                'url' => '/banco-publico-sangre-cordon-umbilical',
+                'icon' => '👶',
+                'label' => 'Banco de sangre de cordón umbilical',
+                'description' => 'Células criopreservadas para el trasplante cuando no hay un familiar compatible.',
             ],
             [
                 'id' => 'inv_l3',
                 'url' => '/investigacion-celulas-progenitoras-hematopoyeticas',
-                'icon' => '👶',
+                'icon' => '🔬',
                 'label' => 'Células progenitoras hematopoyéticas',
-                'description' => 'Banco de sangre de cordón, trasplante de CPH y Registro Nacional de Donantes.',
+                'description' => 'Trasplante de CPH y Registro Nacional de Donantes.',
             ],
             [
                 'id' => 'inv_l4',
@@ -249,9 +249,9 @@ return [
         'buttons' => [
             [
                 'id' => 'inv_cta_uta',
-                'url' => '/unidad-de-terapias-avanzadas',
+                'url' => '/investigacion-terapias-avanzadas',
                 'icon' => '🔬',
-                'label' => 'Terapias avanzadas',
+                'label' => 'Unidad de Terapias Avanzadas',
                 'variant' => 'primary',
             ],
             [
