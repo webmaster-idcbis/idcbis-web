@@ -42,6 +42,15 @@ class InvestigacionTerapiasAvanzadasPageSeeder extends Seeder
                 'meta_description' => 'Inmunoterapia, línea de la Unidad de Terapias Avanzadas del IDCBIS.',
                 'meta_keywords' => 'IDCBIS, inmunoterapia, unidad de terapias avanzadas',
             ],
+            'investigacion-inmunoterapia-til-melanoma' => [
+                'title' => 'TIL en melanoma | IDCBIS',
+            ],
+            'investigacion-inmunoterapia-tcr-vph' => [
+                'title' => 'TCR-T y VPH | IDCBIS',
+            ],
+            'investigacion-inmunoterapia-mama-triple-negativo' => [
+                'title' => 'Mama triple negativo | IDCBIS',
+            ],
         ];
 
         foreach ($pages as $slug => $defaults) {

@@ -54,7 +54,15 @@ export const SITE_SITEMAP = [
           },
           { title: 'Ingeniería tisular', slug: 'investigacion-ingenieria-tisular' },
           { title: 'Innovación y producción', slug: 'investigacion-innovacion-produccion' },
-          { title: 'Inmunoterapia', slug: 'investigacion-inmunoterapia' },
+          {
+            title: 'Inmunoterapia',
+            slug: 'investigacion-inmunoterapia',
+            children: [
+              { title: 'TIL en melanoma', slug: 'investigacion-inmunoterapia-til-melanoma' },
+              { title: 'TCR-T y VPH', slug: 'investigacion-inmunoterapia-tcr-vph' },
+              { title: 'Mama triple negativo', slug: 'investigacion-inmunoterapia-mama-triple-negativo' },
+            ],
+          },
         ],
       },
       { title: 'Banco de Sangre de Cordón Umbilical', slug: 'banco-publico-sangre-cordon-umbilical', icon: '👶' },
@@ -152,6 +160,9 @@ export const PUBLISHED_SITEMAP_SLUGS = new Set([
   'investigacion-ingenieria-tisular',
   'investigacion-innovacion-produccion',
   'investigacion-inmunoterapia',
+  'investigacion-inmunoterapia-til-melanoma',
+  'investigacion-inmunoterapia-tcr-vph',
+  'investigacion-inmunoterapia-mama-triple-negativo',
   'investigacion-celulas-progenitoras-hematopoyeticas',
   'investigacion-medicina-transfusional',
   // Transparencia y gestión

@@ -2,13 +2,18 @@
 
 /**
  * Página de un proyecto del grupo de Neurociencias.
- * El bosquejo solo entrega el nombre de la línea: el desarrollo se publica en este espacio.
+ * El bosquejo entrega el nombre de la línea y el enfoque del grupo.
  */
 function investigacionNeurocienciasProyecto(array $project): array
 {
     $prefix = $project['prefix'];
     $title = $project['title'];
     $image = $project['image'];
+    $imageAlt = $project['imageAlt'] ?? $title;
+    $content = $title.' es un proyecto en desarrollo del grupo de Neurociencias de la Unidad de Terapias Avanzadas del IDCBIS.'
+        ."\n\nEl grupo de Neurociencias de la Unidad de Terapias Avanzadas del IDCBIS es un equipo multidisciplinario enfocado en descifrar los mecanismos del sistema nervioso y transformar ese conocimiento en soluciones terapéuticas de vanguardia."
+        ."\n\nCombinando rigurosidad científica y tecnología de punta, abordamos el estudio de las enfermedades neurológicas y la neuroregeneración a través de un enfoque traslacional integral que abarca tres niveles estratégicos: estudios in vitro, modelos in vivo (preclínicos) e investigación clínica."
+        ."\n\nEn la intersección entre la neurobiología, la bioingeniería y la medicina traslacional, desarrollamos proyectos estratégicos orientados a superar los límites actuales en la reparación neural y las terapias avanzadas.";
 
     return [
         [
@@ -24,7 +29,7 @@ function investigacionNeurocienciasProyecto(array $project): array
                     'overlay' => 'linear-gradient(90deg, rgba(0, 60, 95, 0.92) 0%, rgba(0, 86, 116, 0.78) 55%, rgba(0, 60, 95, 0.4) 100%)',
                     'buttonUrl' => '#desarrollo',
                     'buttonText' => 'Leer el desarrollo',
-                    'description' => 'Proyecto en desarrollo del grupo de Neurociencias, Unidad de Terapias Avanzadas.',
+                    'description' => $title.' es un proyecto en desarrollo del grupo de Neurociencias, Unidad de Terapias Avanzadas.',
                 ],
             ],
             'content' => null,
@@ -41,38 +46,17 @@ function investigacionNeurocienciasProyecto(array $project): array
             'showIndicators' => false,
         ],
         [
-            'id' => 'desarrollo',
+            'id' => $prefix.'_desarrollo',
+            'type' => 'idcbis-about',
+            'variant' => 'clean',
             'anchorId' => 'desarrollo',
-            'gap' => '20px',
-            'type' => 'container',
-            'border' => 'none',
-            'display' => 'flex',
-            'padding' => '5rem 1.5rem',
-            'children' => [
-                [
-                    'id' => $prefix.'_h',
-                    'type' => 'heading',
-                    'level' => 'h2',
-                    'content' => $title,
-                    'variant' => 'section',
-                ],
-                [
-                    'id' => $prefix.'_p',
-                    'type' => 'text',
-                    'color' => '#1a1a1a',
-                    'content' => 'Línea del grupo de Neurociencias de la Unidad de Terapias Avanzadas del IDCBIS. El bosquejo nombra este proyecto; su desarrollo se carga en este espacio.',
-                    'fontSize' => '1.35rem',
-                    'lineHeight' => '1.7',
-                    'textAlign' => 'center',
-                ],
-            ],
-            'maxWidth' => '820px',
-            'minHeight' => 'auto',
-            'fullBleed' => false,
-            'flexDirection' => 'column',
-            'alignItems' => 'stretch',
-            'borderRadius' => '0px',
-            'backgroundColor' => '#ffffff',
+            'fullBleed' => true,
+            'blockLabel' => 'Desarrollo',
+            'title' => $title,
+            'contentSize' => '1.2rem',
+            'image' => $image,
+            'imageAlt' => $imageAlt,
+            'content' => $content,
         ],
         [
             'id' => $prefix.'_cta',

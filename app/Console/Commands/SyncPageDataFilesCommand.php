@@ -128,6 +128,18 @@ class SyncPageDataFilesCommand extends Command
             'source' => 'Entrada de Inmunoterapia, Unidad de Terapias Avanzadas',
             'monolith' => false,
         ],
+        'investigacion-inmunoterapia-til-melanoma' => [
+            'source' => 'Proyecto TIL en melanoma, Inmunoterapias',
+            'monolith' => false,
+        ],
+        'investigacion-inmunoterapia-tcr-vph' => [
+            'source' => 'Proyecto TCR-T y VPH, Inmunoterapias',
+            'monolith' => false,
+        ],
+        'investigacion-inmunoterapia-mama-triple-negativo' => [
+            'source' => 'Proyecto Mama triple negativo, Inmunoterapias',
+            'monolith' => false,
+        ],
         'banco-publico-sangre-cordon-umbilical' => [
             'source' => 'https://idcbis.org.co/banco-de-sangre-cordon-umbilical/',
             'monolith' => false,

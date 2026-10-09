@@ -99,6 +99,9 @@ class InvestigacionPagesTest extends TestCase
             'investigacion-ingenieria-tisular',
             'investigacion-innovacion-produccion',
             'investigacion-inmunoterapia',
+            'investigacion-inmunoterapia-til-melanoma',
+            'investigacion-inmunoterapia-tcr-vph',
+            'investigacion-inmunoterapia-mama-triple-negativo',
         ] as $slug) {
             $meta = require database_path("data/{$slug}-meta.php");
             $this->assertLessThanOrEqual(160, mb_strlen($meta['meta_description'] ?? ''), $slug);
@@ -132,8 +135,43 @@ class InvestigacionPagesTest extends TestCase
             'investigacion-ingenieria-tisular',
             'investigacion-innovacion-produccion',
             'investigacion-inmunoterapia',
+            'investigacion-inmunoterapia-til-melanoma',
+            'investigacion-inmunoterapia-tcr-vph',
+            'investigacion-inmunoterapia-mama-triple-negativo',
         ] as $slug) {
             $this->assertDatabaseHas('pages', ['slug' => $slug, 'status' => 'published']);
         }
+    }
+
+    /** @test */
+    public function inmunoterapia_projects_open_their_own_pages()
+    {
+        $hub = require database_path('data/investigacion-inmunoterapia-content.php');
+
+        $this->assertNotContains('accordion', array_column($hub, 'type'));
+
+        $cards = collect($hub)->firstWhere('id', 'inm_proyectos')['cards'] ?? [];
+        $this->assertCount(3, $cards);
+
+        foreach ($cards as $card) {
+            $this->assertSame('_blank', $card['target'] ?? null);
+            $slug = ltrim($card['url'] ?? '', '/');
+            $project = require database_path("data/{$slug}-content.php");
+            $this->assertSame('carousel', $project[0]['type'] ?? null);
+            $this->assertSame($card['title'], $project[0]['slides'][0]['title'] ?? null, $slug);
+            $this->assertSame('idcbis-about', $project[1]['type'] ?? null);
+            $this->assertSame('cta-banner', $project[array_key_last($project)]['type'] ?? null);
+            $this->assertNotSame('', trim($project[1]['content'] ?? ''));
+        }
+
+        $til = require database_path('data/investigacion-inmunoterapia-til-melanoma-content.php');
+        $this->assertStringContainsString('linfocitos infiltrantes de tumor', $til[1]['content']);
+
+        $tcr = require database_path('data/investigacion-inmunoterapia-tcr-vph-content.php');
+        $this->assertStringContainsString('oncoproteínas E6 y E7', $tcr[1]['content']);
+
+        $cmtn = require database_path('data/investigacion-inmunoterapia-mama-triple-negativo-content.php');
+        $this->assertStringContainsString('cáncer de mama triple negativo', $cmtn[1]['content']);
+        $this->assertSame('icmt_figuras', collect($cmtn)->firstWhere('type', 'idcbis-services')['id'] ?? null);
     }
 }

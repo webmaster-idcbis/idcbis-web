@@ -23,6 +23,8 @@
           v-for="(card, index) in cards"
           :key="card.id || index"
           :href="preview ? (card.url || '#') : undefined"
+          :target="cardTarget(card)"
+          :rel="cardTarget(card) === '_blank' ? 'noopener noreferrer' : undefined"
           class="service-card"
           :class="partClasses(cardAnchor(card, index))"
           :style="{ backgroundColor: card.bgColor || cardBgs[index % cardBgs.length] }"
@@ -49,6 +51,7 @@
           </div>
           <div class="service-card__content">
             <h3 :id="cardTitleId(card, index)">{{ card.title }}</h3>
+            <span v-if="cardTarget(card) === '_blank'" class="sr-only">Se abre en una nueva ventana.</span>
             <p v-if="card.description">{{ card.description }}</p>
             <span v-if="card.tag" class="service-card__tag">{{ card.tag }}</span>
           </div>
@@ -80,6 +83,8 @@ const cards = computed(() => props.element.cards || [])
 const cardAnchor = (card, index) => buildServiceCardFocusAnchor(card.id || `index-${index}`)
 
 const cardTitleId = (card, index) => `service-card-title-${card.id || index}`
+
+const cardTarget = (card) => (props.preview && card.target === '_blank' ? '_blank' : undefined)
 
 const cardSrcSet = (src) => buildSrcSet(src, CARD_WIDTHS)
 

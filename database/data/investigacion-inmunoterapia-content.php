@@ -3,7 +3,7 @@
 /**
  * /investigacion-inmunoterapia
  * Contenido del documento del grupo (02/10/2026).
- * Los bloques marcados como pendientes conservan el espacio del archivo.
+ * Cada proyecto de cáncer abre su propia página, con la misma estructura de Neurociencias.
  */
 
 $imagen = '/img/inmunoterapia/espacio.svg';
@@ -80,12 +80,12 @@ return [
                 'linkText' => 'Ir a modelos',
             ],
             [
-                'id' => 'inm_nav_figuras',
+                'id' => 'inm_nav_proyectos',
                 'icon' => 'briefcase',
-                'title' => 'Figuras',
-                'description' => 'Espacios listos para las láminas del documento.',
-                'url' => '#figuras',
-                'linkText' => 'Ver los espacios',
+                'title' => 'Proyectos',
+                'description' => 'TIL, TCR-T y mama triple negativo. Cada uno abre su página.',
+                'url' => '#proyectos',
+                'linkText' => 'Ver los proyectos',
             ],
             [
                 'id' => 'inm_nav_enlaces',
@@ -197,7 +197,7 @@ return [
         'blockLabel' => 'Proyectos de cáncer',
         'sectionTitle' => 'Tres proyectos',
         'sectionHighlight' => 'en cáncer',
-        'sectionSubtitle' => 'Pase a la ficha y ábrala para leer el desarrollo. El recuadro superior espera la imagen de cada proyecto.',
+        'sectionSubtitle' => 'Elija un proyecto. Su información se abre en una nueva ventana.',
         'cards' => [
             [
                 'id' => 'inm_card_til',
@@ -205,8 +205,9 @@ return [
                 'description' => 'Linfocitos infiltrantes de tumor para melanoma avanzado.',
                 'image' => '',
                 'imageAlt' => 'Espacio reservado para la imagen del proyecto TIL en melanoma.',
-                'tag' => 'Abrir ficha',
-                'url' => '#faq-q-inm_til',
+                'tag' => '',
+                'target' => '_blank',
+                'url' => '/investigacion-inmunoterapia-til-melanoma',
                 'bgColor' => '#ffffff',
             ],
             [
@@ -215,8 +216,9 @@ return [
                 'description' => 'Receptor de célula T modificado para cáncer asociado al virus del papiloma humano.',
                 'image' => '',
                 'imageAlt' => 'Espacio reservado para la imagen del proyecto TCR-T.',
-                'tag' => 'Abrir ficha',
-                'url' => '#faq-q-inm_tcr',
+                'tag' => '',
+                'target' => '_blank',
+                'url' => '/investigacion-inmunoterapia-tcr-vph',
                 'bgColor' => '#ffffff',
             ],
             [
@@ -225,86 +227,9 @@ return [
                 'description' => 'Caracterización de linfocitos T para una inmunoterapia personalizada.',
                 'image' => '',
                 'imageAlt' => 'Espacio reservado para la imagen del proyecto de cáncer de mama triple negativo.',
-                'tag' => 'Abrir ficha',
-                'url' => '#faq-q-inm_cmtn',
-                'bgColor' => '#ffffff',
-            ],
-        ],
-    ],
-    [
-        'id' => 'inm_fichas',
-        'type' => 'accordion',
-        'title' => 'Desarrollo de cada proyecto',
-        'subtitle' => 'Abra una ficha. El texto ya entregado está aquí; la figura se muestra en el espacio de imagen.',
-        'items' => [
-            [
-                'id' => 'inm_til',
-                'question' => 'TIL para el tratamiento de melanoma avanzado',
-                'image' => $imagen,
-                'imageAlt' => 'Espacio reservado para las figuras de la terapia TIL en melanoma. La lámina del documento solo trae el título.',
-                'answer' => "La terapia con linfocitos infiltrantes de tumor (TIL) parte de que el sistema inmunitario del paciente ya ha reconocido el tumor, pero su capacidad efectora está suprimida y metabólicamente agotada por el microambiente tumoral. La estrategia rescata el infiltrado linfocitario nativo poliespecífico desde el tejido neoplásico primario o metastásico. Al liberar estas células de las señales inhibitorias, expandirlas ex vivo y reintroducirlas, se restaura la capacidad citotóxica policlonal para atacar varios neoantígenos a la vez.\n\nEl grupo implementa este enfoque a partir de resecciones y biopsias de pacientes con melanoma maligno. El proceso incluye la disgregación del tejido, cultivos primarios en fase pre-REP con altas dosis de IL-2 y un protocolo de rápida expansión (REP) en configuración masiva (bulk), con anticuerpos anti-CD3 (OKT3) y células alimentadoras irradiadas.\n\nLa estandarización de la manipulación de muestras primarias, el cultivo y la validación de la actividad citotóxica sirven de base para las líneas de redirección de antígeno, edición génica e ingeniería de TCR-T.\n\nLa lámina de figuras de este proyecto está pendiente.",
-            ],
-            [
-                'id' => 'inm_tcr',
-                'question' => 'TCR-T para cáncer asociado al VPH',
-                'image' => $imagen,
-                'imageAlt' => 'Espacio reservado para las figuras de TCR-T. La lámina correspondiente del documento está vacía.',
-                'answer' => "La inmunoterapia con receptores de células T modificados (TCR-T) redirige la especificidad citotóxica frente a dianas tumorales intracelulares. Aprovecha la presentación de antígenos en el complejo mayor de histocompatibilidad (MHC) para que los linfocitos modificados reconozcan células que expresan oncoproteínas virales.\n\nEl grupo demuestra la viabilidad de este principio con linfocitos infiltrantes de tumor específicos contra el VPH en cáncer de cuello uterino de pacientes colombianas. En co-cultivo de TIL pre-REP con líneas de células B inmortalizadas (LCL) autólogas, pulsadas con péptidos virales, identificó reactividad contra las oncoproteínas E6 y E7, medida por CD137 e IFN-γ. El mapeo por citometría de flujo mostró enriquecimiento de subpoblaciones efectoras residentes (CD8⁺, CD39⁺, CD103⁺).\n\nEl aislamiento de secuencias de TCR desde esas subpoblaciones (SMART-seq) y su validación preclínica marcan la primera estrategia de este tipo en esta población. La plataforma permite escalar hacia modelos in vivo y la futura traslación clínica.\n\nInformación pendiente: la lámina de figuras de esta línea llegó vacía. El espacio de arriba queda listo para esa imagen.",
-            ],
-            [
-                'id' => 'inm_cmtn',
-                'question' => 'Linfocitos T en cáncer de mama triple negativo',
-                'image' => $imagen,
-                'imageAlt' => 'Espacio reservado para una figura de cáncer de mama triple negativo.',
-                'answer' => "El cáncer de mama triple negativo (CMTN) es uno de los subtipos más difíciles de tratar por la ausencia de las dianas habituales de otros cánceres de mama. Muchas pacientes tienen una respuesta incompleta o recaen. La inmunoterapia con linfocitos infiltrantes de tumor busca usar la capacidad del sistema inmunitario para reconocer y atacar las células tumorales.\n\nEn este proyecto se estudia la respuesta de los TIL frente a neoantígenos generados por alteraciones genéticas propias de cada tumor. A partir de muestras de pacientes se identifican TIL que respondan a neoantígenos específicos, con información genómica y transcriptómica del tumor. La caracterización de célula individual permite ver las poblaciones que participan en el reconocimiento.\n\nDe forma complementaria se desarrolló un flujo para aislar, expandir y caracterizar los TIL: poblaciones de linfocitos T y sus estados de diferenciación, activación y regulación. Así se puede ver cómo la expansión cambia la composición de los TIL y si hay diferencias asociadas a las características clínicas.\n\nLa integración de estas aproximaciones busca conocimiento sobre la respuesta inmunitaria frente al CMTN y una plataforma para identificar TIL con actividad antitumoral de cada paciente.\n\nEl documento reserva tres láminas para esta línea. Esos espacios están en la sección siguiente.",
-            ],
-        ],
-        'fullBleed' => true,
-        'blockLabel' => 'Fichas',
-        'padding' => '5rem 1.5rem',
-        'margin' => '0',
-        'maxWidth' => '980px',
-        'borderRadius' => '0px',
-        'backgroundColor' => '#eceff1',
-    ],
-    [
-        'id' => 'inm_figuras',
-        'type' => 'idcbis-services',
-        'sectionAnchor' => 'figuras',
-        'fullBleed' => true,
-        'blockLabel' => 'Figuras pendientes',
-        'sectionTitle' => 'Láminas de',
-        'sectionHighlight' => 'mama triple negativo',
-        'sectionSubtitle' => 'El documento trae tres diapositivas solo con el título. Cada recuadro espera su imagen.',
-        'cards' => [
-            [
-                'id' => 'inm_fig_1',
-                'title' => 'Lámina 1',
-                'description' => 'Espacio reservado. Información pendiente.',
-                'image' => '',
-                'imageAlt' => 'Espacio reservado para la primera lámina de cáncer de mama triple negativo.',
-                'tag' => 'Imagen pendiente',
-                'url' => '#figuras',
-                'bgColor' => '#ffffff',
-            ],
-            [
-                'id' => 'inm_fig_2',
-                'title' => 'Lámina 2',
-                'description' => 'Espacio reservado. Información pendiente.',
-                'image' => '',
-                'imageAlt' => 'Espacio reservado para la segunda lámina de cáncer de mama triple negativo.',
-                'tag' => 'Imagen pendiente',
-                'url' => '#figuras',
-                'bgColor' => '#ffffff',
-            ],
-            [
-                'id' => 'inm_fig_3',
-                'title' => 'Lámina 3',
-                'description' => 'Espacio reservado. Información pendiente.',
-                'image' => '',
-                'imageAlt' => 'Espacio reservado para la tercera lámina de cáncer de mama triple negativo.',
-                'tag' => 'Imagen pendiente',
-                'url' => '#figuras',
+                'tag' => '',
+                'target' => '_blank',
+                'url' => '/investigacion-inmunoterapia-mama-triple-negativo',
                 'bgColor' => '#ffffff',
             ],
         ],
