@@ -38,6 +38,8 @@ import IdcbisQuienesSomosElement from '../components/elements/idcbis/IdcbisQuien
 import IdcbisDocumentsPageElement from '../components/elements/idcbis/IdcbisDocumentsPageElement.vue'
 import IdcbisDocumentsListElement from '../components/elements/idcbis/IdcbisDocumentsListElement.vue'
 import IdcbisTeamGridElement from '../components/elements/idcbis/IdcbisTeamGridElement.vue'
+import IdcbisExpandingCardsElement from '../components/elements/idcbis/IdcbisExpandingCardsElement.vue'
+import IdcbisAnchorNavElement from '../components/elements/idcbis/IdcbisAnchorNavElement.vue'
 import IdcbisNewsListElement from '../components/elements/idcbis/IdcbisNewsListElement.vue'
 import IdcbisNewsCarouselElement from '../components/elements/idcbis/IdcbisNewsCarouselElement.vue'
 import IdcbisNewsPressElement from '../components/elements/idcbis/IdcbisNewsPressElement.vue'
@@ -89,6 +91,8 @@ const elementComponents = {
   'idcbis-documents-page': markRaw(IdcbisDocumentsPageElement),
   'idcbis-documents-list': markRaw(IdcbisDocumentsListElement),
   'idcbis-team-grid': markRaw(IdcbisTeamGridElement),
+  'idcbis-expanding-cards': markRaw(IdcbisExpandingCardsElement),
+  'idcbis-anchor-nav': markRaw(IdcbisAnchorNavElement),
   'idcbis-news-list': markRaw(IdcbisNewsListElement),
   'idcbis-news-carousel': markRaw(IdcbisNewsCarouselElement),
   'idcbis-news-press': markRaw(IdcbisNewsPressElement),
@@ -121,6 +125,8 @@ const IDCBIS_BLOCK_TYPES = [
   'idcbis-documents-page',
   'idcbis-documents-list',
   'idcbis-team-grid',
+  'idcbis-expanding-cards',
+  'idcbis-anchor-nav',
   'idcbis-news-list',
   'idcbis-news-carousel',
   'idcbis-news-press',

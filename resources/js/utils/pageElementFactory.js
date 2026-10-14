@@ -507,6 +507,28 @@ export const createElement = (type) => {
         ],
         items: [],
       }
+    case 'idcbis-expanding-cards':
+      return {
+        ...baseElement,
+        fullBleed: true,
+        anchorId: 'lineas',
+        sectionTitle: 'Líneas de investigación',
+        sectionSubtitle: 'En pantalla grande, la tarjeta activa se amplía y muestra su descripción.',
+        visibleCount: 4,
+        cards: [
+          { id: generateId(), title: 'Línea', description: 'Descripción breve de la línea.', url: '#', linkText: 'Abrir la línea', kicker: 'Línea', image: '' },
+        ],
+      }
+    case 'idcbis-anchor-nav':
+      return {
+        ...baseElement,
+        fullBleed: true,
+        label: 'Secciones de la página',
+        backLabel: 'Volver arriba',
+        links: [
+          { id: generateId(), label: 'Presentación', url: '#presentacion' },
+        ],
+      }
     case 'idcbis-team-grid':
       return {
         ...baseElement,

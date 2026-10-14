@@ -97,6 +97,20 @@ class InvestigacionPagesTest extends TestCase
             'investigacion-neurociencias-isquemia-cerebral',
             'investigacion-neurociencias-injerto-nervioso-acelular',
             'investigacion-ingenieria-tisular',
+            'investigacion-ingenieria-tisular-hueso',
+            'investigacion-ingenieria-tisular-piel',
+            'investigacion-ingenieria-tisular-cartilago',
+            'investigacion-ingenieria-tisular-otras',
+            'investigacion-ingenieria-tisular-3d-quyne',
+            'investigacion-ingenieria-tisular-matriacel',
+            'investigacion-ingenieria-tisular-pcem-tgpiel',
+            'investigacion-ingenieria-tisular-fibroglic',
+            'investigacion-ingenieria-tisular-hyalovite',
+            'investigacion-ingenieria-tisular-dispositivos-osteocondrales',
+            'investigacion-ingenieria-tisular-pcl-pva',
+            'investigacion-ingenieria-tisular-vesiculas-extracelulares',
+            'investigacion-ingenieria-tisular-progenitores-hematopoyeticos',
+            'investigacion-ingenieria-tisular-tejido-vascular',
             'investigacion-innovacion-produccion',
             'investigacion-inmunoterapia',
             'investigacion-inmunoterapia-til-melanoma',
@@ -118,6 +132,7 @@ class InvestigacionPagesTest extends TestCase
         $this->seed(\Database\Seeders\InvestigacionMedicinaTransfusionalPageSeeder::class);
         $this->seed(\Database\Seeders\InvestigacionTerapiasAvanzadasPageSeeder::class);
         $this->seed(\Database\Seeders\InvestigacionNeurocienciasPageSeeder::class);
+        $this->seed(\Database\Seeders\InvestigacionIngenieriaTisularPageSeeder::class);
 
         foreach ([
             'investigacion',
@@ -133,6 +148,20 @@ class InvestigacionPagesTest extends TestCase
             'investigacion-neurociencias-isquemia-cerebral',
             'investigacion-neurociencias-injerto-nervioso-acelular',
             'investigacion-ingenieria-tisular',
+            'investigacion-ingenieria-tisular-hueso',
+            'investigacion-ingenieria-tisular-piel',
+            'investigacion-ingenieria-tisular-cartilago',
+            'investigacion-ingenieria-tisular-otras',
+            'investigacion-ingenieria-tisular-3d-quyne',
+            'investigacion-ingenieria-tisular-matriacel',
+            'investigacion-ingenieria-tisular-pcem-tgpiel',
+            'investigacion-ingenieria-tisular-fibroglic',
+            'investigacion-ingenieria-tisular-hyalovite',
+            'investigacion-ingenieria-tisular-dispositivos-osteocondrales',
+            'investigacion-ingenieria-tisular-pcl-pva',
+            'investigacion-ingenieria-tisular-vesiculas-extracelulares',
+            'investigacion-ingenieria-tisular-progenitores-hematopoyeticos',
+            'investigacion-ingenieria-tisular-tejido-vascular',
             'investigacion-innovacion-produccion',
             'investigacion-inmunoterapia',
             'investigacion-inmunoterapia-til-melanoma',
@@ -173,5 +202,54 @@ class InvestigacionPagesTest extends TestCase
         $cmtn = require database_path('data/investigacion-inmunoterapia-mama-triple-negativo-content.php');
         $this->assertStringContainsString('cáncer de mama triple negativo', $cmtn[1]['content']);
         $this->assertSame('icmt_figuras', collect($cmtn)->firstWhere('type', 'idcbis-services')['id'] ?? null);
+    }
+
+    /** @test */
+    public function ingenieria_tisular_opens_lines_and_project_pages()
+    {
+        $hub = require database_path('data/investigacion-ingenieria-tisular-content.php');
+
+        $this->assertSame('carousel', $hub[0]['type'] ?? null);
+        $this->assertSame('Ingeniería de tejidos', $hub[0]['slides'][0]['title'] ?? null);
+
+        $rail = collect($hub)->firstWhere('id', 'it_lineas');
+        $this->assertSame('idcbis-expanding-cards', $rail['type'] ?? null);
+        $this->assertCount(6, $rail['cards'] ?? []);
+        $this->assertSame(4, $rail['visibleCount'] ?? null);
+
+        $team = collect($hub)->firstWhere('id', 'it_equipo');
+        $this->assertCount(7, $team['members'] ?? []);
+        $this->assertSame('Ingrid Silva', $team['members'][0]['name'] ?? null);
+
+        $awards = collect($hub)->firstWhere('id', 'it_reconocimientos');
+        $this->assertCount(6, $awards['items'] ?? []);
+
+        $lines = [
+            'investigacion-ingenieria-tisular-hueso' => 'Hueso',
+            'investigacion-ingenieria-tisular-piel' => 'Piel',
+            'investigacion-ingenieria-tisular-cartilago' => 'Cartílago',
+            'investigacion-ingenieria-tisular-otras' => 'Otras líneas de investigación',
+        ];
+
+        foreach ($lines as $slug => $title) {
+            $line = require database_path("data/{$slug}-content.php");
+            $this->assertSame($title, $line[0]['slides'][0]['title'] ?? null, $slug);
+            $cards = collect($line)->firstWhere('type', 'idcbis-services')['cards'] ?? [];
+            $this->assertNotEmpty($cards, $slug);
+
+            foreach ($cards as $card) {
+                $projectSlug = ltrim($card['url'] ?? '', '/');
+                $project = require database_path("data/{$projectSlug}-content.php");
+                $this->assertSame('carousel', $project[0]['type'] ?? null, $projectSlug);
+                $this->assertSame($card['title'], $project[0]['slides'][0]['title'] ?? null, $projectSlug);
+                $this->assertSame('cta-banner', $project[array_key_last($project)]['type'] ?? null, $projectSlug);
+                $this->assertNotSame('', trim(collect($project)->firstWhere('type', 'idcbis-about')['content'] ?? ''));
+            }
+        }
+
+        $quyne = require database_path('data/investigacion-ingenieria-tisular-3d-quyne-content.php');
+        $this->assertSame('idcbis-anchor-nav', $quyne[1]['type'] ?? null);
+        $this->assertCount(5, $quyne[1]['links'] ?? []);
+        $this->assertStringContainsString('canal medular', collect($quyne)->firstWhere('anchorId', 'presentacion')['content'] ?? '');
     }
 }

@@ -93,6 +93,8 @@ import IdcbisQuienesSomosContentProperties from './properties/IdcbisQuienesSomos
 import IdcbisDocumentsPageContentProperties from './properties/IdcbisDocumentsPageContentProperties.vue'
 import IdcbisDocumentsListContentProperties from './properties/IdcbisDocumentsListContentProperties.vue'
 import IdcbisTeamGridContentProperties from './properties/IdcbisTeamGridContentProperties.vue'
+import IdcbisExpandingCardsContentProperties from './properties/IdcbisExpandingCardsContentProperties.vue'
+import IdcbisAnchorNavContentProperties from './properties/IdcbisAnchorNavContentProperties.vue'
 import IdcbisNewsListContentProperties from './properties/IdcbisNewsListContentProperties.vue'
 import IdcbisNewsCarouselContentProperties from './properties/IdcbisNewsCarouselContentProperties.vue'
 import IdcbisTissueCatalogContentProperties from './properties/IdcbisTissueCatalogContentProperties.vue'
@@ -152,6 +154,8 @@ const panels = {
   'idcbis-documents-page': IdcbisDocumentsPageContentProperties,
   'idcbis-documents-list': IdcbisDocumentsListContentProperties,
   'idcbis-team-grid': IdcbisTeamGridContentProperties,
+  'idcbis-expanding-cards': IdcbisExpandingCardsContentProperties,
+  'idcbis-anchor-nav': IdcbisAnchorNavContentProperties,
   'idcbis-news-list': IdcbisNewsListContentProperties,
   'idcbis-news-carousel': IdcbisNewsCarouselContentProperties,
   'idcbis-tissue-catalog': IdcbisTissueCatalogContentProperties,

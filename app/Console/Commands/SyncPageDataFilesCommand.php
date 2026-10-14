@@ -120,6 +120,62 @@ class SyncPageDataFilesCommand extends Command
             'source' => 'Entrada de Ingeniería tisular, Unidad de Terapias Avanzadas',
             'monolith' => false,
         ],
+        'investigacion-ingenieria-tisular-hueso' => [
+            'source' => 'Línea de hueso, Ingeniería tisular',
+            'monolith' => false,
+        ],
+        'investigacion-ingenieria-tisular-piel' => [
+            'source' => 'Línea de piel, Ingeniería tisular',
+            'monolith' => false,
+        ],
+        'investigacion-ingenieria-tisular-cartilago' => [
+            'source' => 'Línea de cartílago, Ingeniería tisular',
+            'monolith' => false,
+        ],
+        'investigacion-ingenieria-tisular-otras' => [
+            'source' => 'Otras líneas, Ingeniería tisular',
+            'monolith' => false,
+        ],
+        'investigacion-ingenieria-tisular-3d-quyne' => [
+            'source' => 'Proyecto 3D QUYNE, Ingeniería tisular',
+            'monolith' => false,
+        ],
+        'investigacion-ingenieria-tisular-matriacel' => [
+            'source' => 'Proyecto MatriAcel, Ingeniería tisular',
+            'monolith' => false,
+        ],
+        'investigacion-ingenieria-tisular-pcem-tgpiel' => [
+            'source' => 'Proyecto PCEM-TGPiel, Ingeniería tisular',
+            'monolith' => false,
+        ],
+        'investigacion-ingenieria-tisular-fibroglic' => [
+            'source' => 'Proyecto Fibroglic, Ingeniería tisular',
+            'monolith' => false,
+        ],
+        'investigacion-ingenieria-tisular-hyalovite' => [
+            'source' => 'Proyecto Hyalovite, Ingeniería tisular',
+            'monolith' => false,
+        ],
+        'investigacion-ingenieria-tisular-dispositivos-osteocondrales' => [
+            'source' => 'Proyecto dispositivos osteocondrales, Ingeniería tisular',
+            'monolith' => false,
+        ],
+        'investigacion-ingenieria-tisular-pcl-pva' => [
+            'source' => 'Proyecto PCL con hidrogel de PVA/LP, Ingeniería tisular',
+            'monolith' => false,
+        ],
+        'investigacion-ingenieria-tisular-vesiculas-extracelulares' => [
+            'source' => 'Proyecto vesículas extracelulares, Ingeniería tisular',
+            'monolith' => false,
+        ],
+        'investigacion-ingenieria-tisular-progenitores-hematopoyeticos' => [
+            'source' => 'Proyecto progenitores hematopoyéticos, Ingeniería tisular',
+            'monolith' => false,
+        ],
+        'investigacion-ingenieria-tisular-tejido-vascular' => [
+            'source' => 'Proyecto tejido vascular, Ingeniería tisular',
+            'monolith' => false,
+        ],
         'investigacion-innovacion-produccion' => [
             'source' => 'Entrada de Innovación y producción, Unidad de Terapias Avanzadas',
             'monolith' => false,

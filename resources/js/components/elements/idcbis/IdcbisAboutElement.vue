@@ -3,6 +3,7 @@
     :id="element.anchorId || undefined"
     class="idcbis-about"
     :class="{ 'idcbis-about--clean': element.variant === 'clean' }"
+    :style="anchorStyle"
     @click.stop="$emit('click', element)"
   >
     <div class="idcbis-about__flex">
@@ -63,6 +64,10 @@ const { partClasses, focusPart } = useIdcbisEditorParts(props, emit)
 
 const bodyStyle = computed(() => (
   props.element.contentSize ? { fontSize: props.element.contentSize, lineHeight: '1.7' } : {}
+))
+
+const anchorStyle = computed(() => (
+  props.element.scrollMargin ? { scrollMarginTop: props.element.scrollMargin } : undefined
 ))
 
 const isLogoImage = computed(() => {

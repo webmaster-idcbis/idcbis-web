@@ -52,7 +52,46 @@ export const SITE_SITEMAP = [
               { title: 'Injerto nervioso acelular', slug: 'investigacion-neurociencias-injerto-nervioso-acelular' },
             ],
           },
-          { title: 'Ingeniería tisular', slug: 'investigacion-ingenieria-tisular' },
+          {
+            title: 'Ingeniería tisular',
+            slug: 'investigacion-ingenieria-tisular',
+            children: [
+              {
+                title: 'Hueso',
+                slug: 'investigacion-ingenieria-tisular-hueso',
+                children: [
+                  { title: '3D QUYNE', slug: 'investigacion-ingenieria-tisular-3d-quyne' },
+                ],
+              },
+              {
+                title: 'Piel',
+                slug: 'investigacion-ingenieria-tisular-piel',
+                children: [
+                  { title: 'MatriAcel', slug: 'investigacion-ingenieria-tisular-matriacel' },
+                  { title: 'PCEM-TGPiel', slug: 'investigacion-ingenieria-tisular-pcem-tgpiel' },
+                  { title: 'Fibroglic', slug: 'investigacion-ingenieria-tisular-fibroglic' },
+                  { title: 'Hyalovite', slug: 'investigacion-ingenieria-tisular-hyalovite' },
+                ],
+              },
+              {
+                title: 'Cartílago',
+                slug: 'investigacion-ingenieria-tisular-cartilago',
+                children: [
+                  { title: 'Dispositivos osteocondrales', slug: 'investigacion-ingenieria-tisular-dispositivos-osteocondrales' },
+                  { title: 'PCL con hidrogel de PVA/LP', slug: 'investigacion-ingenieria-tisular-pcl-pva' },
+                ],
+              },
+              {
+                title: 'Otras líneas de investigación',
+                slug: 'investigacion-ingenieria-tisular-otras',
+                children: [
+                  { title: 'Vesículas extracelulares', slug: 'investigacion-ingenieria-tisular-vesiculas-extracelulares' },
+                  { title: 'Progenitores hematopoyéticos', slug: 'investigacion-ingenieria-tisular-progenitores-hematopoyeticos' },
+                  { title: 'Tejido vascular', slug: 'investigacion-ingenieria-tisular-tejido-vascular' },
+                ],
+              },
+            ],
+          },
           { title: 'Innovación y producción', slug: 'investigacion-innovacion-produccion' },
           {
             title: 'Inmunoterapia',
@@ -158,6 +197,20 @@ export const PUBLISHED_SITEMAP_SLUGS = new Set([
   'investigacion-neurociencias-isquemia-cerebral',
   'investigacion-neurociencias-injerto-nervioso-acelular',
   'investigacion-ingenieria-tisular',
+  'investigacion-ingenieria-tisular-hueso',
+  'investigacion-ingenieria-tisular-piel',
+  'investigacion-ingenieria-tisular-cartilago',
+  'investigacion-ingenieria-tisular-otras',
+  'investigacion-ingenieria-tisular-3d-quyne',
+  'investigacion-ingenieria-tisular-matriacel',
+  'investigacion-ingenieria-tisular-pcem-tgpiel',
+  'investigacion-ingenieria-tisular-fibroglic',
+  'investigacion-ingenieria-tisular-hyalovite',
+  'investigacion-ingenieria-tisular-dispositivos-osteocondrales',
+  'investigacion-ingenieria-tisular-pcl-pva',
+  'investigacion-ingenieria-tisular-vesiculas-extracelulares',
+  'investigacion-ingenieria-tisular-progenitores-hematopoyeticos',
+  'investigacion-ingenieria-tisular-tejido-vascular',
   'investigacion-innovacion-produccion',
   'investigacion-inmunoterapia',
   'investigacion-inmunoterapia-til-melanoma',
