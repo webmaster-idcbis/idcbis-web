@@ -22,7 +22,7 @@
       <div class="news-article__body">
         <div class="news-article__container">
           <p v-if="post.excerpt" class="news-article__excerpt">{{ post.excerpt }}</p>
-          <div class="news-article__content" v-html="post.content" />
+          <div class="news-article__content" v-html="safeContent" />
         </div>
       </div>
 
@@ -49,6 +49,8 @@ import NewsRelatedCarousel from '../components/news/NewsRelatedCarousel.vue'
 import { usePostsStore } from '../stores/posts'
 import { scrollToTop } from '../utils/scrollToTop'
 import { useI18n } from '../i18n'
+import { sanitizeNewsHtml } from '../utils/sanitizeHtml'
+import { applyDocumentMeta } from '../composables/useDocumentMeta'
 
 const route = useRoute()
 const postsStore = usePostsStore()
@@ -57,6 +59,10 @@ const { t } = useI18n()
 const post = ref(null)
 const related = ref([])
 const loading = ref(true)
+
+const safeContent = computed(() => sanitizeNewsHtml(post.value?.content || ''))
+
+let loadRequest = 0
 
 const heroStyle = computed(() => {
   if (!post.value?.image) {
@@ -70,20 +76,35 @@ const heroStyle = computed(() => {
 })
 
 const loadArticle = async () => {
+  const requestId = ++loadRequest
+  const slug = route.params.slug
   loading.value = true
   post.value = null
   related.value = []
   scrollToTop()
 
   try {
-    const response = await postsStore.fetchPostBySlug(route.params.slug)
+    const response = await postsStore.fetchPostBySlug(slug)
+    if (requestId !== loadRequest || !response) return
     post.value = response.data
     related.value = response.related || []
-    document.title = `${post.value.metaTitle || post.value.title} | IDCBIS`
+    applyDocumentMeta({
+      title: post.value.metaTitle || post.value.title,
+      description: post.value.metaDescription || post.value.excerpt || '',
+      fallbackPath: `/noticias/${slug}`,
+    })
   } catch {
+    if (requestId !== loadRequest) return
     post.value = null
+    applyDocumentMeta({
+      title: 'Noticia no encontrada',
+      description: 'La noticia solicitada no está disponible.',
+      fallbackPath: '/noticias',
+    })
   } finally {
-    loading.value = false
+    if (requestId === loadRequest) {
+      loading.value = false
+    }
   }
 }
 

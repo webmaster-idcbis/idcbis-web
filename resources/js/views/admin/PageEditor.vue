@@ -418,7 +418,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, toRaw } from 'vue'
+import { ref, computed, onMounted, toRaw, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ArrowLeft, Save } from 'lucide-vue-next'
 
@@ -469,7 +469,9 @@ const pageForm = ref({
   metaKeywords: '',
   route: '',
   status: 'draft',
-  publishedAt: null
+  publishedAt: null,
+  noIndex: false,
+  sections: [],
 })
 
 // Computed
@@ -910,9 +912,9 @@ const savePage = async () => {
       meta_title: pageForm.value.metaTitle || null,
       meta_keywords: pageForm.value.metaKeywords || null,
       content: contentPayload,
-      sections: [],
+      sections: Array.isArray(pageForm.value.sections) ? pageForm.value.sections : [],
       status: pageForm.value.status || 'draft',
-      no_index: false,
+      no_index: pageForm.value.noIndex === true,
     }
 
     console.log('DATOS PARA API (content bytes):', sentFingerprint.length)
@@ -1057,7 +1059,9 @@ const loadPage = async () => {
           metaKeywords: pageData.meta_keywords || '',
           route: pageData.slug || '',
           status: pageData.status || 'draft',
-          publishedAt: pageData.published_at || null
+          publishedAt: pageData.published_at || null,
+          noIndex: pageData.no_index === true || pageData.no_index === 1 || pageData.no_index === '1',
+          sections: Array.isArray(pageData.sections) ? pageData.sections : [],
         }
 
         elements.value = normalizeLoadedElements(pageData.content || [])
@@ -1102,7 +1106,9 @@ const resetToDefaults = () => {
     metaKeywords: '',
     route: '',
     status: 'draft',
-    publishedAt: null
+    publishedAt: null,
+    noIndex: false,
+    sections: [],
   }
   elements.value = []
 }
@@ -1111,6 +1117,13 @@ const resetToDefaults = () => {
 onMounted(() => {
   fetchTemplates()
 })
+
+watch(() => route.params.id, (id, previous) => {
+  if (id !== previous) {
+    loadPage()
+  }
+})
+
 loadPage()
 </script>
 

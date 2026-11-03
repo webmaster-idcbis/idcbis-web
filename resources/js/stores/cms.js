@@ -7,6 +7,7 @@ export const useCmsStore = defineStore('cms', () => {
   const currentPage = ref(null);
   const components = ref([]);
   const loading = ref(false);
+  let pageRequest = 0;
 
   const availableComponents = computed(() => [
     {
@@ -104,16 +105,20 @@ export const useCmsStore = defineStore('cms', () => {
   };
 
   const fetchPageBySlug = async (slug) => {
+    const requestId = ++pageRequest;
     loading.value = true;
     try {
       const response = await axios.get(`/api/pages/slug/${slug}`, {
         params: { _t: Date.now() },
         headers: { 'Cache-Control': 'no-cache' },
       });
+      if (requestId !== pageRequest) return null;
       currentPage.value = response.data.data;
       return currentPage.value;
     } finally {
-      loading.value = false;
+      if (requestId === pageRequest) {
+        loading.value = false;
+      }
     }
   };
 

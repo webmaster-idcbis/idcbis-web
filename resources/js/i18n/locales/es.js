@@ -37,7 +37,7 @@ export default {
       blood: 'Banco Distrital de Sangre',
       tissues: 'Banco Distrital de Tejidos',
       therapies: 'Terapias avanzadas',
-      donors: 'Registro Nacional de donantes',
+      donors: 'Registro DarCélulas',
       wellness: 'Bienestar',
     },
     researchMenu: {

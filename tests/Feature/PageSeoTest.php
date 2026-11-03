@@ -18,6 +18,7 @@ class PageSeoTest extends TestCase
     {
         parent::setUp();
         $this->user = User::factory()->create();
+        $this->grantAdmin($this->user);
         $this->token = $this->user->createToken('test-token')->plainTextToken;
     }
 

@@ -44,6 +44,7 @@ import { useCmsStore } from '../stores/cms';
 import { scrollToTop } from '../utils/scrollToTop';
 import { useI18n } from '../i18n';
 import { localizePage } from '../utils/localizeContent';
+import { applyDocumentMeta } from '../composables/useDocumentMeta';
 import MainLayout from '../components/layout/MainLayout.vue';
 import PageContentRenderer from '../components/PageContentRenderer.vue';
 
@@ -74,6 +75,20 @@ const cmsStore = useCmsStore();
 const { t, locale } = useI18n();
 const loading = ref(true);
 const page = ref(null);
+let loadRequest = 0;
+
+const applyPageMeta = (loaded) => {
+  const localized = localizePage(loaded, locale.value);
+  const slug = localized?.slug || loaded?.slug || '';
+  const path = slug === 'inicio' ? '/' : `/${slug}`;
+  applyDocumentMeta({
+    title: localized?.meta_title || localized?.title || loaded?.title,
+    description: localized?.meta_description || loaded?.meta_description || '',
+    canonical: localized?.canonical_url || loaded?.canonical_url || path,
+    noIndex: Boolean(localized?.no_index ?? loaded?.no_index),
+    fallbackPath: path,
+  });
+};
 
 const sectionComponents = {
   hero: markRaw(HeroSection),
@@ -128,6 +143,7 @@ const pageTheme = computed(() => {
 })
 
 const loadPage = async () => {
+  const requestId = ++loadRequest;
   loading.value = true;
   page.value = null;
   if (!route.hash) {
@@ -136,10 +152,20 @@ const loadPage = async () => {
 
   const slug = route.params.slug || 'inicio';
   try {
-    page.value = await cmsStore.fetchPageBySlug(slug);
+    const loaded = await cmsStore.fetchPageBySlug(slug);
+    if (requestId !== loadRequest || !loaded) return;
+    page.value = loaded;
+    applyPageMeta(loaded);
   } catch (error) {
+    if (requestId !== loadRequest) return;
     page.value = null;
+    applyDocumentMeta({
+      title: t('common.pageNotFound'),
+      description: t('common.pageNotFoundHint'),
+      fallbackPath: '/',
+    });
   } finally {
+    if (requestId !== loadRequest) return;
     loading.value = false;
     await nextTick();
     if (route.hash) {
@@ -152,4 +178,7 @@ const loadPage = async () => {
 
 onMounted(loadPage);
 watch(() => route.path, loadPage);
+watch(locale, () => {
+  if (page.value) applyPageMeta(page.value);
+});
 </script>

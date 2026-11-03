@@ -75,8 +75,8 @@ class InicioPageTest extends TestCase
         $this->assertFalse($hero['showArrows']);
         $this->assertFalse($hero['showIndicators']);
         $this->assertCount(1, $hero['slides']);
-        $this->assertSame('Ciencia que', $hero['slides'][0]['titleLight']);
-        $this->assertSame('transforma vidas', $hero['slides'][0]['titleBold']);
+        $this->assertSame('Transformamos la salud de Colombia', $hero['slides'][0]['titleLight']);
+        $this->assertSame('desde el Distrito Capital', $hero['slides'][0]['titleBold']);
         $this->assertSame('Quiero donar sangre', $hero['slides'][0]['button1Text']);
         $this->assertSame('/banco-de-sangre', $hero['slides'][0]['button1Url']);
         $this->assertSame('Registrarme en DarCélulas', $hero['slides'][0]['button2Text']);

@@ -2,7 +2,7 @@
   <section
     class="idcbis-hero-carousel"
     :aria-roledescription="preview ? 'carrusel' : undefined"
-    aria-label="IDCBIS, ciencia que transforma vidas"
+    :aria-label="carouselLabel"
     @click.stop="$emit('click', element)"
     @mouseenter="isHovered = true"
     @mouseleave="isHovered = false"
@@ -273,6 +273,12 @@ const slideLabel = (slide, index) => {
   const title = [slide.titleLight, slide.titleBold].filter(Boolean).join(' ').trim()
   return title || `Slide ${index + 1}`
 }
+
+const carouselLabel = computed(() => {
+  const slide = slides.value[currentSlide.value]
+  const title = slide ? [slide.titleLight, slide.titleBold].filter(Boolean).join(' ').trim() : ''
+  return title ? `IDCBIS, ${title}` : 'IDCBIS'
+})
 
 const onSlideClick = (slide, index, event) => {
   goToSlide(index)

@@ -37,7 +37,7 @@ export default {
       blood: 'Donate blood',
       tissues: 'Tissues',
       therapies: 'Advanced therapies',
-      donors: 'Donor registry',
+      donors: 'DarCélulas registry',
       wellness: 'Wellness',
     },
     researchMenu: {

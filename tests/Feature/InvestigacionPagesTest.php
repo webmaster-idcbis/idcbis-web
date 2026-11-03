@@ -127,12 +127,7 @@ class InvestigacionPagesTest extends TestCase
     {
         \App\Models\User::factory()->create();
 
-        $this->seed(\Database\Seeders\InvestigacionPageSeeder::class);
-        $this->seed(\Database\Seeders\InvestigacionCelulasProgenitorasPageSeeder::class);
-        $this->seed(\Database\Seeders\InvestigacionMedicinaTransfusionalPageSeeder::class);
-        $this->seed(\Database\Seeders\InvestigacionTerapiasAvanzadasPageSeeder::class);
-        $this->seed(\Database\Seeders\InvestigacionNeurocienciasPageSeeder::class);
-        $this->seed(\Database\Seeders\InvestigacionIngenieriaTisularPageSeeder::class);
+        $this->artisan('page:create-investigacion')->assertSuccessful();
 
         foreach ([
             'investigacion',

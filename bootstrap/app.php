@@ -15,6 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(prepend: [
             \App\Http\Middleware\ParseJsonBody::class,
         ]);
+
+        $middleware->alias([
+            'permission' => \App\Http\Middleware\EnsureApiPermission::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

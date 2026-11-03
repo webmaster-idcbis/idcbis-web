@@ -251,8 +251,8 @@ const isLogoImage = computed(() => {
   aspect-ratio: 3 / 2;
   object-fit: cover;
   object-position: center;
-  border-radius: 0;
-  box-shadow: none;
+  border-radius: 40px 20px 40px 20px;
+  box-shadow: 0 20px 36px rgba(11, 79, 108, 0.16);
   background: transparent;
 }
 

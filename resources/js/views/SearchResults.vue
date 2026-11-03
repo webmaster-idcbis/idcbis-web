@@ -64,6 +64,7 @@ import { ref, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import MainLayout from '../components/layout/MainLayout.vue';
 import { useSearchStore } from '../stores/search';
+import { applyDocumentMeta } from '../composables/useDocumentMeta';
 
 const route = useRoute();
 const router = useRouter();
@@ -77,8 +78,21 @@ const loading = computed(() => searchStore.loading);
 const error = computed(() => searchStore.error);
 const lastQuery = computed(() => searchStore.lastQuery);
 
+const updateSearchMeta = (term) => {
+  const trimmed = (term || '').trim();
+  applyDocumentMeta({
+    title: trimmed ? `Buscar: ${trimmed}` : 'Buscar en IDCBIS',
+    description: trimmed
+      ? `Resultados de búsqueda para ${trimmed} en el sitio del IDCBIS.`
+      : 'Busca información en las páginas publicadas del IDCBIS.',
+    fallbackPath: trimmed ? `/buscar?q=${encodeURIComponent(trimmed)}` : '/buscar',
+    noIndex: true,
+  });
+};
+
 const performSearch = async () => {
   const trimmed = query.value.trim();
+  updateSearchMeta(trimmed);
 
   if (trimmed !== (route.query.q || '')) {
     await router.replace({ name: 'Search', query: trimmed ? { q: trimmed } : {} });
@@ -100,7 +114,9 @@ watch(
     query.value = typeof value === 'string' ? value : '';
     if (query.value.trim().length >= 2) {
       performSearch();
+      return;
     }
+    updateSearchMeta(query.value);
   },
   { immediate: true },
 );

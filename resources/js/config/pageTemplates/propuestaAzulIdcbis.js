@@ -38,13 +38,13 @@ export function buildPropuestaAzulPage() {
     slides: [
       createIdcbisHeroSlide({
         id: 'slide_inicio_home',
-        titleLight: 'Ciencia que',
-        titleBold: 'transforma vidas',
+        titleLight: 'Transformamos la salud de Colombia',
+        titleBold: 'desde el Distrito Capital',
         subtitle: 'En el IDCBIS convertimos ciencia, innovación y capacidades especializadas en soluciones para la salud y la vida de los colombianos.',
         button1Text: 'Quiero donar sangre',
         button1Url: HOME_SERVICES[0].href,
         button2Text: 'Registrarme en DarCélulas',
-        button2Url: HOME_SERVICES[4].href,
+        button2Url: HOME_SERVICES[3].href,
         button3Text: 'Conocer nuestros servicios',
         button3Url: '#servicios',
         image: '',
@@ -64,10 +64,10 @@ export function buildPropuestaAzulPage() {
     sectionHighlight: 'servicios',
     sectionSubtitle: 'Elige el que más se adapte a ti. Todos son importantes.',
     cards: [
-      { title: 'Banco Distrital de Sangre', description: 'Es rápida, segura y salva hasta 3 vidas. Necesitamos todos los grupos sanguíneos.', image: IMG.services[0], tag: '#DONARVIDA', url: HOME_SERVICES[0].href },
-      { title: 'Banco Distrital de Tejidos', description: 'Piel, huesos, córneas... Tu donación puede devolver la vista o la movilidad a alguien.', image: IMG.services[2], tag: '#REGALAVIDA', url: HOME_SERVICES[1].href },
-      { title: 'Terapias avanzadas', description: 'Tratamos enfermedades autoinmunes con células. Somos pioneros en Latinoamérica.', image: IMG.services[3], tag: '#INNOVACIÓN', url: HOME_SERVICES[2].href },
-      { title: 'Registro Nacional de donantes', description: '¿Tienes sangre rara? Tu tipo puede ser clave para alguien. Inscribite.', image: IMG.services[4], tag: '#SANGREUNICA', url: HOME_SERVICES[3].href },
+      { title: 'Banco Distrital de Sangre', description: 'En 15 minutos puedes ayudar a salvar hasta 3 vidas. La donación es segura y tu sangre se separa en componentes para varios pacientes.', image: IMG.services[0], tag: '#DONARVIDA', url: HOME_SERVICES[0].href },
+      { title: 'Banco Distrital de Tejidos', description: 'Primer banco multitejidos de Colombia. Seleccionamos, procesamos y suministramos tejidos humanos para trasplantes e implantes.', image: IMG.services[2], tag: '#REGALAVIDA', url: HOME_SERVICES[1].href },
+      { title: 'Terapias avanzadas', description: 'Investigamos y desarrollamos nuevas tecnologías en medicina regenerativa: terapia celular, terapia génica e ingeniería tisular.', image: IMG.services[3], tag: '#INNOVACIÓN', url: HOME_SERVICES[2].href },
+      { title: 'Registro DarCélulas', description: 'Primer y único registro nacional de donantes de células formadoras de la sangre. Inscríbete y dale a un paciente la oportunidad de un trasplante.', image: IMG.services[4], tag: '#DARCELULAS', url: HOME_SERVICES[3].href },
       { title: 'Bienestar', description: 'Charlas, hábitos, comunidad. Porque la salud también es prevenir.', image: IMG.services[5], tag: '#SENTIRSEBIEN', url: HOME_SERVICES[4].href },
     ].map((c, i) => ({ ...c, id: HOME_SERVICES[i]?.id || `card_${i}` })),
   })

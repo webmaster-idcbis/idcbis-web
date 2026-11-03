@@ -282,6 +282,7 @@
 import { ref, onMounted } from 'vue';
 import { useAuthStore } from '../../stores/auth';
 import { useMenusStore } from '../../stores/menus';
+import { useUiStore } from '../../stores/ui';
 import { 
   Plus, 
   Pencil, 
@@ -294,6 +295,7 @@ import {
 
 const authStore = useAuthStore();
 const menusStore = useMenusStore();
+const uiStore = useUiStore();
 
 const showModal = ref(false);
 const saving = ref(false);
@@ -385,6 +387,7 @@ const saveMenu = async () => {
   };
 
   saving.value = true;
+  const wasEditing = !!editingMenu.value;
   try {
     if (editingMenu.value) {
       await menusStore.updateMenu(editingMenu.value.id, data);
@@ -392,8 +395,13 @@ const saveMenu = async () => {
       await menusStore.createMenu(data);
     }
     closeModal();
+    uiStore.setFlash(wasEditing ? 'Menú actualizado.' : 'Menú creado.');
   } catch (err) {
-    console.error('Error al guardar menú:', err);
+    const errors = err.response?.data?.errors;
+    const message = errors
+      ? Object.values(errors).flat().join(' ')
+      : (err.response?.data?.message || 'No se pudo guardar el menú.');
+    uiStore.setFlash(message, 'error');
   } finally {
     saving.value = false;
   }

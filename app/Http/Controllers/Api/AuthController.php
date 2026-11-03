@@ -26,17 +26,17 @@ class AuthController extends Controller
             ]);
         }
 
+        if ($user->is_active === false) {
+            throw ValidationException::withMessages([
+                'email' => ['Esta cuenta está desactivada. Comunícate con el administrador.'],
+            ]);
+        }
+
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
             'token' => $token,
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'roles' => $user->getRoleNames(),
-                'permissions' => $user->getPermissionNames(),
-            ]
+            'user' => $this->authUserPayload($user),
         ]);
     }
 
@@ -53,12 +53,17 @@ class AuthController extends Controller
     {
         $user = $request->user();
 
-        return response()->json([
+        return response()->json($this->authUserPayload($user));
+    }
+
+    private function authUserPayload(User $user): array
+    {
+        return [
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'roles' => $user->getRoleNames(),
-            'permissions' => $user->getPermissionNames(),
-        ]);
+            'roles' => $user->getRoleNames()->values(),
+            'permissions' => $user->getAllPermissions()->pluck('name')->values(),
+        ];
     }
 }

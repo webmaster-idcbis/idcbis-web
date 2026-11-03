@@ -27,9 +27,8 @@ class AdminUserSeeder extends Seeder
         // Assign admin role
         $user->assignRole('admin');
 
-        $this->command->info('Usuario administrador creado exitosamente!');
+        $this->command->info('Usuario administrador creado exitosamente.');
         $this->command->info('Email: admin@idcbis.gov.co');
-        $this->command->info('Password: Admin123!');
         $this->command->info('Rol: admin asignado');
     }
 }

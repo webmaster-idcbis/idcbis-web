@@ -20,6 +20,7 @@
 <script setup>
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { mergeElementStyles } from '../../composables/useElementStyles'
+import { isAllowedExternalScript } from '../../utils/sanitizeHtml'
 
 const props = defineProps({
   element: { type: Object, required: true },
@@ -31,21 +32,20 @@ defineEmits(['click'])
 const root = ref(null)
 const hasContent = computed(() => !!(props.element.htmlCode || '').trim())
 
-// v-html inserta <script> sin ejecutarlo. En la página pública se vuelve a crear
-// para que widgets externos, como el bloque de Bogotá, sí arranquen.
+// v-html no ejecuta <script>. Solo se vuelve a crear el del portal de Bogotá.
 const activateScripts = async () => {
   if (!props.preview) return
   await nextTick()
   const host = root.value
   if (!host) return
   host.querySelectorAll('script').forEach((oldScript) => {
-    const script = document.createElement('script')
-    if (oldScript.src) {
-      script.src = oldScript.src
-      script.async = true
-    } else {
-      script.text = oldScript.textContent || ''
+    if (!isAllowedExternalScript(oldScript.src)) {
+      oldScript.remove()
+      return
     }
+    const script = document.createElement('script')
+    script.src = oldScript.src
+    script.async = true
     oldScript.replaceWith(script)
   })
 }

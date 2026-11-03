@@ -38,6 +38,18 @@ class RolesAndPermissionsSeeder extends Seeder
             'roles.create',
             'roles.edit',
             'roles.delete',
+
+            // Menus (solo admin, vía syncPermissions de todos los permisos)
+            'menus.view',
+            'menus.create',
+            'menus.edit',
+            'menus.delete',
+
+            // Permisos del catálogo (solo admin)
+            'permissions.view',
+            'permissions.create',
+            'permissions.edit',
+            'permissions.delete',
             
             // Settings
             'settings.view',
@@ -83,6 +95,6 @@ class RolesAndPermissionsSeeder extends Seeder
         $admin->assignRole('admin');
 
         $this->command->info('Roles y permisos creados exitosamente');
-        $this->command->info('Usuario admin: admin@idcbis.org.co / Admin123!');
+        $this->command->info('Usuario admin: admin@idcbis.org.co');
     }
 }

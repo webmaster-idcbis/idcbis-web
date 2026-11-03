@@ -7,6 +7,7 @@ export const usePostsStore = defineStore('posts', () => {
   const posts = ref([]);
   const currentPost = ref(null);
   const loading = ref(false);
+  let postRequest = 0;
   const pagination = ref({
     current_page: 1,
     last_page: 1,
@@ -51,13 +52,17 @@ export const usePostsStore = defineStore('posts', () => {
   };
 
   const fetchPostBySlug = async (slug) => {
+    const requestId = ++postRequest;
     loading.value = true;
     try {
       const response = await axios.get(`/api/posts/slug/${slug}`);
+      if (requestId !== postRequest) return null;
       currentPost.value = response.data.data;
       return response.data;
     } finally {
-      loading.value = false;
+      if (requestId === postRequest) {
+        loading.value = false;
+      }
     }
   };
 

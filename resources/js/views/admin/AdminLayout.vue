@@ -135,7 +135,7 @@
               </span>
             </router-link>
           </li>
-          <li>
+          <li v-if="authStore.hasPermission('menus.view')">
             <router-link 
               to="/admin/menus"
               class="flex items-center p-1.5 text-white rounded-lg hover:bg-white/10 group relative text-sm"

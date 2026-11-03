@@ -19,6 +19,7 @@ class MenuApiTest extends TestCase
     {
         parent::setUp();
         $this->user = User::factory()->create();
+        $this->grantAdmin($this->user);
         $this->token = $this->user->createToken('test-token')->plainTextToken;
     }
 
@@ -80,6 +81,9 @@ class MenuApiTest extends TestCase
             'name' => 'Menú Principal Test',
             'location' => 'header'
         ]);
+
+        $menu = Menu::where('name', 'Menú Principal Test')->first();
+        $this->assertSame($page->id, $menu->items[0]['page_id']);
     }
 
     /** @test */
@@ -149,15 +153,44 @@ class MenuApiTest extends TestCase
     /** @test */
     public function public_menu_endpoint_returns_only_active_menus()
     {
-        // Skip - route exists but returning 404 in test environment
-        $this->markTestSkipped('Route /api/menus/public returning 404 in test env');
+        Menu::factory()->header()->inactive()->create([
+            'name' => 'Oculto',
+            'order' => 1,
+        ]);
+        Menu::factory()->header()->create([
+            'name' => 'Visible',
+            'order' => 2,
+            'items' => [
+                [
+                    'type' => 'url',
+                    'title' => 'Contacto',
+                    'url' => '/contacto',
+                    'target' => '_self',
+                    'order' => 0,
+                ],
+            ],
+        ]);
+
+        $this->getJson('/api/menus/public')
+            ->assertOk()
+            ->assertJsonPath('data.name', 'Visible')
+            ->assertJsonPath('data.items.0.title', 'Contacto');
     }
 
     /** @test */
     public function available_pages_endpoint_returns_only_published_pages()
     {
-        // Skip this test if endpoint doesn't exist
-        $this->markTestSkipped('Endpoint /api/menus/available-pages not implemented');
+        Page::factory()->published()->create(['title' => 'Publicada']);
+        Page::factory()->draft()->create(['title' => 'Borrador']);
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer '.$this->token,
+        ])->getJson('/api/menus-available-pages');
+
+        $response->assertOk();
+        $titles = collect($response->json('data'))->pluck('title');
+        $this->assertTrue($titles->contains('Publicada'));
+        $this->assertFalse($titles->contains('Borrador'));
     }
 
     /** @test */

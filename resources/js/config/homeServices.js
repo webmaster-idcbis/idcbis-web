@@ -24,7 +24,7 @@ export const HOME_SERVICES = [
   {
     id: 'card_donantes',
     titleKey: 'header.servicesMenu.donors',
-    title: 'Registro de donantes',
+    title: 'Registro DarCélulas',
     href: '/darcelulas',
   },
   {

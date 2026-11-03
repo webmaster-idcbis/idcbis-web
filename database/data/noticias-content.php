@@ -1,9 +1,26 @@
 <?php
 
 /**
- * Contenido de /noticias tal como está en la base de datos (bloques del editor).
- * Sincronizado con: php artisan page:sync-data-files
+ * Contenido de /noticias (bloques del editor).
+ * Las tarjetas salen de database/data/noticias-posts.php.
  */
+
+$posts = require __DIR__.'/noticias-posts.php';
+usort($posts, static fn (array $a, array $b) => strcmp($b['published_at'], $a['published_at']));
+
+$toItem = static function (array $post): array {
+    return [
+        'id' => $post['id'],
+        'slug' => $post['slug'],
+        'image' => $post['image'],
+        'title' => $post['title'],
+        'excerpt' => $post['excerpt'],
+        'category' => $post['category'],
+        'publishedAt' => $post['published_label'],
+    ];
+};
+
+$items = array_map($toItem, $posts);
 
 return [
     [
@@ -23,89 +40,7 @@ return [
     [
         'id' => 'noticias_list',
         'type' => 'idcbis-news-list',
-        'items' => [
-            [
-                'id' => 'news-001',
-                'slug' => 'idcbis-fortalece-investigacion-terapias-avanzadas',
-                'image' => '/img/banner_6.jpg',
-                'title' => 'IDCBIS fortalece la investigación en terapias avanzadas',
-                'excerpt' => 'El instituto avanza en líneas de investigación en medicina regenerativa y terapias celulares para beneficio de la población bogotana.',
-                'category' => 'investigacion',
-                'publishedAt' => '12 marzo 2025',
-            ],
-            [
-                'id' => 'news-002',
-                'slug' => 'campana-donacion-sangre-marzo-2025',
-                'image' => '/img/banner-sangre.jpg',
-                'title' => 'Campaña de donación de sangre: tu aporte salva vidas',
-                'excerpt' => 'Invitamos a la ciudadanía a participar en la jornada de donación del Banco Distrital de Sangre. Un proceso seguro de menos de una hora.',
-                'category' => 'sangre',
-                'publishedAt' => '8 marzo 2025',
-            ],
-            [
-                'id' => 'news-003',
-                'slug' => 'convenio-red-tejidos-2025',
-                'image' => '/img/banco-distrital-de-tejidos-01.jpg',
-                'title' => 'Nuevo convenio para fortalecer la red de tejidos',
-                'excerpt' => 'El IDCBIS suscribe acuerdo interinstitucional para ampliar la cobertura del Banco Distrital de Tejidos en Bogotá y la región.',
-                'category' => 'convenios',
-                'publishedAt' => '28 febrero 2025',
-            ],
-            [
-                'id' => 'news-004',
-                'slug' => 'reconocimiento-talento-humano-idcbis',
-                'image' => '/img/Lideres/Dr-Gustavo-Salguero-Director-IDCBIS-600x800.jpg',
-                'title' => 'Reconocimiento al talento humano del instituto',
-                'excerpt' => 'Equipo del IDCBIS recibe distinción por su compromiso con la calidad y la ética en la gestión de productos biológicos humanos.',
-                'category' => 'reconocimientos',
-                'publishedAt' => '20 febrero 2025',
-            ],
-            [
-                'id' => 'news-005',
-                'slug' => 'apropiacion-social-talleres-comunidad',
-                'image' => '/img/programa%201.jpeg',
-                'title' => 'Apropiación social: talleres abiertos a la comunidad',
-                'excerpt' => 'Programa de divulgación científica con talleres sobre donación, investigación y cultura de la calidad en salud.',
-                'category' => 'apropiacion-social',
-                'publishedAt' => '14 febrero 2025',
-            ],
-            [
-                'id' => 'news-006',
-                'slug' => 'avances-celulas-progenitoras-hematopoyeticas',
-                'image' => '/img/programa%202.jpeg',
-                'title' => 'Avances en células progenitoras hematopoyéticas',
-                'excerpt' => 'Investigadores del IDCBIS presentan resultados en líneas de estudio sobre células progenitoras y medicina transfusional.',
-                'category' => 'celulas',
-                'publishedAt' => '5 febrero 2025',
-            ],
-            [
-                'id' => 'news-007',
-                'slug' => 'congreso-nacional-biotecnologia',
-                'image' => '/img/banner_5.jpg',
-                'title' => 'IDCBIS participa en congreso nacional de biotecnología',
-                'excerpt' => 'Delegación del instituto comparte experiencias en innovación en salud, bancos biológicos y gestión del conocimiento.',
-                'category' => 'congreso',
-                'publishedAt' => '25 enero 2025',
-            ],
-            [
-                'id' => 'news-008',
-                'slug' => 'jornada-donacion-tejidos',
-                'image' => '/img/banner_4.png',
-                'title' => 'Jornada de donación de tejidos: información para familias',
-                'excerpt' => 'Actividad de sensibilización sobre donación de tejidos y el rol del Banco Distrital de Tejidos en trasplantes y medicina regenerativa.',
-                'category' => 'tejidos',
-                'publishedAt' => '18 enero 2025',
-            ],
-            [
-                'id' => 'news-009',
-                'slug' => 'llamado-donacion-ciudadania',
-                'image' => '/img/donantes1.png',
-                'title' => 'Más donantes, más esperanza: llamado a la ciudadanía',
-                'excerpt' => 'El IDCBIS invita a sumarse a la cultura de la donación como acto solidario que transforma la salud pública en Bogotá.',
-                'category' => 'donacion',
-                'publishedAt' => '10 enero 2025',
-            ],
-        ],
+        'items' => $items,
         'columns' => 3,
         'fullBleed' => true,
         'blockLabel' => 'Listado de noticias',
@@ -116,62 +51,7 @@ return [
     [
         'id' => 'noticias_carousel',
         'type' => 'idcbis-news-carousel',
-        'items' => [
-            [
-                'id' => 'news-001',
-                'slug' => 'idcbis-fortalece-investigacion-terapias-avanzadas',
-                'image' => '/img/banner_6.jpg',
-                'title' => 'IDCBIS fortalece la investigación en terapias avanzadas',
-                'excerpt' => 'El instituto avanza en líneas de investigación en medicina regenerativa y terapias celulares para beneficio de la población bogotana.',
-                'category' => 'investigacion',
-                'publishedAt' => '12 marzo 2025',
-            ],
-            [
-                'id' => 'news-002',
-                'slug' => 'campana-donacion-sangre-marzo-2025',
-                'image' => '/img/banner-sangre.jpg',
-                'title' => 'Campaña de donación de sangre: tu aporte salva vidas',
-                'excerpt' => 'Invitamos a la ciudadanía a participar en la jornada de donación del Banco Distrital de Sangre. Un proceso seguro de menos de una hora.',
-                'category' => 'sangre',
-                'publishedAt' => '8 marzo 2025',
-            ],
-            [
-                'id' => 'news-003',
-                'slug' => 'convenio-red-tejidos-2025',
-                'image' => '/img/banco-distrital-de-tejidos-01.jpg',
-                'title' => 'Nuevo convenio para fortalecer la red de tejidos',
-                'excerpt' => 'El IDCBIS suscribe acuerdo interinstitucional para ampliar la cobertura del Banco Distrital de Tejidos en Bogotá y la región.',
-                'category' => 'convenios',
-                'publishedAt' => '28 febrero 2025',
-            ],
-            [
-                'id' => 'news-004',
-                'slug' => 'reconocimiento-talento-humano-idcbis',
-                'image' => '/img/Lideres/Dr-Gustavo-Salguero-Director-IDCBIS-600x800.jpg',
-                'title' => 'Reconocimiento al talento humano del instituto',
-                'excerpt' => 'Equipo del IDCBIS recibe distinción por su compromiso con la calidad y la ética en la gestión de productos biológicos humanos.',
-                'category' => 'reconocimientos',
-                'publishedAt' => '20 febrero 2025',
-            ],
-            [
-                'id' => 'news-005',
-                'slug' => 'apropiacion-social-talleres-comunidad',
-                'image' => '/img/programa%201.jpeg',
-                'title' => 'Apropiación social: talleres abiertos a la comunidad',
-                'excerpt' => 'Programa de divulgación científica con talleres sobre donación, investigación y cultura de la calidad en salud.',
-                'category' => 'apropiacion-social',
-                'publishedAt' => '14 febrero 2025',
-            ],
-            [
-                'id' => 'news-006',
-                'slug' => 'avances-celulas-progenitoras-hematopoyeticas',
-                'image' => '/img/programa%202.jpeg',
-                'title' => 'Avances en células progenitoras hematopoyéticas',
-                'excerpt' => 'Investigadores del IDCBIS presentan resultados en líneas de estudio sobre células progenitoras y medicina transfusional.',
-                'category' => 'celulas',
-                'publishedAt' => '5 febrero 2025',
-            ],
-        ],
+        'items' => array_slice($items, 0, 6),
         'limit' => 8,
         'autoPlay' => true,
         'interval' => 4500,

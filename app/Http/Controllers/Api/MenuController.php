@@ -27,18 +27,9 @@ class MenuController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'location' => 'required|in:header,footer',
-            'items' => 'required|array',
-            'items.*.title' => 'required|string',
-            'items.*.type' => 'required|in:page,url',
-            'items.*.url' => 'required|string',
-            'items.*.target' => 'nullable|in:_self,_blank',
-            'items.*.order' => 'nullable|integer',
-            'is_active' => 'boolean',
-            'order' => 'nullable|integer'
-        ]);
+        $this->prepareMenuItems($request);
+
+        $validated = $request->validate($this->menuRules());
 
         $menu = Menu::create($validated);
 
@@ -57,18 +48,9 @@ class MenuController extends Controller
 
     public function update(Request $request, Menu $menu)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'location' => 'required|in:header,footer',
-            'items' => 'required|array',
-            'items.*.title' => 'required|string',
-            'items.*.type' => 'required|in:page,url',
-            'items.*.url' => 'required|string',
-            'items.*.target' => 'nullable|in:_self,_blank',
-            'items.*.order' => 'nullable|integer',
-            'is_active' => 'boolean',
-            'order' => 'nullable|integer'
-        ]);
+        $this->prepareMenuItems($request);
+
+        $validated = $request->validate($this->menuRules());
 
         $menu->update($validated);
 
@@ -102,18 +84,7 @@ class MenuController extends Controller
             ]);
         }
 
-        // Resolver URLs de páginas
-        $items = collect($menu->items)->map(function ($item) {
-            if ($item['type'] === 'page') {
-                $page = Page::find($item['page_id'] ?? null);
-                $item['url'] = $page ? '/' . $page->slug : '#';
-                $item['is_active'] = $page && $page->status === 'published';
-            }
-            return $item;
-        })->filter(function ($item) {
-            // Solo mostrar items activos (páginas publicadas o URLs externas)
-            return !isset($item['is_active']) || $item['is_active'];
-        })->sortBy('order')->values()->all();
+        $items = $this->resolveMenuItems($menu->items ?? []);
 
         return response()->json([
             'data' => [
@@ -135,5 +106,84 @@ class MenuController extends Controller
         return response()->json([
             'data' => $pages
         ]);
+    }
+
+    private function menuRules(): array
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'location' => 'required|in:header,footer',
+            'items' => 'required|array',
+            'items.*.title' => 'required|string',
+            'items.*.type' => 'required|in:page,url',
+            'items.*.url' => 'required|string',
+            'items.*.target' => 'nullable|in:_self,_blank',
+            'items.*.order' => 'nullable|integer',
+            'items.*.page_id' => 'nullable|integer',
+            'items.*.children' => 'nullable|array',
+            'items.*.children.*.title' => 'required|string',
+            'items.*.children.*.type' => 'required|in:page,url',
+            'items.*.children.*.url' => 'nullable|string',
+            'items.*.children.*.target' => 'nullable|in:_self,_blank',
+            'items.*.children.*.order' => 'nullable|integer',
+            'items.*.children.*.page_id' => 'nullable|integer',
+            'is_active' => 'boolean',
+            'order' => 'nullable|integer',
+        ];
+    }
+
+    private function prepareMenuItems(Request $request): void
+    {
+        $items = $request->input('items');
+
+        if (! is_array($items)) {
+            return;
+        }
+
+        $request->merge([
+            'items' => $this->normalizeMenuItems($items),
+        ]);
+    }
+
+    private function normalizeMenuItems(array $items): array
+    {
+        return array_values(array_map(function ($item) {
+            if (! is_array($item)) {
+                return $item;
+            }
+
+            if (array_key_exists('page_id', $item) && $item['page_id'] === '') {
+                $item['page_id'] = null;
+            }
+
+            if (isset($item['children']) && is_array($item['children'])) {
+                $item['children'] = $this->normalizeMenuItems($item['children']);
+            }
+
+            return $item;
+        }, $items));
+    }
+
+    private function resolveMenuItems(array $items): array
+    {
+        return collect($items)->map(function ($item) {
+            if (! is_array($item)) {
+                return null;
+            }
+
+            if (($item['type'] ?? null) === 'page') {
+                $page = Page::find($item['page_id'] ?? null);
+                $item['url'] = $page ? '/'.$page->slug : '#';
+                $item['is_active'] = $page && $page->status === 'published';
+            }
+
+            if (! empty($item['children']) && is_array($item['children'])) {
+                $item['children'] = $this->resolveMenuItems($item['children']);
+            }
+
+            return $item;
+        })->filter(function ($item) {
+            return is_array($item) && (! isset($item['is_active']) || $item['is_active']);
+        })->sortBy('order')->values()->all();
     }
 }

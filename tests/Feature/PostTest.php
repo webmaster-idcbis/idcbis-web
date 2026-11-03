@@ -30,6 +30,7 @@ class PostTest extends TestCase
     public function authenticated_user_can_create_post()
     {
         $user = User::factory()->create();
+        $this->grantAdmin($user);
         Sanctum::actingAs($user);
 
         $response = $this->postJson('/api/posts', [
@@ -69,6 +70,7 @@ class PostTest extends TestCase
     public function admin_posts_list_includes_drafts()
     {
         $user = User::factory()->create();
+        $this->grantAdmin($user);
         Sanctum::actingAs($user);
 
         Post::factory()->for($user, 'creator')->published()->create();
@@ -83,6 +85,7 @@ class PostTest extends TestCase
     public function post_can_be_saved_with_custom_published_at()
     {
         $user = User::factory()->create();
+        $this->grantAdmin($user);
         Sanctum::actingAs($user);
 
         $response = $this->postJson('/api/posts', [
@@ -122,6 +125,7 @@ class PostTest extends TestCase
     public function can_save_post_with_embedded_featured_image()
     {
         $user = User::factory()->create();
+        $this->grantAdmin($user);
         Sanctum::actingAs($user);
 
         $png = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==');
