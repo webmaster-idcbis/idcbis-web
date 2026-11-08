@@ -17,12 +17,11 @@ class InicioPageTest extends TestCase
     {
         $content = require database_path('data/propuesta-azul-content.php');
 
-        $this->assertCount(8, $content);
+        $this->assertCount(7, $content);
 
         $expected = [
             ['type' => 'idcbis-hero-carousel', 'blockLabel' => 'Hero principal (carrusel)'],
             ['type' => 'idcbis-services', 'blockLabel' => 'Grid de servicios'],
-            ['type' => 'idcbis-audiences', 'blockLabel' => 'Accesos según tu perfil'],
             ['type' => 'idcbis-stats', 'blockLabel' => 'Cifras destacadas'],
             ['type' => 'idcbis-bubbles', 'blockLabel' => 'Programas de investigación'],
             ['type' => 'idcbis-about', 'blockLabel' => 'Somos IDCBIS'],
@@ -48,13 +47,12 @@ class InicioPageTest extends TestCase
 
         $this->assertNotNull($page);
         $this->assertSame('published', $page->status);
-        $this->assertCount(8, $page->content);
+        $this->assertCount(7, $page->content);
         $this->assertSame([], $page->sections);
         $this->assertSame(
             [
                 'idcbis-hero-carousel',
                 'idcbis-services',
-                'idcbis-audiences',
                 'idcbis-stats',
                 'idcbis-bubbles',
                 'idcbis-about',
@@ -84,6 +82,9 @@ class InicioPageTest extends TestCase
         $this->assertSame('Conocer nuestros servicios', $hero['slides'][0]['button3Text']);
         $this->assertSame('#servicios', $hero['slides'][0]['button3Url']);
         $this->assertCount(3, $hero['quickAnswers']);
+        $this->assertSame('/quienes-somos', $hero['quickAnswers'][0]['url']);
+        $this->assertSame('/investigacion', $hero['quickAnswers'][1]['url']);
+        $this->assertSame('#servicios', $hero['quickAnswers'][2]['url']);
         $this->assertCount(3, $hero['visualFrames']);
         $this->assertStringNotContainsString('cordón', json_encode($hero, JSON_UNESCAPED_UNICODE));
     }
@@ -97,10 +98,12 @@ class InicioPageTest extends TestCase
         $this->getJson('/api/pages/slug/inicio')
             ->assertOk()
             ->assertJsonPath('data.slug', 'inicio')
-            ->assertJsonCount(8, 'data.content')
+            ->assertJsonCount(7, 'data.content')
             ->assertJsonPath('data.content.0.type', 'idcbis-hero-carousel')
-            ->assertJsonPath('data.content.2.type', 'idcbis-audiences')
-            ->assertJsonPath('data.content.6.type', 'html')
-            ->assertJsonPath('data.content.7.type', 'idcbis-news-press');
+            ->assertJsonPath('data.content.1.type', 'idcbis-services')
+            ->assertJsonPath('data.content.1.cards.4.title', 'Donaciones')
+            ->assertJsonPath('data.content.2.type', 'idcbis-stats')
+            ->assertJsonPath('data.content.5.type', 'html')
+            ->assertJsonPath('data.content.6.type', 'idcbis-news-press');
     }
 }

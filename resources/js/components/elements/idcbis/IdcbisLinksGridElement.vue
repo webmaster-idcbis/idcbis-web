@@ -1,5 +1,5 @@
 <template>
-  <section class="idcbis-links" :class="element.className" :style="sectionStyles" @click.stop="$emit('click', element)">
+  <section class="idcbis-links" :class="[element.className, { 'is-media': isMedia }]" :style="sectionStyles" @click.stop="$emit('click', element)">
     <div class="idcbis-links__container">
       <div class="idcbis-links__header">
         <h2>
@@ -10,7 +10,7 @@
       </div>
       <div
         class="idcbis-links__grid"
-        :class="{ 'is-expand': isExpand }"
+        :class="{ 'is-expand': isExpand, 'is-media': isMedia }"
         @mouseleave="closeCards"
         @focusout="onGridFocusOut"
       >
@@ -27,13 +27,46 @@
           @mouseenter="openCard(link, index)"
           @focusin="openCard(link, index)"
         >
-          <ContentIcon :value="link.icon || '🔗'" class="link-card__icon" />
-          <h3 :style="element.cardTitleColor ? { color: element.cardTitleColor } : undefined">{{ link.label }}</h3>
-          <p v-if="link.description && !isExpand">{{ link.description }}</p>
-          <div v-else-if="link.description" class="link-card__detail">
-            <div class="link-card__detail-inner">
-              <p>{{ link.description }}</p>
+          <div v-if="isMedia && link.image" class="link-card__media">
+            <picture v-if="rasterSrcSet(link.image)">
+              <source
+                type="image/webp"
+                :srcset="rasterSrcSet(link.image)"
+                sizes="(max-width: 900px) 78vw, 25vw"
+              />
+              <img
+                :src="link.image"
+                :alt="link.imageAlt || ''"
+                width="1200"
+                height="750"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+            <img
+              v-else
+              :src="link.image"
+              :alt="link.imageAlt || ''"
+              width="1200"
+              height="750"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <span v-if="isMedia && link.image" class="link-card__shade" aria-hidden="true"></span>
+          <div class="link-card__body">
+            <ContentIcon v-if="!isMedia || !link.image" :value="link.icon || '🔗'" class="link-card__icon" />
+            <h3 :style="!isMedia && element.cardTitleColor ? { color: element.cardTitleColor } : undefined">{{ link.label }}</h3>
+            <p v-if="link.description && (!isExpand || isMedia)">{{ link.description }}</p>
+            <div v-else-if="link.description" class="link-card__detail">
+              <div class="link-card__detail-inner">
+                <p>{{ link.description }}</p>
+              </div>
             </div>
+            <span v-if="isMedia && preview && link.url" class="link-card__cta">
+              Conocer la línea
+              <span aria-hidden="true">→</span>
+            </span>
           </div>
         </component>
       </div>
@@ -44,6 +77,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { mergeElementStyles, resolveBackground } from '../../../composables/useElementStyles'
+import { CARD_WIDTHS, buildSrcSet } from '../../../utils/responsiveImages'
 import ContentIcon from '../ContentIcon.vue'
 
 const props = defineProps({
@@ -55,7 +89,16 @@ defineEmits(['click'])
 
 const links = computed(() => props.element.links || [])
 const isExpand = computed(() => props.element.layout === 'expand')
+const isMedia = computed(() => props.element.layout === 'media')
 const openKey = ref(null)
+
+const rasterSrcSet = (src) => {
+  if (!src || /\.svg(?:[?#].*)?$/i.test(src)) return ''
+  const clean = String(src).split('?')[0]
+  if (!/\.(?:jpe?g|png|webp)$/i.test(clean)) return ''
+  if (/programa/i.test(clean)) return ''
+  return buildSrcSet(src, CARD_WIDTHS)
+}
 
 const cardKey = (link, index) => String(link.id || index)
 
@@ -90,6 +133,10 @@ const sectionStyles = computed(() => {
 })
 
 const cardStyles = computed(() => {
+  if (isMedia.value) {
+    return { borderRadius: '18px' }
+  }
+
   const styles = {}
   if (props.element.cardBackground) styles.background = props.element.cardBackground
   if (props.element.cardTextColor) styles.color = props.element.cardTextColor
@@ -284,6 +331,153 @@ const cardStyles = computed(() => {
   .is-expand .link-card,
   .is-expand .link-card__detail {
     transition: none;
+  }
+}
+
+.idcbis-links.is-media .idcbis-links__container {
+  max-width: 1400px;
+}
+
+.idcbis-links.is-media .idcbis-links__header {
+  margin-bottom: 1.75rem;
+}
+
+.idcbis-links__grid.is-media {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.9rem;
+  align-items: stretch;
+}
+
+.is-media .link-card {
+  position: relative;
+  isolation: isolate;
+  justify-content: flex-end;
+  min-height: 26rem;
+  padding: 0;
+  overflow: hidden;
+  color: #ffffff;
+  background: #003c5f;
+  border: 0;
+  box-shadow: 0 10px 24px rgba(0, 60, 95, 0.12);
+}
+
+.is-media .link-card:hover {
+  transform: translateY(-4px);
+  filter: none;
+  box-shadow: 0 16px 32px rgba(0, 60, 95, 0.18);
+}
+
+.is-media .link-card:focus-visible {
+  outline: 3px solid #c4a140;
+  outline-offset: 3px;
+}
+
+.link-card__media,
+.link-card__shade {
+  position: absolute;
+  inset: 0;
+}
+
+.link-card__media {
+  z-index: 0;
+  overflow: hidden;
+  background: #003c5f;
+}
+
+.link-card__shade {
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(0, 28, 44, 0) 0%, rgba(0, 28, 44, 0.1) 32%, rgba(0, 18, 32, 0.9) 58%, rgba(0, 14, 26, 0.96) 100%);
+  pointer-events: none;
+}
+
+.link-card__media picture,
+.link-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.link-card__media img {
+  transition: transform 0.45s ease;
+}
+
+.is-media .link-card:hover .link-card__media img {
+  transform: scale(1.05);
+}
+
+.link-card__body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.is-media .link-card__body {
+  position: relative;
+  z-index: 2;
+  flex-grow: 0;
+  gap: 0.4rem;
+  padding: 1.15rem 1rem 1rem;
+}
+
+.is-media .link-card h3 {
+  margin: 0;
+  color: #ffffff;
+  font-family: var(--font-idcbis-display);
+  font-size: clamp(1.05rem, 1.2vw, 1.35rem);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.is-media .link-card p {
+  margin: 0;
+  color: #f4f7f8;
+  opacity: 1;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.link-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 44px;
+  margin-top: 0.2rem;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.is-media .link-card__cta span {
+  color: #d9b85a;
+}
+
+@media (max-width: 900px) {
+  .idcbis-links__grid.is-media {
+    display: grid;
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: min(78vw, 280px);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.4rem;
+  }
+
+  .is-media .link-card {
+    scroll-snap-align: start;
+    min-height: 24rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-media .link-card,
+  .link-card__media img,
+  .is-media .link-card:hover,
+  .is-media .link-card:hover .link-card__media img {
+    transition: none;
+    transform: none;
   }
 }
 </style>

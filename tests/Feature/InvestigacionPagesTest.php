@@ -45,7 +45,16 @@ class InvestigacionPagesTest extends TestCase
         $this->assertSame('Innovación y producción', $links[2]['label'] ?? null);
         $this->assertSame('/investigacion-inmunoterapia', $links[3]['url'] ?? null);
         $this->assertSame('Inmunoterapia', $links[3]['label'] ?? null);
+        $this->assertSame('media', collect($uta)->firstWhere('type', 'idcbis-links')['layout'] ?? null);
+        $this->assertSame('/img/neurociencias/hero.jpg', $links[0]['image'] ?? null);
+        $this->assertNotEmpty($links[1]['image'] ?? null);
+        $this->assertNotEmpty($links[2]['image'] ?? null);
+        $this->assertNotEmpty($links[3]['image'] ?? null);
+        foreach ($links as $link) {
+            $this->assertNotSame('', trim($link['imageAlt'] ?? ''));
+        }
         $this->assertNotContains('idcbis-line-cards', array_column($uta, 'type'));
+        $this->assertNotContains('cta-banner', array_column($uta, 'type'));
     }
 
     /** @test */

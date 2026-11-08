@@ -55,6 +55,8 @@ const institutionalIcons = {
   '⚙️': '/img/Iconos/gestion.svg',
   '📋': '/img/Iconos/gestion.svg',
   '📝': '/img/Iconos/gestion.svg',
+  '🗂️': '/img/Iconos/organigrama.svg',
+  '🗂': '/img/Iconos/organigrama.svg',
   '📑': '/img/Iconos/politicas y lineamientos.svg',
   '📚': '/img/Iconos/politicas y lineamientos.svg',
   '👥': '/img/Iconos/gestores lideres.svg',

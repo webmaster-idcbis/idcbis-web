@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header class="relative z-30">
     <!-- Barra institucional GOV.CO -->
     <div class="bg-white border-b border-gray-200">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,8 +56,8 @@
           </div>
 
           <!-- Desktop Navigation + Search + Social -->
-          <div class="hidden md:flex items-center gap-6 flex-1 justify-end min-w-0">
-            <nav class="flex items-center space-x-6 shrink-0" :aria-label="t('header.mainNav')">
+          <div class="hidden lg:flex items-center gap-3 xl:gap-5 flex-1 justify-end min-w-0">
+            <nav class="flex items-center gap-x-2 lg:gap-x-2.5 xl:gap-x-5 shrink min-w-0" :aria-label="t('header.mainNav')">
               <template v-for="item in menuItems" :key="item.href">
                 <div
                   v-if="item.children?.length"
@@ -68,8 +68,8 @@
                 >
                   <button
                     type="button"
-                    class="inline-flex items-center gap-1 text-sm font-medium hover:text-[#C4A140] transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A140] focus-visible:ring-offset-2 focus-visible:ring-offset-[#005674] rounded-sm"
-                    :class="{ 'text-white/90': hasActiveChild(item) }"
+                    class="inline-flex items-center gap-1 text-[13px] xl:text-sm font-medium hover:text-[#C4A140] transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A140] focus-visible:ring-offset-2 focus-visible:ring-offset-[#005674] rounded-sm"
+                    :class="{ 'text-[#C4A140]': hasActiveChild(item) }"
                     :aria-expanded="isDropdownOpen(item.href)"
                     :aria-controls="dropdownId(item.href)"
                     aria-haspopup="true"
@@ -92,7 +92,7 @@
                   >
                     <ul
                       :id="dropdownId(item.href)"
-                      class="min-w-[280px] rounded-lg bg-white py-2 shadow-lg ring-1 ring-black/10"
+                      class="w-[min(28rem,calc(100vw-2rem))] rounded-lg bg-white py-2 shadow-lg ring-1 ring-black/10"
                       role="menu"
                       :aria-label="menuPanelLabel(item)"
                     >
@@ -100,7 +100,7 @@
                         <router-link
                           :to="child.href"
                           role="menuitem"
-                          class="block px-4 py-2.5 text-sm font-medium text-[#005674] hover:bg-[#005674]/10 hover:text-[#003C5F] focus-visible:bg-[#005674]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#005674] transition-colors"
+                          class="block px-4 py-2.5 text-sm font-medium leading-snug text-[#005674] whitespace-normal hover:bg-[#005674]/10 hover:text-[#003C5F] focus-visible:bg-[#005674]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#005674] transition-colors"
                           :class="{ 'bg-[#005674]/10 text-[#003C5F]': isActive(child.href) }"
                           @click="closeDropdown(item.href)"
                         >
@@ -114,17 +114,20 @@
                 <router-link
                   v-else
                   :to="item.href"
-                  class="text-sm font-medium hover:text-[#C4A140] transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A140] focus-visible:ring-offset-2 focus-visible:ring-offset-[#005674] rounded-sm"
-                  :class="{ 'text-white/90': isActive(item.href) }"
+                  class="text-[13px] xl:text-sm font-medium hover:text-[#C4A140] transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A140] focus-visible:ring-offset-2 focus-visible:ring-offset-[#005674] rounded-sm"
+                  :class="{ 'text-[#C4A140]': isActive(item.href) }"
+                  :aria-current="isActive(item.href) ? 'page' : undefined"
                 >
                   {{ item.name }}
                 </router-link>
               </template>
             </nav>
 
-            <SiteSearch class="shrink-0" />
+            <div class="shrink-0 min-w-0 w-[8.75rem] xl:w-52">
+              <SiteSearch class="w-full max-w-none" />
+            </div>
 
-            <nav class="flex items-center gap-0.5 shrink-0" :aria-label="t('header.socialNav')">
+            <nav class="flex items-center shrink-0" :aria-label="t('header.socialNav')">
               <a
                 v-for="social in socialLinks"
                 :key="social.name"
@@ -132,15 +135,15 @@
                 :aria-label="social.name"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center justify-center p-1.5 rounded-md text-white hover:text-[#C4A140] hover:bg-white/10 transition-colors"
+                class="inline-flex items-center justify-center h-7 w-7 rounded-full text-white/90 hover:text-[#C4A140] hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A140] focus-visible:ring-offset-2 focus-visible:ring-offset-[#005674]"
               >
-                <component :is="social.icon" class="h-4 w-4" aria-hidden="true" />
+                <component :is="social.icon" class="h-3.5 w-3.5" aria-hidden="true" />
               </a>
             </nav>
           </div>
 
           <!-- Mobile toggle -->
-          <div class="flex items-center gap-3 shrink-0 md:hidden">
+          <div class="flex items-center gap-3 shrink-0 lg:hidden">
             <button
               ref="menuToggle"
               type="button"
@@ -159,7 +162,7 @@
     </div>
 
     <!-- Mobile Navigation -->
-    <div v-show="mobileMenuOpen" id="mobile-main-nav" ref="mobileNav" class="md:hidden bg-[#005674] border-t border-white/10">
+    <div v-show="mobileMenuOpen" id="mobile-main-nav" ref="mobileNav" class="lg:hidden bg-[#005674] border-t border-white/10">
       <div class="px-4 py-3">
         <SiteSearch compact class="max-w-none mb-3" />
       </div>
@@ -276,7 +279,6 @@ const logos = {
 };
 
 const institutionalLinks = computed(() => [
-  { name: t('header.institutionalLinks.news'), href: '/noticias' },
   { name: t('header.institutionalLinks.userCare'), href: '/atencion-a-usuarios' },
   { name: t('header.institutionalLinks.participa'), href: '/participa' },
   { name: t('header.institutionalLinks.transparency'), href: '/transparencia' },
@@ -332,6 +334,7 @@ const fallbackMenuItems = computed(() => [
     href: '/investigacion',
     children: researchChildren.value,
   },
+  { name: t('header.fallbackMenu.news'), href: '/noticias' },
   { name: t('header.fallbackMenu.contact'), href: '/contacto' },
 ]);
 
@@ -345,7 +348,7 @@ const menuItems = computed(() => {
       }))
     : fallbackMenuItems.value;
 
-  return base.map((item) => {
+  const withSections = base.map((item) => {
     if (isServicesMenuItem(item)) {
       return {
         ...item,
@@ -360,7 +363,41 @@ const menuItems = computed(() => {
     }
     return item;
   });
+
+  return insertNewsItem(withSections);
 });
+
+const isNewsMenuItem = (item) => {
+  const href = String(item?.href || '').split('?')[0].replace(/\/+$/, '') || '/';
+  if (href === '/noticias' || href.endsWith('/noticias')) return true;
+  const name = String(item?.name || '').trim().toLowerCase();
+  return name === 'noticias' || name === 'news';
+};
+
+const insertNewsItem = (items) => {
+  if (items.some(isNewsMenuItem)) return items;
+
+  const news = { name: t('header.fallbackMenu.news'), href: '/noticias' };
+  const contactIndex = items.findIndex((item) => {
+    const href = String(item?.href || '').split('?')[0].replace(/\/+$/, '');
+    return href === '/contacto' || href.endsWith('/contacto');
+  });
+
+  if (contactIndex >= 0) {
+    return [...items.slice(0, contactIndex), news, ...items.slice(contactIndex)];
+  }
+
+  const researchIndex = items.findIndex(isResearchMenuItem);
+  if (researchIndex >= 0) {
+    return [
+      ...items.slice(0, researchIndex + 1),
+      news,
+      ...items.slice(researchIndex + 1),
+    ];
+  }
+
+  return [...items, news];
+};
 
 const isActive = (href) => {
   if (href === '/') {

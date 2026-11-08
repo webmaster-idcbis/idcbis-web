@@ -8,7 +8,7 @@
       <header class="news-press__header">
         <div class="news-press__intro">
           <p class="news-press__kicker">IDCBIS</p>
-          <h2 id="news-press-title">{{ element.sectionTitle || 'Noticias y Prensa' }}</h2>
+          <h2 id="news-press-title">{{ element.sectionTitle || t('ui.newsSection') }}</h2>
           <p v-if="element.sectionSubtitle">{{ element.sectionSubtitle }}</p>
         </div>
         <component
@@ -17,7 +17,7 @@
           v-bind="ctaBindings"
           @click.stop="onCtaClick"
         >
-          {{ element.buttonText || 'Ver todas las noticias' }}
+          {{ element.buttonText || t('news.viewAll') }}
         </component>
       </header>
 
@@ -49,7 +49,7 @@
               <h3 :id="titleId(item, index)">{{ item.title }}</h3>
               <p v-if="item.excerpt" class="news-press__excerpt">{{ item.excerpt }}</p>
               <span class="news-press__more">
-                Leer noticia
+                {{ t('ui.readNews') }}
                 <ArrowRight :size="16" aria-hidden="true" />
               </span>
             </div>
@@ -57,15 +57,15 @@
         </li>
       </ul>
 
-      <p v-else class="news-press__empty">Pronto publicaremos noticias del IDCBIS en esta sección.</p>
+      <p v-else class="news-press__empty">{{ t('ui.newsEmpty') }}</p>
 
       <div v-if="showPodcast" class="news-press__podcast">
-        <p class="news-press__kicker news-press__kicker--gold">Audio</p>
+        <p class="news-press__kicker news-press__kicker--gold">{{ t('ui.audio') }}</p>
         <div class="news-press__podcast-copy">
-          <h3>{{ element.podcastTitle || 'Nuestro Podcast' }}</h3>
+          <h3>{{ element.podcastTitle || t('ui.podcast') }}</h3>
           <p v-if="element.podcastDescription">{{ element.podcastDescription }}</p>
           <p v-if="element.episodeTitle" class="news-press__episode">
-            Último episodio: {{ element.episodeTitle }}
+            {{ t('ui.latestEpisode', { title: element.episodeTitle }) }}
           </p>
         </div>
         <a
@@ -74,12 +74,12 @@
           target="_blank"
           rel="noopener noreferrer"
         >
-          Escuchar el episodio
+          {{ t('ui.listen') }}
         </a>
       </div>
 
       <div v-if="namedCreators.length" class="news-press__creators">
-        <h3>Colaboraciones</h3>
+        <h3>{{ t('ui.collaborations') }}</h3>
         <ul>
           <li v-for="creator in namedCreators" :key="creator.id || creator.name">
             {{ creator.name }}
@@ -94,6 +94,7 @@
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { ArrowRight } from 'lucide-vue-next'
+import { useI18n } from '../../../i18n'
 
 const props = defineProps({
   element: { type: Object, required: true },
@@ -102,6 +103,7 @@ const props = defineProps({
 })
 
 defineEmits(['click', 'focus-part'])
+const { t } = useI18n()
 
 const news = computed(() => props.element.news || [])
 const namedCreators = computed(() => (props.element.creators || []).filter((creator) => creator.name))

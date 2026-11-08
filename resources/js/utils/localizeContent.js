@@ -69,25 +69,137 @@ export function localizeValue(value, locale = DEFAULT_LOCALE, fallback = FALLBAC
   return value
 }
 
+const STRUCTURAL_KEYS = new Set([
+  'id',
+  'type',
+  'name',
+  'icon',
+  'href',
+  'url',
+  'src',
+  'image',
+  'html',
+  'htmlCode',
+  'fullBleed',
+  'autoPlay',
+  'showArrows',
+  'showIndicators',
+  'blockLabel',
+  'theme',
+  'order',
+  'status',
+  'slug',
+  'target',
+  'rel',
+])
+
+function isStructuralKey(key) {
+  if (STRUCTURAL_KEYS.has(key)) {
+    return true
+  }
+
+  return /(?:color|image|url|href|src|class|icon|padding|margin|width|height|radius|gradient|font|size|interval|play|bleed|anchor|theme|layout|align|poster|video|order|status|slug|target|rel|required|rows|columns|limit|variant)$/i.test(
+    key,
+  )
+}
+
 /**
- * Applies optional page.translations[locale] overlay, then deep-localizes bilingual leaves.
+ * Copies translated strings onto the current content tree.
+ * Layout, media and structure stay on the published page.
+ */
+export function mergeTranslatedNode(base, translated) {
+  if (typeof base === 'string') {
+    return typeof translated === 'string' && translated.trim() !== '' ? translated : base
+  }
+
+  if (base == null || typeof base === 'number' || typeof base === 'boolean') {
+    return base
+  }
+
+  if (Array.isArray(base)) {
+    if (!Array.isArray(translated)) {
+      return base
+    }
+
+    const sameLength = base.length === translated.length
+
+    return base.map((item, index) => {
+      if (typeof item === 'string') {
+        const next = translated[index]
+        return sameLength && typeof next === 'string' && next.trim() !== '' ? next : item
+      }
+
+      let match
+      if (item && typeof item === 'object' && !Array.isArray(item) && item.id) {
+        match = translated.find((entry) => entry && typeof entry === 'object' && entry.id === item.id)
+      }
+      if (!match && item && typeof item === 'object' && !Array.isArray(item) && item.name) {
+        match = translated.find((entry) => entry && typeof entry === 'object' && entry.name === item.name)
+      }
+      if (!match && sameLength) {
+        match = translated[index]
+      }
+      if (!match && item && typeof item === 'object' && item.value != null) {
+        match = translated.find((entry) => entry && typeof entry === 'object' && entry.value === item.value)
+      }
+      if (match === undefined) {
+        return item
+      }
+
+      return mergeTranslatedNode(item, match)
+    })
+  }
+
+  if (typeof base === 'object') {
+    if (!translated || typeof translated !== 'object' || Array.isArray(translated)) {
+      return base
+    }
+
+    const result = { ...base }
+    Object.keys(base).forEach((key) => {
+      if (isStructuralKey(key) || !Object.prototype.hasOwnProperty.call(translated, key)) {
+        return
+      }
+      result[key] = mergeTranslatedNode(base[key], translated[key])
+    })
+    return result
+  }
+
+  return base
+}
+
+/**
+ * Applies optional page.translations[locale] as text on the current design,
+ * then deep-localizes bilingual leaves.
  */
 export function localizePage(page, locale = DEFAULT_LOCALE, fallback = FALLBACK_LOCALE) {
   if (!page || typeof page !== 'object') {
     return page
   }
 
-  const overlay = page.translations?.[locale] || getPageTranslationOverlay(page.slug, locale)
   const base = { ...page }
+  const overlay = locale === fallback
+    ? null
+    : (page.translations?.[locale] || getPageTranslationOverlay(page.slug, locale))
 
   if (overlay && typeof overlay === 'object') {
-    ;['title', 'meta_title', 'meta_description', 'meta_keywords', 'content', 'sections'].forEach(
-      (field) => {
-        if (overlay[field] !== undefined) {
-          base[field] = overlay[field]
-        }
-      },
-    )
+    ;['title', 'meta_title', 'meta_description', 'meta_keywords'].forEach((field) => {
+      if (typeof overlay[field] === 'string' && overlay[field].trim() !== '') {
+        base[field] = overlay[field]
+      }
+    })
+
+    if (overlay.content !== undefined && page.content != null) {
+      base.content = mergeTranslatedNode(page.content, overlay.content)
+    } else if (page.content == null && overlay.content !== undefined) {
+      base.content = overlay.content
+    }
+
+    if (overlay.sections !== undefined && page.sections != null) {
+      base.sections = mergeTranslatedNode(page.sections, overlay.sections)
+    } else if (page.sections == null && overlay.sections !== undefined) {
+      base.sections = overlay.sections
+    }
   }
 
   return localizeValue(base, locale, fallback)

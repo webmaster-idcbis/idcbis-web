@@ -44,7 +44,7 @@ onMounted(() => {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
-.layout-main:not(:has(.qs-hero)):not(:has(.docs-hero)):not(:has(.news-article__hero)):not(:has(.search-page__hero)):not(:has(.sitemap__hero)):not(:has(.hero-block)):not(:has(.idcbis-hero)):not(:has(.hero-slider-section)):not(:has(.carousel-element--hero-full)) :deep(.breadcrumbs) {
+.layout-main:not(:has(.qs-hero)):not(:has(.docs-hero)):not(:has(.news-article__hero)):not(:has(.search-page__hero)):not(:has(.sitemap__hero)):not(:has(.hero-block)):not(:has(.idcbis-hero)):not(:has(.hero-slider-section)):not(:has(.carousel-element--hero-full)):not(:has(.donate-hub)) :deep(.breadcrumbs) {
   color: #005674;
   text-shadow: none;
 }

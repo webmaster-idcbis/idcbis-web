@@ -10,7 +10,7 @@
       :aria-expanded="open"
       aria-controls="a11y-menu-panel"
       aria-haspopup="true"
-      :aria-label="open ? 'Cerrar menú de accesibilidad' : 'Abrir menú de accesibilidad'"
+      :aria-label="open ? t('a11y.close') : t('a11y.open')"
       @click="toggle"
     >
       <Accessibility class="a11y-menu__trigger-icon" aria-hidden="true" :stroke-width="2" />
@@ -20,10 +20,10 @@
       id="a11y-menu-panel"
       class="a11y-menu__panel"
       role="menu"
-      aria-label="Opciones de accesibilidad"
+      :aria-label="t('a11y.options')"
       :hidden="!open"
     >
-      <p class="a11y-menu__title" id="a11y-menu-title">Accesibilidad</p>
+      <p class="a11y-menu__title" id="a11y-menu-title">{{ t('a11y.title') }}</p>
 
       <ul class="a11y-menu__list" aria-labelledby="a11y-menu-title">
         <li role="none">
@@ -35,7 +35,7 @@
             @click="increaseFont"
           >
             <ZoomIn class="a11y-menu__icon" aria-hidden="true" :stroke-width="2" />
-            <span>Aumentar letra</span>
+            <span>{{ t('a11y.increase') }}</span>
           </button>
         </li>
         <li role="none">
@@ -47,7 +47,7 @@
             @click="decreaseFont"
           >
             <ZoomOut class="a11y-menu__icon" aria-hidden="true" :stroke-width="2" />
-            <span>Reducir letra</span>
+            <span>{{ t('a11y.decrease') }}</span>
           </button>
         </li>
         <li role="none">
@@ -62,7 +62,7 @@
             <span class="a11y-menu__icon a11y-menu__icon--bars" aria-hidden="true">
               <span /><span /><span /><span />
             </span>
-            <span>Escala de gris</span>
+            <span>{{ t('a11y.grayscale') }}</span>
           </button>
         </li>
         <li role="none">
@@ -75,7 +75,7 @@
             @click="toggleHighContrast"
           >
             <Contrast class="a11y-menu__icon" aria-hidden="true" :stroke-width="2" />
-            <span>Alto contraste</span>
+            <span>{{ t('a11y.highContrast') }}</span>
           </button>
         </li>
         <li role="none">
@@ -88,7 +88,7 @@
             @click="toggleContrast"
           >
             <Eye class="a11y-menu__icon" aria-hidden="true" :stroke-width="2" />
-            <span>Contraste</span>
+            <span>{{ t('a11y.contrast') }}</span>
           </button>
         </li>
         <li role="none">
@@ -101,7 +101,7 @@
             @click="toggleUnderlineLinks"
           >
             <Link class="a11y-menu__icon" aria-hidden="true" :stroke-width="2" />
-            <span>Subrayado de enlaces</span>
+            <span>{{ t('a11y.underline') }}</span>
           </button>
         </li>
         <li role="none">
@@ -113,7 +113,7 @@
             @click="reset"
           >
             <RotateCcw class="a11y-menu__icon" aria-hidden="true" :stroke-width="2" />
-            <span>Restablecer</span>
+            <span>{{ t('a11y.reset') }}</span>
           </button>
         </li>
       </ul>
@@ -133,7 +133,9 @@ import {
   RotateCcw,
 } from 'lucide-vue-next'
 import { useAccessibility } from '../../composables/useAccessibility'
+import { useI18n } from '../../i18n'
 
+const { t } = useI18n()
 const open = ref(false)
 const rootRef = ref(null)
 

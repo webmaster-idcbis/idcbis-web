@@ -10,7 +10,7 @@ class BancoDistritalDeTejidosPageTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function tejidos_content_data_has_hero_catalog_team_and_referents()
+    public function tejidos_content_data_has_hero_catalog_and_referents()
     {
         $content = require database_path('data/banco-distrital-de-tejidos-content.php');
 
@@ -23,7 +23,7 @@ class BancoDistritalDeTejidosPageTest extends TestCase
         $this->assertContains('idcbis-tissue-catalog', $types);
         $this->assertContains('process-timeline', $types);
         $this->assertContains('dual-panel', $types);
-        $this->assertContains('idcbis-team-grid', $types);
+        $this->assertNotContains('idcbis-team-grid', $types);
         $this->assertContains('idcbis-links', $types);
         $this->assertContains('cta-banner', $types);
 

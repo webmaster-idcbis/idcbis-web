@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Client\Pool;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -61,7 +63,7 @@ class MachineTranslator
 
             $cacheKey = 'mt:'.$this->driver().':'.md5($source.'|'.$target.'|'.$trimmed);
             $cached = Cache::get($cacheKey);
-            if (is_string($cached)) {
+            if (is_string($cached) && ! $this->isUnchangedTranslation($trimmed, $cached)) {
                 $map[$text] = $cached;
                 continue;
             }
@@ -75,18 +77,106 @@ class MachineTranslator
 
         $driver = $this->driver();
 
-        foreach (array_chunk(array_keys($pending), $driver === 'libretranslate' ? 5 : 8) as $chunk) {
+        foreach (array_chunk(array_keys($pending), 3) as $chunk) {
+            $translatedChunk = $driver === 'libretranslate'
+                ? $this->translateChunkSequential($chunk, $target, $source)
+                : $this->translateChunkWithGtx($chunk, $target, $source);
+
             foreach ($chunk as $text) {
-                $cacheKey = $pending[$text];
-                $translated = $this->requestTranslation($text, $target, $source);
-                Cache::put($cacheKey, $translated, now()->addDays(30));
+                $translated = $translatedChunk[$text] ?? null;
+                if (! is_string($translated) || $translated === '' || $this->isUnchangedTranslation($text, $translated)) {
+                    $map[$text] = $text;
+                    continue;
+                }
+
+                Cache::put($pending[$text], $translated, now()->addDays(30));
                 $map[$text] = $translated;
             }
 
-            usleep(80000);
+            usleep(250000);
         }
 
         return $map;
+    }
+
+    /**
+     * @param  list<string>  $chunk
+     * @return array<string, string>
+     */
+    private function translateChunkSequential(array $chunk, string $target, string $source): array
+    {
+        $translated = [];
+
+        foreach ($chunk as $text) {
+            $translated[$text] = $this->requestTranslation($text, $target, $source);
+        }
+
+        return $translated;
+    }
+
+    /**
+     * @param  list<string>  $chunk
+     * @return array<string, string>
+     */
+    private function translateChunkWithGtx(array $chunk, string $target, string $source): array
+    {
+        $pending = array_values($chunk);
+        $translated = [];
+
+        for ($attempt = 0; $attempt < 5 && $pending !== []; $attempt++) {
+            if ($attempt > 0) {
+                sleep(min(20, 2 ** $attempt));
+            }
+
+            try {
+                $responses = Http::pool(function (Pool $pool) use ($pending, $target, $source) {
+                    foreach ($pending as $index => $text) {
+                    $pool->as((string) $index)
+                        ->timeout(15)
+                        ->withHeaders([
+                            'User-Agent' => 'Mozilla/5.0 (compatible; IDCBIS-CMS/1.0)',
+                        ])
+                        ->get('https://clients5.google.com/translate_a/t', [
+                            'client' => 'dict-chrome-ex',
+                            'sl' => $source,
+                            'tl' => $target,
+                            'q' => $text,
+                        ]);
+                    }
+                });
+            } catch (Throwable $e) {
+                Log::warning('MachineTranslator batch failed', ['message' => $e->getMessage()]);
+                sleep(3);
+                continue;
+            }
+
+            $retry = [];
+
+            foreach ($pending as $index => $text) {
+                $response = $responses[(string) $index] ?? null;
+                if (! $response instanceof Response) {
+                    $retry[] = $text;
+                    continue;
+                }
+
+                if ($response->status() === 429 || $response->serverError()) {
+                    $retry[] = $text;
+                    continue;
+                }
+
+                if ($response->successful()) {
+                    $parsed = $this->parseClients5Response($response->json());
+                    $translated[$text] = is_string($parsed) && $parsed !== '' ? $parsed : $text;
+                    continue;
+                }
+
+                $translated[$text] = $text;
+            }
+
+            $pending = $retry;
+        }
+
+        return $translated;
     }
 
     private function requestTranslation(string $text, string $target, string $source): string
@@ -141,11 +231,10 @@ class MachineTranslator
             ->withHeaders([
                 'User-Agent' => 'Mozilla/5.0 (compatible; IDCBIS-CMS/1.0)',
             ])
-            ->get('https://translate.googleapis.com/translate_a/single', [
-                'client' => 'gtx',
+            ->get('https://clients5.google.com/translate_a/t', [
+                'client' => 'dict-chrome-ex',
                 'sl' => $source,
                 'tl' => $target,
-                'dt' => 't',
                 'q' => $text,
             ]);
 
@@ -153,7 +242,7 @@ class MachineTranslator
             return $text;
         }
 
-        return $this->parseGoogleResponse($response->json()) ?: $text;
+        return $this->parseClients5Response($response->json()) ?: $text;
     }
 
     private function collectStrings(mixed $value, array &$unique, ?string $key = null): void
@@ -223,8 +312,16 @@ class MachineTranslator
         return (bool) preg_match('/(color|image|url|href|src|class|icon|padding|margin|width|height|radius|gradient)/i', $key);
     }
 
+    private function isUnchangedTranslation(string $source, string $translated): bool
+    {
+        return trim($source) === trim($translated);
+    }
+
     private function shouldSkipString(string $text): bool
     {
+        if (preg_match('/<\s*\/?\s*[a-z!][^>]*>/i', $text)) {
+            return true;
+        }
         if (preg_match('#^(https?:)?//#i', $text)) {
             return true;
         }
@@ -241,10 +338,30 @@ class MachineTranslator
             return true;
         }
         if (! preg_match('/\s/u', $text) && preg_match('/^\/?[\w\-.\/]+$/', $text) && strlen($text) < 80) {
-            return true;
+            // Rutas, archivos e identificadores. Las palabras sueltas (Servicios, Organigrama) sí se traducen.
+            if (preg_match('/[\/_\-.]/', $text) || preg_match('/\d/', $text) || strlen($text) <= 2) {
+                return true;
+            }
+
+            return false;
         }
 
         return false;
+    }
+
+    private function parseClients5Response(mixed $json): ?string
+    {
+        if (is_string($json)) {
+            $trimmed = trim($json);
+
+            return $trimmed !== '' ? $trimmed : null;
+        }
+
+        if (is_array($json) && isset($json[0]) && is_string($json[0]) && trim($json[0]) !== '') {
+            return $json[0];
+        }
+
+        return $this->parseGoogleResponse($json);
     }
 
     private function parseGoogleResponse(mixed $json): ?string

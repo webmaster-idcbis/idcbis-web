@@ -22,18 +22,28 @@ export const HOME_SERVICES = [
     href: '/unidad-de-terapias-avanzadas',
   },
   {
+    id: 'card_omimed',
+    titleKey: 'header.servicesMenu.omimed',
+    title: 'OmiMed',
+    href: '/omimed',
+  },
+  {
     id: 'card_donantes',
     titleKey: 'header.servicesMenu.donors',
-    title: 'Registro DarCélulas',
+    title: 'Registro Nacional de Donantes de Células Progenitoras Hematopoyéticas - Darcelulas',
     href: '/darcelulas',
   },
   {
     id: 'card_bienestar',
-    titleKey: 'header.servicesMenu.wellness',
-    title: 'Bienestar',
-    href: '/servicios-institucionales',
+    titleKey: 'header.servicesMenu.donations',
+    title: 'Donaciones',
+    href: '/donaciones',
   },
 ]
+
+export function homeServiceHref(id) {
+  return HOME_SERVICES.find((service) => service.id === id)?.href || '/'
+}
 
 /** Detecta el ítem "Servicios" del menú principal */
 export function isServicesMenuItem(item) {

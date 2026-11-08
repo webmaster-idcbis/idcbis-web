@@ -40,9 +40,24 @@ class PretranslatePagesCommand extends Command
 
         $done = 0;
         $skipped = 0;
+        $total = $pages->count();
 
         foreach ($pages as $page) {
             $translations = is_array($page->translations) ? $page->translations : [];
+
+            $this->writeProgress($page->slug, $done, $skipped, $total, 'running');
+
+            $curatedFile = database_path('data/'.$page->slug.'-translations.php');
+            if (is_file($curatedFile)) {
+                $curated = require $curatedFile;
+                if (is_array($curated)) {
+                    $page->translations = array_replace($translations, $curated);
+                    $page->save();
+                    $skipped++;
+                    $bar->advance();
+                    continue;
+                }
+            }
 
             if (! $force && ! empty($translations[$locale]['content'])) {
                 $skipped++;
@@ -60,6 +75,13 @@ class PretranslatePagesCommand extends Command
             ];
 
             $translated = $translator->translateTree($payload, $locale, 'es');
+            if ($this->translationMatchesSource($payload, $translated)) {
+                $this->writeProgress($page->slug, $done, $skipped, $total, 'unchanged');
+                $skipped++;
+                $bar->advance();
+                continue;
+            }
+
             $translations[$locale] = $translated;
             $page->translations = $translations;
             $page->save();
@@ -72,7 +94,76 @@ class PretranslatePagesCommand extends Command
         $this->newLine(2);
         $this->info("Traducidas: {$done}. Omitidas (ya existían): {$skipped}.");
         $this->line('En el sitio, el cambio ES/EN usa estas traducciones guardadas (instantáneo).');
+        $this->writeProgress('', $done, $skipped, $total, 'done');
 
         return self::SUCCESS;
+    }
+
+    private function translationMatchesSource(array $source, mixed $translated): bool
+    {
+        if (! is_array($translated)) {
+            return true;
+        }
+
+        $left = $this->comparableTexts($source);
+        $right = $this->comparableTexts($translated);
+        if ($left === []) {
+            return false;
+        }
+
+        $limit = min(count($left), count($right));
+        if ($limit === 0) {
+            return true;
+        }
+
+        $same = 0;
+        for ($i = 0; $i < $limit; $i++) {
+            if ($left[$i] === $right[$i]) {
+                $same++;
+            }
+        }
+
+        return ($same / $limit) > 0.85;
+    }
+
+    private function comparableTexts(mixed $value): array
+    {
+        $out = [];
+        $this->collectComparableTexts($value, $out);
+
+        return $out;
+    }
+
+    private function collectComparableTexts(mixed $value, array &$out): void
+    {
+        if (is_string($value)) {
+            $text = trim($value);
+            if (mb_strlen($text) >= 24 && preg_match('/\p{L}/u', $text)) {
+                $out[] = $text;
+            }
+
+            return;
+        }
+
+        if (! is_array($value)) {
+            return;
+        }
+
+        foreach ($value as $item) {
+            $this->collectComparableTexts($item, $out);
+        }
+    }
+
+    private function writeProgress(string $slug, int $done, int $skipped, int $total, string $state): void
+    {
+        $path = storage_path('app/pretranslate-status.json');
+        file_put_contents($path, json_encode([
+            'state' => $state,
+            'slug' => $slug,
+            'done' => $done,
+            'skipped' => $skipped,
+            'total' => $total,
+            'at' => date('c'),
+        ], JSON_UNESCAPED_UNICODE));
     }
 }

@@ -44,6 +44,7 @@ import IdcbisNewsListElement from '../components/elements/idcbis/IdcbisNewsListE
 import IdcbisNewsCarouselElement from '../components/elements/idcbis/IdcbisNewsCarouselElement.vue'
 import IdcbisNewsPressElement from '../components/elements/idcbis/IdcbisNewsPressElement.vue'
 import IdcbisTissueCatalogElement from '../components/elements/idcbis/IdcbisTissueCatalogElement.vue'
+import IdcbisDonationsHubElement from '../components/elements/idcbis/IdcbisDonationsHubElement.vue'
 import StatsGridElement from '../components/elements/StatsGridElement.vue'
 import ProcessTimelineElement from '../components/elements/ProcessTimelineElement.vue'
 import AccordionElement from '../components/elements/AccordionElement.vue'
@@ -97,6 +98,7 @@ const elementComponents = {
   'idcbis-news-carousel': markRaw(IdcbisNewsCarouselElement),
   'idcbis-news-press': markRaw(IdcbisNewsPressElement),
   'idcbis-tissue-catalog': markRaw(IdcbisTissueCatalogElement),
+  'idcbis-donations-hub': markRaw(IdcbisDonationsHubElement),
   'stats-grid': markRaw(StatsGridElement),
   'process-timeline': markRaw(ProcessTimelineElement),
   accordion: markRaw(AccordionElement),
@@ -131,6 +133,7 @@ const IDCBIS_BLOCK_TYPES = [
   'idcbis-news-carousel',
   'idcbis-news-press',
   'idcbis-tissue-catalog',
+  'idcbis-donations-hub',
 ]
 
 export function usePageElements() {

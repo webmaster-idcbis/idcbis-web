@@ -1,6 +1,6 @@
 import { createElement, createIdcbisHeroSlide } from '../../utils/pageElementFactory'
 import { IDCBIS_PROPOSAL_IMAGES as IMG, IDCBIS_SERVICE_BANNERS } from '../idcbisProposalImages'
-import { HOME_SERVICES } from '../homeServices'
+import { homeServiceHref } from '../homeServices'
 
 export const PROPUESTA_AZUL_PAGE_META = {
   title: 'IDCBIS | Ciencia que te conecta con la vida',
@@ -31,9 +31,9 @@ export function buildPropuestaAzulPage() {
       { src: IDCBIS_SERVICE_BANNERS.donantes, alt: 'Manos sosteniendo una célula, la ciencia al servicio de la vida' },
     ],
     quickAnswers: [
-      { id: 'qa_que_es', icon: 'institute', question: '¿Qué es IDCBIS?', answer: 'Un Instituto de ciencia, biotecnología e innovación en salud.' },
-      { id: 'qa_que_hacemos', icon: 'science', question: '¿Qué hacemos?', answer: 'Convertimos ciencia e innovación en soluciones para la salud y la vida.' },
-      { id: 'qa_que_puedes', icon: 'action', question: '¿Qué puedes hacer aquí?', answer: 'Donar, registrarme, conocer servicios, investigar, estudiar o generar alianzas.' },
+      { id: 'qa_que_es', icon: 'institute', question: '¿Qué es IDCBIS?', answer: 'Un Instituto de ciencia, biotecnología e innovación en salud.', url: '/quienes-somos' },
+      { id: 'qa_que_hacemos', icon: 'science', question: '¿Qué hacemos?', answer: 'Convertimos ciencia e innovación en soluciones para la salud y la vida.', url: '/investigacion' },
+      { id: 'qa_que_puedes', icon: 'action', question: '¿Qué puedes hacer aquí?', answer: 'Donar, registrarme, conocer servicios, investigar, estudiar o generar alianzas.', url: '#servicios' },
     ],
     slides: [
       createIdcbisHeroSlide({
@@ -42,9 +42,9 @@ export function buildPropuestaAzulPage() {
         titleBold: 'desde el Distrito Capital',
         subtitle: 'En el IDCBIS convertimos ciencia, innovación y capacidades especializadas en soluciones para la salud y la vida de los colombianos.',
         button1Text: 'Quiero donar sangre',
-        button1Url: HOME_SERVICES[0].href,
+        button1Url: homeServiceHref('card_sangre'),
         button2Text: 'Registrarme en DarCélulas',
-        button2Url: HOME_SERVICES[3].href,
+        button2Url: homeServiceHref('card_donantes'),
         button3Text: 'Conocer nuestros servicios',
         button3Url: '#servicios',
         image: '',
@@ -64,12 +64,12 @@ export function buildPropuestaAzulPage() {
     sectionHighlight: 'servicios',
     sectionSubtitle: 'Elige el que más se adapte a ti. Todos son importantes.',
     cards: [
-      { title: 'Banco Distrital de Sangre', description: 'En 15 minutos puedes ayudar a salvar hasta 3 vidas. La donación es segura y tu sangre se separa en componentes para varios pacientes.', image: IMG.services[0], tag: '#DONARVIDA', url: HOME_SERVICES[0].href },
-      { title: 'Banco Distrital de Tejidos', description: 'Primer banco multitejidos de Colombia. Seleccionamos, procesamos y suministramos tejidos humanos para trasplantes e implantes.', image: IMG.services[2], tag: '#REGALAVIDA', url: HOME_SERVICES[1].href },
-      { title: 'Terapias avanzadas', description: 'Investigamos y desarrollamos nuevas tecnologías en medicina regenerativa: terapia celular, terapia génica e ingeniería tisular.', image: IMG.services[3], tag: '#INNOVACIÓN', url: HOME_SERVICES[2].href },
-      { title: 'Registro DarCélulas', description: 'Primer y único registro nacional de donantes de células formadoras de la sangre. Inscríbete y dale a un paciente la oportunidad de un trasplante.', image: IMG.services[4], tag: '#DARCELULAS', url: HOME_SERVICES[3].href },
-      { title: 'Bienestar', description: 'Charlas, hábitos, comunidad. Porque la salud también es prevenir.', image: IMG.services[5], tag: '#SENTIRSEBIEN', url: HOME_SERVICES[4].href },
-    ].map((c, i) => ({ ...c, id: HOME_SERVICES[i]?.id || `card_${i}` })),
+      { serviceId: 'card_sangre', title: 'Banco Distrital de Sangre', description: 'En 15 minutos puedes ayudar a salvar hasta 3 vidas. La donación es segura y tu sangre se separa en componentes para varios pacientes.', image: IMG.services[0], tag: '#DONARVIDA', url: homeServiceHref('card_sangre') },
+      { serviceId: 'card_tejidos', title: 'Banco Distrital de Tejidos', description: 'Primer banco multitejidos de Colombia. Seleccionamos, procesamos y suministramos tejidos humanos para trasplantes e implantes.', image: IMG.services[2], tag: '#REGALAVIDA', url: homeServiceHref('card_tejidos') },
+      { serviceId: 'card_terapias', title: 'Terapias avanzadas', description: 'Investigamos y desarrollamos nuevas tecnologías en medicina regenerativa: terapia celular, terapia génica e ingeniería tisular.', image: IMG.services[3], tag: '#INNOVACIÓN', url: homeServiceHref('card_terapias') },
+      { serviceId: 'card_donantes', title: 'Registro DarCélulas', description: 'Primer y único registro nacional de donantes de células formadoras de la sangre. Inscríbete y dale a un paciente la oportunidad de un trasplante.', image: IMG.services[4], tag: '#DARCELULAS', url: homeServiceHref('card_donantes') },
+      { serviceId: 'card_bienestar', title: 'Donaciones', description: 'Elige donar sangre o tejidos. Un acto voluntario, gratuito y altruista.', image: IMG.services[5], tag: '#ELIGEDONAR', url: homeServiceHref('card_bienestar') },
+    ].map(({ serviceId, ...card }) => ({ ...card, id: serviceId })),
   })
 
   const stats = createElement('idcbis-stats')
@@ -124,25 +124,6 @@ export function buildPropuestaAzulPage() {
     htmlCode: '<section id="portal-bogota-block" data-cat="Salud"></section><script src="https://bogota.gov.co/2025/queestapasando/main-block.js"></script>',
   })
 
-  const audiences = createElement('idcbis-audiences')
-  Object.assign(audiences, {
-    blockLabel: 'Accesos según tu perfil',
-    fullBleed: true,
-    sectionTitle: 'Encuentra lo que necesitas según tu perfil',
-    sectionSubtitle: 'Cada persona tiene una razón para visitarnos. Te ayudamos a llegar más rápido.',
-    cards: [
-      { id: 'audience_ciudadano', icon: 'users', title: 'Soy Ciudadano', description: 'Información, campañas, participación y contacto.', url: '/participa', linkText: 'Ir a mi sección' },
-      { id: 'audience_donante', icon: 'droplet', title: 'Soy Donante', description: 'Donación de sangre, tejidos y registro en DarCélulas.', url: '/banco-de-sangre', linkText: 'Ir a mi sección' },
-      { id: 'audience_paciente', icon: 'patient', title: 'Soy Paciente o Familiar', description: 'Servicios, orientación y contactos.', url: '/atencion-a-usuarios', linkText: 'Ir a mi sección' },
-      { id: 'audience_profesional', icon: 'stethoscope', title: 'Soy Profesional de la Salud', description: 'Servicios especializados, investigación y contacto.', url: '/unidad-de-terapias-avanzadas', linkText: 'Ir a mi sección' },
-      { id: 'audience_investigador', icon: 'flask', title: 'Soy Investigador', description: 'Proyectos, grupos, publicaciones y alianzas.', url: '/investigacion', linkText: 'Ir a mi sección' },
-      { id: 'audience_estudiante', icon: 'student', title: 'Soy Estudiante', description: 'Prácticas, investigación, convocatorias y contacto.', url: '/contacto', linkText: 'Ir a mi sección' },
-      { id: 'audience_aliado', icon: 'handshake', title: 'Soy Aliado', description: 'Cooperación, alianzas y posibilidades de apoyo.', url: '/contacto', linkText: 'Ir a mi sección' },
-      { id: 'audience_periodista', icon: 'news', title: 'Soy Periodista', description: 'Noticias, voceros y contacto de Comunicaciones.', url: '/noticias', linkText: 'Ir a mi sección' },
-      { id: 'audience_proveedor', icon: 'briefcase', title: 'Soy Proveedor', description: 'Contratación y procesos correspondientes.', url: '/contratacion', linkText: 'Ir a mi sección' },
-    ],
-  })
-
   const newsPress = createElement('idcbis-news-press')
   Object.assign(newsPress, {
     blockLabel: 'Noticias y prensa',
@@ -157,5 +138,5 @@ export function buildPropuestaAzulPage() {
     episodeTitle: '',
   })
 
-  return [heroCarousel, services, audiences, stats, bubbles, about, portalBogota, newsPress]
+  return [heroCarousel, services, stats, bubbles, about, portalBogota, newsPress]
 }

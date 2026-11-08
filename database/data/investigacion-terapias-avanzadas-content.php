@@ -3,7 +3,7 @@
 /**
  * Sección general de /investigacion-terapias-avanzadas.
  * Las cuatro líneas se desarrollan en páginas propias.
- * layout expand: al pasar el cursor una tarjeta crece y muestra su texto.
+ * layout media: cada línea muestra su imagen y el texto, sin ocultar la descripción.
  */
 
 return [
@@ -26,13 +26,15 @@ return [
     [
         'id' => 'uta_lineas',
         'type' => 'idcbis-links',
-        'layout' => 'expand',
+        'layout' => 'media',
         'color' => '#0B4F6C',
         'links' => [
             [
                 'id' => 'uta_l1',
                 'url' => '/investigacion-neurociencias',
                 'icon' => '🧠',
+                'image' => '/img/neurociencias/hero.jpg',
+                'imageAlt' => 'Neurona vista al microscopio.',
                 'label' => 'Neurociencias',
                 'description' => 'Estudia enfermedades neurodegenerativas y cómo la terapia celular interactúa con el trauma raquimedular.',
             ],
@@ -40,6 +42,8 @@ return [
                 'id' => 'uta_l2',
                 'url' => '/investigacion-ingenieria-tisular',
                 'icon' => '🦴',
+                'image' => '/img/Servicios%20Home/BT-1200x800.png',
+                'imageAlt' => 'Fragmento de tejido sostenido con pinzas.',
                 'label' => 'Ingeniería tisular',
                 'description' => 'Regenera piel y hueso con andamios biológicos, impresión 3D y células encapsuladas.',
             ],
@@ -47,6 +51,8 @@ return [
                 'id' => 'uta_l3',
                 'url' => '/investigacion-innovacion-produccion',
                 'icon' => '🏭',
+                'image' => '/img/Servicios%20Home/TE-AV-1200x800.png',
+                'imageAlt' => 'Objetivos de un microscopio de laboratorio.',
                 'label' => 'Innovación y producción',
                 'description' => 'Lleva productos celulares a escala y estudia esferoides, vesículas extracelulares y cuerpos apoptóticos.',
             ],
@@ -54,6 +60,8 @@ return [
                 'id' => 'uta_l4',
                 'url' => '/investigacion-inmunoterapia',
                 'icon' => '🛡️',
+                'image' => '/img/programa%203.png',
+                'imageAlt' => 'Células observadas por microscopía de fluorescencia.',
                 'label' => 'Inmunoterapia',
                 'description' => 'Desarrolla células CAR-T, inmunoterapia génica y modelos de enfermedad con CRISPR-Cas9.',
             ],
@@ -67,26 +75,8 @@ return [
         'cardTitleColor' => '#0B4F6C',
         'highlightColor' => '#008996',
         'backgroundColor' => '#f8f9fa',
-        'sectionSubtitle' => 'Pase el cursor para leer cada línea y elija una para continuar.',
+        'sectionSubtitle' => 'Elija una línea para conocer su trabajo.',
         'cardBorderRadius' => '20px',
         'sectionHighlight' => 'investigación',
-    ],
-    [
-        'id' => 'uta_cta',
-        'type' => 'cta-banner',
-        'title' => 'Investigación IDCBIS',
-        'buttons' => [
-            [
-                'id' => 'uta_cta_inv',
-                'url' => '/investigacion',
-                'icon' => '←',
-                'label' => 'Volver a investigación',
-                'variant' => 'primary',
-            ],
-        ],
-        'subtitle' => 'Regrese al conjunto de líneas del instituto.',
-        'fullBleed' => true,
-        'blockLabel' => 'Llamado a la acción',
-        'backgroundColor' => 'linear-gradient(135deg, #005674 0%, #008996 100%)',
     ],
 ];

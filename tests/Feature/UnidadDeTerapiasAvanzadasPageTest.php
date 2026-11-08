@@ -10,7 +10,7 @@ class UnidadDeTerapiasAvanzadasPageTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function uta_content_data_has_hero_stats_omimed_and_team_blocks()
+    public function uta_content_data_has_hero_stats_omimed_and_process_blocks()
     {
         $content = require database_path('data/unidad-de-terapias-avanzadas-content.php');
 
@@ -22,7 +22,7 @@ class UnidadDeTerapiasAvanzadasPageTest extends TestCase
         $types = array_column($content, 'type');
         $this->assertContains('dual-panel', $types);
         $this->assertContains('process-timeline', $types);
-        $this->assertContains('idcbis-team-grid', $types);
+        $this->assertNotContains('idcbis-team-grid', $types);
         $this->assertContains('cta-banner', $types);
     }
 

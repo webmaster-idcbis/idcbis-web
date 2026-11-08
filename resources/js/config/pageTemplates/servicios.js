@@ -222,7 +222,7 @@ export function buildServiciosPage() {
         variant: 'info',
         icon: '📍',
         title: 'Ubicación',
-        content: 'IDCBIS\nCarrera 28 #39 A - 10\nBogotá, Colombia\n\nHorario: Lun-Vie 7:00 AM - 5:00 PM',
+        content: 'IDCBIS\nCarrera 32 No. 12-81, Edificio Hemocentro\nSecretaría Distrital de Salud, Bogotá\n\nHorario: Lun-Vie 7:00 AM - 5:00 PM',
       }),
       card({
         variant: 'info',

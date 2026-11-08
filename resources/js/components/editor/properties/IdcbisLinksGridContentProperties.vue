@@ -9,6 +9,7 @@
       <select class="field-input" :value="element.layout || ''" @change="element.layout = $event.target.value">
         <option value="">Cuadrícula</option>
         <option value="expand">Expandir al pasar el cursor</option>
+        <option value="media">Tarjetas con imagen</option>
       </select>
     </div>
 
@@ -49,6 +50,8 @@
     </p>
     <div v-for="(link, i) in element.links" :key="link.id || i" class="border rounded p-2 space-y-2">
       <input v-model="link.icon" class="field-input" placeholder="Emoji o ruta SVG">
+      <input v-model="link.image" class="field-input" placeholder="Ruta de la imagen">
+      <input v-model="link.imageAlt" class="field-input" placeholder="Texto alternativo de la imagen">
       <input v-model="link.label" class="field-input" placeholder="Título">
       <input v-model="link.url" class="field-input" placeholder="URL">
       <input v-model="link.description" class="field-input" placeholder="Descripción">
@@ -65,7 +68,7 @@ const props = defineProps({ element: { type: Object, required: true } })
 
 const addLink = () => {
   if (!props.element.links) props.element.links = []
-  props.element.links.push({ id: generateId(), icon: '🔗', label: '', url: '', description: '' })
+  props.element.links.push({ id: generateId(), icon: '🔗', image: '', imageAlt: '', label: '', url: '', description: '' })
 }
 </script>
 

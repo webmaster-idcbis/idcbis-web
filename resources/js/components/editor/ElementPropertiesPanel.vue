@@ -98,6 +98,7 @@ import IdcbisAnchorNavContentProperties from './properties/IdcbisAnchorNavConten
 import IdcbisNewsListContentProperties from './properties/IdcbisNewsListContentProperties.vue'
 import IdcbisNewsCarouselContentProperties from './properties/IdcbisNewsCarouselContentProperties.vue'
 import IdcbisTissueCatalogContentProperties from './properties/IdcbisTissueCatalogContentProperties.vue'
+import IdcbisDonationsHubContentProperties from './properties/IdcbisDonationsHubContentProperties.vue'
 import SitemapContentProperties from './properties/SitemapContentProperties.vue'
 import { paletteCategories } from '../../config/pageElementPalette'
 
@@ -159,6 +160,7 @@ const panels = {
   'idcbis-news-list': IdcbisNewsListContentProperties,
   'idcbis-news-carousel': IdcbisNewsCarouselContentProperties,
   'idcbis-tissue-catalog': IdcbisTissueCatalogContentProperties,
+  'idcbis-donations-hub': IdcbisDonationsHubContentProperties,
   sitemap: SitemapContentProperties,
 }
 

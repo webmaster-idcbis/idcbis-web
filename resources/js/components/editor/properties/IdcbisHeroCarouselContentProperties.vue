@@ -32,6 +32,20 @@
       </label>
     </div>
 
+    <div v-if="quickAnswers.length" class="space-y-2 pt-2 border-t">
+      <span class="text-xs font-medium">Respuestas rápidas del banner</span>
+      <div
+        v-for="(item, index) in quickAnswers"
+        :key="item.id || index"
+        class="border rounded-lg p-3 space-y-2 bg-gray-50"
+      >
+        <p class="text-xs font-semibold text-slate-700">{{ item.question || `Respuesta ${index + 1}` }}</p>
+        <input v-model="item.question" type="text" placeholder="Pregunta" class="field-input">
+        <textarea v-model="item.answer" rows="2" placeholder="Respuesta" class="field-input"></textarea>
+        <input v-model="item.url" type="text" placeholder="URL (ej. /quienes-somos o #servicios)" class="field-input">
+      </div>
+    </div>
+
     <div class="flex items-center justify-between pt-2 border-t">
       <span class="text-xs font-medium">Slides ({{ slides.length }})</span>
       <button type="button" class="text-xs px-2 py-1 bg-[#0B4F6C] text-white rounded" @click="addSlide">
@@ -90,6 +104,7 @@ const props = defineProps({
 })
 
 const slides = computed(() => props.element.slides || [])
+const quickAnswers = computed(() => props.element.quickAnswers || [])
 const activeFocus = computed(() => props.partFocus?.anchor || '')
 
 const slideAnchor = (slide, index) => buildHeroSlideFocusAnchor(slide.id || `index-${index}`)

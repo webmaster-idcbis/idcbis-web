@@ -28,11 +28,11 @@
           <p v-if="item.description">{{ item.description }}</p>
           <dl v-if="item.duration || item.frequency">
             <div v-if="item.duration">
-              <dt>Duración</dt>
+              <dt>{{ t('ui.duration') }}</dt>
               <dd>{{ item.duration }}</dd>
             </div>
             <div v-if="item.frequency">
-              <dt>Frecuencia</dt>
+              <dt>{{ t('ui.frequency') }}</dt>
               <dd>{{ item.frequency }}</dd>
             </div>
           </dl>
@@ -45,6 +45,7 @@
 <script setup>
 import { computed } from 'vue'
 import { Droplets, FlaskConical, HeartPulse, Users } from 'lucide-vue-next'
+import { useI18n } from '../../../i18n'
 import { resolveBackgroundColor } from '../../../composables/useElementStyles'
 
 const ICON_MAP = { Droplets, HeartPulse, FlaskConical, Users }
@@ -56,6 +57,7 @@ const props = defineProps({
 })
 
 defineEmits(['click'])
+const { t } = useI18n()
 
 const items = computed(() => props.element.items || [])
 

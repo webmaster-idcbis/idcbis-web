@@ -507,6 +507,46 @@ export const createElement = (type) => {
         ],
         items: [],
       }
+    case 'idcbis-donations-hub':
+      return {
+        ...baseElement,
+        fullBleed: true,
+        blockLabel: 'Portal de donaciones',
+        eyebrow: 'Un acto que nace de ti',
+        title: 'Elige cómo regalar vida',
+        subtitle: 'Donar sangre o tejidos es voluntario, gratuito y altruista. Elige un camino y conoce qué significa tu decisión para otras personas.',
+        valuesTitle: 'Así entendemos la donación',
+        paths: [
+          {
+            id: generateId(),
+            tone: 'sangre',
+            kicker: '01 · Sangre',
+            title: 'Donar sangre',
+            description: 'En cerca de 15 minutos puedes ayudar a salvar hasta 3 vidas.',
+            facts: ['15 minutos', 'Hasta 3 vidas', 'Donación segura'],
+            cta: 'Conocer la donación de sangre',
+            url: '/banco-de-sangre',
+            image: '/img/Servicios Home/BS-1200x800.png',
+          },
+          {
+            id: generateId(),
+            tone: 'tejidos',
+            kicker: '02 · Tejidos',
+            title: 'Donar tejidos',
+            description: 'Una donación de tejidos puede mejorar la vida de decenas de pacientes.',
+            facts: ['En vida o después', '#déjalo conversado', 'Decenas de pacientes'],
+            cta: 'Conocer la donación de tejidos',
+            url: '/banco-distrital-de-tejidos#donacion',
+            image: '/img/Servicios Home/BT-1200x800.png',
+          },
+        ],
+        values: [
+          { id: generateId(), title: 'Voluntaria', text: 'La decisión es tuya. Nadie puede obligarte a donar.' },
+          { id: generateId(), title: 'Gratuita', text: 'Donar no tiene costo ni retribución económica.' },
+          { id: generateId(), title: 'Solidaria', text: 'Ayudas a alguien que quizá nunca vas a conocer.' },
+          { id: generateId(), title: 'Segura', text: 'El IDCBIS cuida a quien dona y a quien recibe.' },
+        ],
+      }
     case 'idcbis-expanding-cards':
       return {
         ...baseElement,
@@ -594,15 +634,15 @@ export const createElement = (type) => {
             id: generateId(),
             icon: 'MapPin',
             title: 'Dirección',
-            text: 'Carrera 28 #39 A - 10, Bogotá, Colombia',
-            link: 'https://www.google.com/maps/search/?api=1&query=Carrera+28+%2339A-10,+Bogot%C3%A1,+Colombia',
+            text: 'Carrera 32 No. 12-81, Edificio Hemocentro\nSecretaría Distrital de Salud, Bogotá',
+            link: 'https://www.google.com/maps/search/?api=1&query=Carrera+32+No.+12-81,+Edificio+Hemocentro,+Bogot%C3%A1,+Colombia',
             linkLabel: 'Cómo llegar',
           },
           {
             id: generateId(),
             icon: 'Clock',
             title: 'Horarios',
-            text: 'Lunes a viernes: 7:00 a. m. - 5:00 p. m.\nSábados: 8:00 a. m. - 2:00 p. m.',
+            text: 'Colecta intramural\nLunes a viernes: 7:00 a. m. - 5:00 p. m.\nSábados: 8:00 a. m. - 2:00 p. m.\n\nColecta extramural según programación establecida',
             link: '',
             linkLabel: '',
           },

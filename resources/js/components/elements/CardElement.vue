@@ -20,11 +20,11 @@
       <div v-if="element.content" class="card-content" :style="contentStyles">{{ element.content }}</div>
       <dl v-if="element.duration || element.frequency" class="card-meta">
         <div v-if="element.duration">
-          <dt>Duración</dt>
+          <dt>{{ t('ui.duration') }}</dt>
           <dd>{{ element.duration }}</dd>
         </div>
         <div v-if="element.frequency">
-          <dt>Frecuencia</dt>
+          <dt>{{ t('ui.frequency') }}</dt>
           <dd>{{ element.frequency }}</dd>
         </div>
       </dl>
@@ -35,6 +35,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from '../../i18n'
 import { mergeElementStyles, resolveBackgroundColor } from '../../composables/useElementStyles'
 import ContentIcon from './ContentIcon.vue'
 
@@ -44,6 +45,7 @@ const props = defineProps({
 })
 
 defineEmits(['click'])
+const { t } = useI18n()
 
 const wrapperTag = computed(() => (props.preview && props.element.href ? 'a' : 'div'))
 

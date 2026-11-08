@@ -5,7 +5,7 @@
  * Sincronizado con: php artisan page:sync-data-files
  */
 
-$mapsUrl = 'https://www.google.com/maps/search/?api=1&query=Carrera+28+%2339A-10,+Bogot%C3%A1,+Colombia';
+$mapsUrl = 'https://www.google.com/maps/search/?api=1&query=Carrera+32+No.+12-81,+Edificio+Hemocentro,+Bogot%C3%A1,+Colombia';
 $agendarUrl = 'tel:+5713649620';
 
 return [
@@ -368,8 +368,8 @@ return [
                 'icon' => 'MapPin',
                 'title' => 'Dirección',
                 'text' => 'Banco Distrital de Sangre - IDCBIS
-Carrera 28 #39 A - 10
-Bogotá, Colombia',
+Carrera 32 No. 12-81, Edificio Hemocentro
+Secretaría Distrital de Salud, Bogotá',
                 'link' => $mapsUrl,
                 'linkLabel' => 'Cómo llegar',
             ],
@@ -377,9 +377,12 @@ Bogotá, Colombia',
                 'id' => 'bds_info_hor',
                 'icon' => 'Clock',
                 'title' => 'Horarios de atención',
-                'text' => 'Lunes a viernes: 7:00 a. m. - 5:00 p. m.
+                'text' => 'Colecta intramural
+Lunes a viernes: 7:00 a. m. - 5:00 p. m.
 Sábados: 8:00 a. m. - 2:00 p. m.
-Parqueadero gratuito para donantes',
+Parqueadero gratuito para donantes
+
+Colecta extramural según programación establecida',
                 'link' => '',
                 'linkLabel' => '',
             ],
@@ -433,9 +436,14 @@ Correo: bancodesangre@idcbis.org.co',
                         'type' => 'card',
                         'title' => 'Ubicación',
                         'content' => 'Banco Distrital de Sangre - IDCBIS
-Carrera 28 #39 A - 10 Bogotá, Colombia
-Horario: Lun-Vie 7:00-17:00  Sáb 8:00-14:00
-Parqueadero gratuito para donantes',
+Carrera 32 No. 12-81, Edificio Hemocentro
+Secretaría Distrital de Salud, Bogotá
+
+Colecta intramural
+Lun-Vie 7:00-17:00  Sáb 8:00-14:00
+Parqueadero gratuito para donantes
+
+Colecta extramural según programación establecida',
                         'variant' => 'info',
                     ],
                     [

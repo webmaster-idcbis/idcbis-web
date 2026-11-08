@@ -7,10 +7,12 @@
 return [
     ['slug' => 'quienes-somos', 'title' => 'Quiénes Somos', 'skip_if_exists' => true],
     ['slug' => 'servicios', 'title' => 'Servicios'],
+    ['slug' => 'donaciones', 'title' => 'Donaciones', 'skip_if_exists' => true],
     ['slug' => 'banco-de-sangre', 'title' => 'Banco Distrital de Sangre', 'skip_if_exists' => true],
     ['slug' => 'banco-distrital-de-tejidos', 'title' => 'Banco Distrital de Tejidos', 'skip_if_exists' => true],
-    ['slug' => 'darcelulas', 'title' => 'DarCélulas', 'skip_if_exists' => true],
+    ['slug' => 'darcelulas', 'title' => 'Registro Nacional de Donantes de Células Progenitoras Hematopoyéticas - Darcelulas', 'skip_if_exists' => true],
     ['slug' => 'unidad-de-terapias-avanzadas', 'title' => 'Unidad de Terapias Avanzadas', 'skip_if_exists' => true],
+    ['slug' => 'omimed', 'title' => 'OmiMed', 'skip_if_exists' => true],
     ['slug' => 'servicios-institucionales', 'title' => 'Servicios Institucionales'],
     ['slug' => 'investigacion', 'title' => 'Investigación IDCBIS', 'skip_if_exists' => true],
     ['slug' => 'banco-publico-sangre-cordon-umbilical', 'title' => 'Banco de Sangre de Cordón Umbilical'],

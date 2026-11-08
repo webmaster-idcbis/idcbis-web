@@ -47,6 +47,7 @@ export const paletteCategories = [
     id: 'idcbis',
     label: 'Bloques IDCBIS',
     items: [
+      { type: 'idcbis-donations-hub', icon: '♥', iconClass: 'text-[#C4A140]', label: 'Portal de donaciones', description: 'Elige sangre o tejidos' },
       { type: 'idcbis-hero', icon: '★', iconClass: 'text-[#0B4F6C]', label: 'Hero donación', description: 'Título, botones e imagen' },
       { type: 'idcbis-hero-carousel', icon: '⇄', iconClass: 'text-[#2C8C99]', label: 'Hero carrusel', description: 'Hero en slides' },
       { type: 'idcbis-checklist', icon: '☑', iconClass: 'text-[#C4A140]', label: 'Requisitos', description: 'Lista con CTA de donación' },

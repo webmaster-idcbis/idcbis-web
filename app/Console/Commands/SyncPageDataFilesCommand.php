@@ -53,6 +53,9 @@ class SyncPageDataFilesCommand extends Command
         'mapa-del-sitio' => [
             'monolith' => false,
         ],
+        'donaciones' => [
+            'monolith' => false,
+        ],
         'banco-de-sangre' => [
             'monolith' => false,
         ],
@@ -65,6 +68,10 @@ class SyncPageDataFilesCommand extends Command
             'monolith' => false,
         ],
         'unidad-de-terapias-avanzadas' => [
+            'source' => 'https://idcbis.org.co/unidad-de-terapias-avanzadas/',
+            'monolith' => false,
+        ],
+        'omimed' => [
             'source' => 'https://idcbis.org.co/unidad-de-terapias-avanzadas/',
             'monolith' => false,
         ],

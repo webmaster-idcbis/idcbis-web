@@ -16,7 +16,6 @@
           <span>{{ element.sectionHighlight || 'servicios' }}</span>
         </h2>
         <p v-if="element.sectionSubtitle">{{ element.sectionSubtitle }}</p>
-        <p v-if="useRail" class="idcbis-services__hint">Pase el cursor sobre un servicio para leer más.</p>
       </div>
 
       <div
@@ -65,12 +64,12 @@
             <div class="service-card__content">
               <span v-if="card.tag" class="service-card__tag">{{ card.tag }}</span>
               <h3 :id="cardTitleId(card, index)">{{ card.title }}</h3>
-              <span v-if="cardTarget(card) === '_blank'" class="sr-only">Se abre en una nueva ventana.</span>
+              <span v-if="cardTarget(card) === '_blank'" class="sr-only">{{ t('ui.newWindow') }}</span>
               <div class="service-card__detail">
                 <div class="service-card__detail-inner">
                   <p v-if="card.description">{{ card.description }}</p>
                   <span class="service-card__more">
-                    Conocer servicio
+                    {{ t('ui.knowService') }}
                     <ArrowRight :size="16" aria-hidden="true" />
                   </span>
                 </div>
@@ -82,7 +81,7 @@
           <button
             type="button"
             class="services-rail__arrow"
-            aria-label="Ver el servicio anterior"
+            :aria-label="t('ui.previousService')"
             @click.stop="cycle(-1)"
           >
             <span aria-hidden="true">←</span>
@@ -90,7 +89,7 @@
           <button
             type="button"
             class="services-rail__arrow"
-            aria-label="Ver el servicio siguiente"
+            :aria-label="t('ui.nextService')"
             @click.stop="cycle(1)"
           >
             <span aria-hidden="true">→</span>
@@ -132,7 +131,7 @@
           </div>
           <div class="service-card__content">
             <h3 :id="cardTitleId(card, index)">{{ card.title }}</h3>
-            <span v-if="cardTarget(card) === '_blank'" class="sr-only">Se abre en una nueva ventana.</span>
+            <span v-if="cardTarget(card) === '_blank'" class="sr-only">{{ t('ui.newWindow') }}</span>
             <p v-if="card.description">{{ card.description }}</p>
             <span v-if="card.tag" class="service-card__tag">{{ card.tag }}</span>
           </div>
@@ -145,6 +144,7 @@
 <script setup>
 import { computed, nextTick, ref } from 'vue'
 import { ArrowRight } from 'lucide-vue-next'
+import { useI18n } from '../../../i18n'
 import { IDCBIS_THEME } from '../../../config/idcbisTheme'
 import { useIdcbisEditorParts } from '../../../composables/useIdcbisEditorParts'
 import { buildServiceCardFocusAnchor } from '../../../utils/editorPartFocus'
@@ -157,6 +157,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['click', 'focus-part'])
+const { t } = useI18n()
 const { partClasses, focusPart } = useIdcbisEditorParts(props, emit)
 
 const cardBgs = IDCBIS_THEME.cardBgs
@@ -258,11 +259,6 @@ const onCardClick = (card, index, event) => {
   color: #333333;
   max-width: 700px;
   margin: 0.5rem auto 0;
-}
-
-.idcbis-services__hint {
-  color: #607d8b;
-  font-size: 0.98rem;
 }
 
 .idcbis-services__grid {

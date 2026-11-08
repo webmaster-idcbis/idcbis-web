@@ -88,12 +88,20 @@
               </component>
               <p v-if="slide.subtitle">{{ slide.subtitle }}</p>
               <ul v-if="quickAnswers.length && index === 0" class="idcbis-hero__answers">
-                <li v-for="item in quickAnswers" :key="item.id || item.question" class="idcbis-hero__answer">
-                  <component :is="answerIcon(item.icon)" class="idcbis-hero__answer-icon" aria-hidden="true" />
-                  <div>
-                    <p class="idcbis-hero__answer-q">{{ item.question }}</p>
-                    <p class="idcbis-hero__answer-a">{{ item.answer }}</p>
-                  </div>
+                <li v-for="item in quickAnswers" :key="item.id || item.question">
+                  <component
+                    :is="answerTag(item)"
+                    class="idcbis-hero__answer"
+                    :class="{ 'idcbis-hero__answer--link': answerIsLink(item) }"
+                    v-bind="answerBindings(item)"
+                    @click.stop="onAnswerClick(item, $event)"
+                  >
+                    <component :is="answerIcon(item.icon)" class="idcbis-hero__answer-icon" aria-hidden="true" />
+                    <div>
+                      <p class="idcbis-hero__answer-q">{{ item.question }}</p>
+                      <p class="idcbis-hero__answer-a">{{ item.answer }}</p>
+                    </div>
+                  </component>
                 </li>
               </ul>
               <div class="idcbis-hero__cta">
@@ -134,7 +142,7 @@
               class="idcbis-hero__image"
               :style="{ backgroundImage: `url(${slide.image})` }"
               role="img"
-              :aria-label="slide.imageAlt || 'Imagen destacada'"
+              :aria-label="slide.imageAlt || t('ui.featuredImage')"
             >
               <span v-if="slide.imageBadge" class="idcbis-hero__badge">{{ slide.imageBadge }}</span>
             </div>
@@ -146,7 +154,7 @@
         v-if="slides.length > 1 && element.showArrows !== false"
         type="button"
         class="idcbis-hero-carousel__nav idcbis-hero-carousel__nav--prev"
-        aria-label="Anterior"
+        :aria-label="t('ui.previous')"
         @click.stop="prevSlide"
       >
         <svg class="idcbis-hero-carousel__nav-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -157,7 +165,7 @@
         v-if="slides.length > 1 && element.showArrows !== false"
         type="button"
         class="idcbis-hero-carousel__nav idcbis-hero-carousel__nav--next"
-        aria-label="Siguiente"
+        :aria-label="t('ui.next')"
         @click.stop="nextSlide"
       >
         <svg class="idcbis-hero-carousel__nav-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -172,14 +180,14 @@
         :aria-pressed="userPaused"
         @click.stop="toggleAutoplay"
       >
-        {{ userPaused ? 'Reanudar' : 'Pausar' }}
+        {{ userPaused ? t('ui.resume') : t('ui.pause') }}
       </button>
 
       <div
         v-if="slides.length > 1 && element.showIndicators !== false"
         class="idcbis-hero-carousel__dots"
         role="group"
-        aria-label="Elegir servicio"
+        :aria-label="t('ui.chooseSlide')"
       >
         <button
           v-for="(slide, index) in slides"
@@ -187,7 +195,7 @@
           type="button"
           class="idcbis-hero-carousel__dot"
           :class="{ 'idcbis-hero-carousel__dot--active': currentSlide === index }"
-          :aria-label="`Ir a ${slideLabel(slide, index)}`"
+          :aria-label="t('ui.goTo', { label: slideLabel(slide, index) })"
           :aria-current="currentSlide === index ? 'true' : undefined"
           @click.stop="goToSlide(index)"
         />
@@ -199,6 +207,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { Building2, FlaskConical, HandHeart } from 'lucide-vue-next'
+import { useI18n } from '../../../i18n'
 import { useIdcbisEditorParts } from '../../../composables/useIdcbisEditorParts'
 import { buildHeroSlideFocusAnchor } from '../../../utils/editorPartFocus'
 import { HERO_WIDTHS, buildSrcSet } from '../../../utils/responsiveImages'
@@ -216,6 +225,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['click', 'focus-part'])
+const { t } = useI18n()
 
 const { partClasses, focusPart } = useIdcbisEditorParts(props, emit)
 
@@ -249,6 +259,28 @@ const visualLabel = computed(() => {
 })
 
 const answerIcon = (name) => ANSWER_ICONS[name] || Building2
+
+const answerUrl = (item) => String(item?.url || '').trim()
+
+const answerIsLink = (item) => Boolean(props.preview && answerUrl(item))
+
+const answerTag = (item) => (answerIsLink(item) ? 'a' : 'div')
+
+const answerBindings = (item) => {
+  if (!answerIsLink(item)) return {}
+  const url = answerUrl(item)
+  const external = /^https?:\/\//i.test(url)
+  return {
+    href: url,
+    ...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {}),
+  }
+}
+
+const onAnswerClick = (item, event) => {
+  if (!props.preview) {
+    event.preventDefault()
+  }
+}
 
 const slideBackground = (slide) => slide.backgroundImage || props.element.backgroundImage || ''
 
@@ -631,6 +663,32 @@ onUnmounted(() => {
   border-radius: 0.75rem;
   background: rgba(0, 60, 95, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.22);
+  color: inherit;
+  text-decoration: none;
+  text-align: left;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.idcbis-hero__answer--link {
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.idcbis-hero__answer--link:hover {
+  background: rgba(0, 60, 95, 0.98);
+  border-color: rgba(196, 161, 64, 0.7);
+}
+
+.idcbis-hero__answer--link:focus-visible {
+  outline: 2px solid #C4A140;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .idcbis-hero__answer--link {
+    transition: none;
+  }
 }
 
 .idcbis-hero__answer-icon {

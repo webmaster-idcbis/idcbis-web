@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+  <!-- Caja superior -->
+  <rect x="176" y="32" width="160" height="88" rx="12"/>
+  <!-- Línea vertical desde la caja superior -->
+  <rect x="244" y="120" width="24" height="64"/>
+  <!-- Barra horizontal -->
+  <rect x="72" y="168" width="368" height="24" rx="4"/>
+  <!-- Líneas verticales a las tres cajas -->
+  <rect x="100" y="192" width="24" height="56"/>
+  <rect x="244" y="192" width="24" height="56"/>
+  <rect x="388" y="192" width="24" height="56"/>
+  <!-- Tres cajas inferiores -->
+  <rect x="40" y="248" width="144" height="88" rx="12"/>
+  <rect x="184" y="248" width="144" height="88" rx="12"/>
+  <rect x="328" y="248" width="144" height="88" rx="12"/>
+  <!-- Segunda fila: líneas desde caja central inferior -->
+  <rect x="244" y="336" width="24" height="48"/>
+  <rect x="140" y="368" width="232" height="24" rx="4"/>
+  <rect x="140" y="392" width="24" height="32"/>
+  <rect x="348" y="392" width="24" height="32"/>
+  <!-- Dos cajas de tercera nivel -->
+  <rect x="88" y="424" width="128" height="56" rx="10"/>
+  <rect x="296" y="424" width="128" height="56" rx="10"/>
+</svg>

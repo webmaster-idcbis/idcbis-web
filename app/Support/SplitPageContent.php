@@ -171,6 +171,16 @@ class SplitPageContent
         $id = $section['id'] ?? uniqid('qs_sec_');
 
         return match ($layout) {
+            'organigrama' => [self::block([
+                'id' => $id,
+                'type' => 'image',
+                'blockLabel' => $title,
+                'fullBleed' => true,
+                'src' => $section['image'] ?? '',
+                'alt' => $section['imageAlt'] ?? $title,
+                'caption' => $section['caption'] ?? $title,
+                'padding' => '2rem',
+            ])],
             'team' => [self::block([
                 'id' => $id,
                 'type' => 'idcbis-team-grid',
@@ -233,7 +243,18 @@ class SplitPageContent
                     'margin' => '0 auto 3rem',
                     'padding' => '0 2rem 2rem',
                     'listStyle' => 'bullet',
-                    'items' => $section['items'] ?? [],
+                    'items' => array_map(
+                        static function ($item) {
+                            if (is_string($item)) {
+                                return $item;
+                            }
+                            $name = $item['name'] ?? '';
+                            $url = $item['url'] ?? '';
+
+                            return $url !== '' ? trim($name.' — '.$url) : $name;
+                        },
+                        $section['items'] ?? []
+                    ),
                 ]),
             ],
             default => [self::block([

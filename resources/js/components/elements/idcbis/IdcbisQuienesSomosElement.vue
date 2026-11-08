@@ -36,7 +36,7 @@
           @click.stop="focusPart('mission', 'Misión')"
         >
           <ContentIcon value="/img/Iconos/mision.svg" class="qs-mv-card__icon" />
-          <h2>Misión</h2>
+          <h2>{{ t('about.mission') }}</h2>
           <p>{{ element.mission }}</p>
         </article>
         <article
@@ -45,7 +45,7 @@
           @click.stop="focusPart('vision', 'Visión 2030')"
         >
           <ContentIcon value="/img/Iconos/vision.svg" class="qs-mv-card__icon" />
-          <h2>Visión 2030</h2>
+          <h2>{{ t('about.vision') }}</h2>
           <p>{{ element.vision }}</p>
         </article>
       </div>
@@ -58,15 +58,15 @@
       @click.stop="focusPart('purpose', 'Propósito superior')"
     >
       <div class="qs-container">
-        <h2>Propósito superior</h2>
+        <h2>{{ t('about.purpose') }}</h2>
         <p>{{ element.purpose }}</p>
       </div>
     </section>
 
-    <!-- Principios rectores — cuadrícula uniforme -->
+    <!-- Principios rectores — imagen con transición al texto -->
     <section class="qs-section qs-section--white">
       <div class="qs-container">
-        <h2 class="qs-section-title">Principios rectores</h2>
+        <h2 class="qs-section-title">{{ t('about.principles') }}</h2>
         <ul class="qs-principles">
           <li
             v-for="(item, index) in principles"
@@ -75,8 +75,20 @@
             :class="partClasses(buildPrincipleFocusAnchor(item.id || index))"
             @click.stop="focusPart(buildPrincipleFocusAnchor(item.id || index), item.title)"
           >
-            <ContentIcon :value="item.icon" class="qs-principle__icon" />
-            <span class="qs-principle__label">{{ item.title }}</span>
+            <img
+              v-if="item.image"
+              :src="item.image"
+              :alt="item.imageAlt || item.title"
+              class="qs-principle__photo"
+              loading="lazy"
+              width="480"
+              height="640"
+            >
+            <div v-else class="qs-principle__fallback" aria-hidden="true" />
+            <div class="qs-principle__scrim" aria-hidden="true" />
+            <div class="qs-principle__content">
+              <span class="qs-principle__label">{{ item.title }}</span>
+            </div>
           </li>
         </ul>
       </div>
@@ -118,7 +130,7 @@
     <!-- Secciones plegables -->
     <section class="qs-section qs-section--white qs-accordion-wrap">
       <div class="qs-container">
-        <h2 class="qs-section-title">Más información institucional</h2>
+        <h2 class="qs-section-title">{{ t('about.moreInfo') }}</h2>
         <div class="qs-accordion">
           <div
             v-for="(section, index) in sections"
@@ -139,14 +151,70 @@
             </button>
             <div class="qs-accordion__panel" :aria-hidden="openIndex !== index">
               <div class="qs-accordion__panel-inner">
+                <!-- Organigrama -->
+                <figure v-if="section.layout === 'organigrama'" class="qs-orgchart">
+                  <p v-if="section.description" class="qs-orgchart__desc">{{ section.description }}</p>
+                  <button
+                    v-if="section.image"
+                    type="button"
+                    class="qs-orgchart__media"
+                    :aria-label="t('about.enlarge', { title: section.title || t('about.orgChart') })"
+                    @click.stop="onOrgChartClick(section)"
+                  >
+                    <img
+                      :src="section.image"
+                      :alt="section.imageAlt || section.title || t('about.orgChartAlt')"
+                      class="qs-orgchart__image"
+                      loading="lazy"
+                      width="1364"
+                      height="1216"
+                    >
+                  </button>
+                  <figcaption v-if="section.caption" class="qs-orgchart__caption">{{ section.caption }}</figcaption>
+                </figure>
+
                 <!-- Lista de funciones -->
-                <ul v-if="section.layout === 'list'" class="qs-list">
+                <ul v-else-if="section.layout === 'list'" class="qs-list">
                   <li v-for="(line, i) in section.items" :key="i">{{ line }}</li>
                 </ul>
 
                 <!-- Miembros fundadores -->
                 <ul v-else-if="section.layout === 'founders'" class="qs-founders">
-                  <li v-for="(name, i) in section.items" :key="i">{{ name }}</li>
+                  <li
+                    v-for="(item, i) in section.items"
+                    :key="founderMeta(item).name + i"
+                    class="qs-founder"
+                  >
+                    <component
+                      :is="preview && founderMeta(item).url ? 'a' : 'div'"
+                      :href="preview && founderMeta(item).url ? founderMeta(item).url : undefined"
+                      :target="preview && founderMeta(item).url ? '_blank' : undefined"
+                      :rel="preview && founderMeta(item).url ? 'noopener noreferrer' : undefined"
+                      class="qs-founder__card"
+                      :aria-label="founderMeta(item).url
+                        ? t('about.visitSite', { name: founderMeta(item).name })
+                        : undefined"
+                      @click.stop
+                    >
+                      <span
+                        class="qs-founder__logo-wrap"
+                        :class="{ 'qs-founder__logo-wrap--dark': founderMeta(item).logoOnDark }"
+                      >
+                        <img
+                          v-if="founderMeta(item).logo"
+                          :src="founderMeta(item).logo"
+                          :alt="t('about.logoOf', { name: founderMeta(item).name })"
+                          class="qs-founder__logo"
+                          loading="lazy"
+                          @error="onFounderLogoError"
+                        >
+                        <span v-else class="qs-founder__logo-fallback" aria-hidden="true">
+                          {{ founderInitials(founderMeta(item).name) }}
+                        </span>
+                      </span>
+                      <span class="qs-founder__name">{{ founderMeta(item).name }}</span>
+                    </component>
+                  </li>
                 </ul>
 
                 <!-- Equipo con fotos -->
@@ -203,7 +271,6 @@
                 <!-- Contacto / horarios -->
                 <div v-else-if="section.layout === 'contact'" class="qs-contact-grid">
                   <div v-for="(block, ci) in section.items" :key="ci" class="qs-contact-card">
-                    <ContentIcon :value="block.icon" class="qs-contact-card__icon" />
                     <h3>{{ block.title }}</h3>
                     <p>{{ block.text }}</p>
                   </div>
@@ -214,12 +281,40 @@
         </div>
       </div>
     </section>
+
+    <Teleport to="body">
+      <div
+        v-if="orgChartOpen && orgChartActive"
+        class="qs-orgchart-lightbox"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="orgChartActive.title || t('about.orgChart')"
+        @click.self="closeOrgChart"
+      >
+        <div class="qs-orgchart-lightbox__bar">
+          <button type="button" class="qs-orgchart-lightbox__btn" @click="zoomOrgChart(-0.2)">−</button>
+          <button type="button" class="qs-orgchart-lightbox__btn" @click="zoomOrgChart(0.2)">+</button>
+          <button type="button" class="qs-orgchart-lightbox__btn qs-orgchart-lightbox__btn--close" @click="closeOrgChart">
+            {{ t('about.close') }}
+          </button>
+        </div>
+        <div class="qs-orgchart-lightbox__stage">
+          <img
+            :src="orgChartActive.image"
+            :alt="orgChartActive.imageAlt || orgChartActive.title || t('about.orgChartAlt')"
+            class="qs-orgchart-lightbox__image"
+            :style="{ transform: `scale(${orgChartZoom})` }"
+          >
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { ChevronDown } from 'lucide-vue-next'
+import { useI18n } from '../../../i18n'
 import { teamPhotoUrl, avatarFallbackUrl } from '../../../config/idcbisTeamPhotos'
 import ContentIcon from '../ContentIcon.vue'
 import {
@@ -236,15 +331,57 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['click', 'focus-part'])
+const { t } = useI18n()
 
 const openIndex = ref(props.preview ? 0 : -1)
+const orgChartOpen = ref(false)
+const orgChartZoom = ref(1)
+const orgChartActive = ref(null)
 
 const introParagraphs = computed(() => props.element.intro || [])
 const principles = computed(() => props.element.principles || [])
 const director = computed(() => props.element.director || null)
 const sections = computed(() => props.element.sections || [])
 
+const onOrgChartClick = (section) => {
+  if (!props.preview) return
+  openOrgChart(section)
+}
+
+const openOrgChart = (section) => {
+  if (!section?.image) return
+  orgChartActive.value = section
+  orgChartZoom.value = 1
+  orgChartOpen.value = true
+  document.body.style.overflow = 'hidden'
+}
+
+const closeOrgChart = () => {
+  orgChartOpen.value = false
+  orgChartActive.value = null
+  orgChartZoom.value = 1
+  document.body.style.overflow = ''
+}
+
+const zoomOrgChart = (delta) => {
+  orgChartZoom.value = Math.min(2.5, Math.max(0.6, Number((orgChartZoom.value + delta).toFixed(2))))
+}
+
+const onOrgChartKeydown = (event) => {
+  if (!orgChartOpen.value) return
+  if (event.key === 'Escape') closeOrgChart()
+  if (event.key === '+' || event.key === '=') zoomOrgChart(0.2)
+  if (event.key === '-') zoomOrgChart(-0.2)
+}
+
+onMounted(() => window.addEventListener('keydown', onOrgChartKeydown))
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onOrgChartKeydown)
+  document.body.style.overflow = ''
+})
+
 const sectionIcons = {
+  organigrama: '/img/Iconos/organigrama.svg',
   list: '/img/Iconos/Funciones IDCBIS.svg',
   founders: '/img/Iconos/miembros fundadores.svg',
   team: '/img/Iconos/gestores lideres.svg',
@@ -253,6 +390,38 @@ const sectionIcons = {
 }
 
 const sectionIcon = (section) => sectionIcons[section.layout] || section.icon || '📄'
+
+const founderMeta = (item) => {
+  if (typeof item === 'string') {
+    return { name: item, logo: '', url: '', logoOnDark: false }
+  }
+  return {
+    name: item?.name || '',
+    logo: item?.logo || '',
+    url: item?.url || '',
+    logoOnDark: Boolean(item?.logoOnDark),
+  }
+}
+
+const founderInitials = (name) => {
+  const words = String(name || '').split(/\s+/).filter(Boolean)
+  if (!words.length) return '·'
+  return words.slice(0, 2).map((w) => w[0]).join('').toUpperCase()
+}
+
+const onFounderLogoError = (event) => {
+  const img = event.target
+  if (!img) return
+  img.style.display = 'none'
+  const wrap = img.parentElement
+  if (wrap && !wrap.querySelector('.qs-founder__logo-fallback')) {
+    const fallback = document.createElement('span')
+    fallback.className = 'qs-founder__logo-fallback'
+    fallback.setAttribute('aria-hidden', 'true')
+    fallback.textContent = '·'
+    wrap.appendChild(fallback)
+  }
+}
 
 const partClasses = (anchor) => {
   if (props.preview) return {}
@@ -480,60 +649,242 @@ const toggle = (index) => {
   line-height: 1.5;
 }
 
-/* Principios — altura uniforme */
+/* Principios — overlay limpio con transición imagen → texto */
 .qs-principles {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 1rem;
+  gap: 0.875rem;
   align-items: stretch;
 }
 
 @media (max-width: 1024px) {
   .qs-principles {
     grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
   }
 }
 
 @media (max-width: 640px) {
   .qs-principles {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
   }
 }
 
 .qs-principle {
+  position: relative;
+  isolation: isolate;
+  aspect-ratio: 3 / 4;
+  min-height: 260px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #003C5F;
+  cursor: pointer;
+}
+
+.qs-principle:focus-visible {
+  outline: 2px solid #005674;
+  outline-offset: 3px;
+}
+
+.qs-principle__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  transform: scale(1.01);
+  transition: transform 0.55s ease, filter 0.45s ease;
+}
+
+.qs-principle__fallback {
+  position: absolute;
+  inset: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  min-height: 160px;
-  padding: 1.5rem 1rem;
-  background: linear-gradient(180deg, #f8fbfc 0%, #fff 100%);
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(11, 79, 108, 0.05);
-  transition: transform 0.2s, box-shadow 0.2s;
+  background: linear-gradient(160deg, #0b4f6c, #008996);
 }
 
-.qs-principle:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(11, 79, 108, 0.1);
+.qs-principle__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      185deg,
+      rgba(0, 60, 95, 0) 0%,
+      rgba(0, 60, 95, 0.04) 32%,
+      rgba(0, 54, 86, 0.32) 56%,
+      rgba(0, 42, 68, 0.7) 76%,
+      rgba(0, 28, 46, 0.94) 100%
+    );
 }
 
-.qs-principle__icon {
-  font-size: 2rem;
-  line-height: 1;
-  margin-bottom: 0.75rem;
+.qs-principle__scrim::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 36, 58, 0.28);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.qs-principle__content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 1.5rem 1.15rem 1.35rem;
+  color: #fff;
 }
 
 .qs-principle__label {
-  font-size: 0.875rem;
+  font-family: var(--font-idcbis-display);
+  font-size: clamp(0.9rem, 1.05vw, 1.05rem);
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+  text-shadow: 0 1px 12px rgba(0, 24, 40, 0.4);
+}
+
+.qs-principle:hover .qs-principle__photo,
+.qs-principle:focus-within .qs-principle__photo {
+  transform: scale(1.05);
+}
+
+.qs-principle:hover .qs-principle__scrim::after,
+.qs-principle:focus-within .qs-principle__scrim::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qs-principle__photo,
+  .qs-principle__scrim::after {
+    transition: none;
+  }
+
+  .qs-principle:hover .qs-principle__photo,
+  .qs-principle:focus-within .qs-principle__photo {
+    transform: none;
+  }
+}
+
+/* Organigrama (acordeón) */
+.qs-orgchart {
+  margin: 0;
+}
+
+.qs-orgchart__desc {
+  margin: 0 0 1rem;
+  color: #475569;
+  line-height: 1.65;
+  font-size: 0.95rem;
+}
+
+.qs-orgchart__media {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #0f172a;
+  cursor: zoom-in;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.qs-orgchart__media:hover {
+  border-color: #008996;
+  box-shadow: 0 10px 24px rgba(11, 79, 108, 0.12);
+}
+
+.qs-orgchart__media:focus-visible {
+  outline: 2px solid #005674;
+  outline-offset: 2px;
+}
+
+.qs-orgchart__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.qs-orgchart__caption {
+  margin: 0.75rem 0 0;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: #64748b;
+}
+
+.qs-orgchart-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  background: rgba(15, 23, 42, 0.92);
+}
+
+.qs-orgchart-lightbox__bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+}
+
+.qs-orgchart-lightbox__btn {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: #0b4f6c;
-  line-height: 1.35;
+  cursor: pointer;
+}
+
+.qs-orgchart-lightbox__btn:hover,
+.qs-orgchart-lightbox__btn:focus-visible {
+  background: rgba(0, 137, 150, 0.45);
+  outline: none;
+}
+
+.qs-orgchart-lightbox__btn--close {
+  font-size: 0.875rem;
+}
+
+.qs-orgchart-lightbox__stage {
+  flex: 1;
+  overflow: auto;
+  display: grid;
+  place-items: center;
+  padding: 0.5rem 1rem 2rem;
+}
+
+.qs-orgchart-lightbox__image {
+  max-width: min(96vw, 1200px);
+  width: 100%;
+  height: auto;
+  transform-origin: center center;
+  transition: transform 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qs-orgchart__media,
+  .qs-orgchart-lightbox__image {
+    transition: none;
+  }
 }
 
 /* Director */
@@ -655,6 +1006,7 @@ const toggle = (index) => {
 .qs-accordion__trigger-icon {
   font-size: 1.35rem;
   flex-shrink: 0;
+  color: #1a1a1a;
 }
 
 .qs-accordion__trigger-text {
@@ -735,44 +1087,139 @@ const toggle = (index) => {
   padding: 0;
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.875rem;
 }
 
-.qs-founders li {
-  padding: 0.875rem 1rem;
-  background: #f8fafc;
-  border-radius: 10px;
+.qs-founder {
+  min-width: 0;
+}
+
+.qs-founder__card {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  column-gap: 0.9rem;
+  align-items: center;
+  min-height: 88px;
+  padding: 0.85rem 1rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+a.qs-founder__card:hover {
+  border-color: #008996;
+  box-shadow: 0 10px 24px rgba(11, 79, 108, 0.1);
+  transform: translateY(-2px);
+}
+
+a.qs-founder__card:focus-visible {
+  outline: 2px solid #005674;
+  outline-offset: 2px;
+}
+
+.qs-founder__logo-wrap {
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem;
+  border-radius: 12px;
+  background: #f4f7f9;
+  overflow: hidden;
+}
+
+.qs-founder__logo-wrap--dark {
+  background: #0b4f6c;
+}
+
+.qs-founder__logo {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.qs-founder__logo-fallback {
+  font-family: var(--font-idcbis-display);
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0b4f6c;
+}
+
+.qs-founder__name {
   font-size: 0.875rem;
-  font-weight: 600;
-  color: #334155;
-  border-left: 3px solid #2c8c99;
+  font-weight: 700;
+  color: #0b4f6c;
+  line-height: 1.35;
 }
 
-/* Equipo */
+@media (prefers-reduced-motion: reduce) {
+  .qs-founder__card,
+  a.qs-founder__card:hover {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* Equipo — compacto: 4–5 por fila */
 .qs-team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.85rem 0.75rem;
+}
+
+@media (max-width: 1100px) {
+  .qs-team-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .qs-team-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .qs-team-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .qs-team-card {
-  background: #f8fafc;
-  border-radius: 16px;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0.75rem 0.5rem 0.9rem;
+  background: #fff;
+  border-radius: 12px;
   border: 1px solid #e8eef2;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
 .qs-team-card:hover {
-  box-shadow: 0 12px 28px rgba(11, 79, 108, 0.1);
+  border-color: #b6d6de;
+  box-shadow: 0 8px 18px rgba(11, 79, 108, 0.08);
   transform: translateY(-2px);
 }
 
 .qs-team-card__photo-wrap {
-  aspect-ratio: 1;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
   background: #dde8ec;
   overflow: hidden;
+  flex-shrink: 0;
+  margin-bottom: 0.65rem;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3px #c5dde4;
 }
 
 .qs-team-card__photo {
@@ -784,34 +1231,36 @@ const toggle = (index) => {
 }
 
 .qs-team-card__body {
-  padding: 1.15rem;
+  padding: 0;
+  min-width: 0;
+  width: 100%;
 }
 
 .qs-team-card__body h3 {
-  font-size: 0.9375rem;
+  font-size: 0.8125rem;
   font-weight: 800;
   color: #0b4f6c;
-  margin: 0 0 0.35rem;
-  line-height: 1.3;
+  margin: 0 0 0.3rem;
+  line-height: 1.25;
 }
 
 .qs-team-card__role {
-  font-size: 0.8125rem;
-  color: #2c8c99;
+  font-size: 0.6875rem;
+  color: #008996;
   font-weight: 600;
-  margin: 0 0 0.35rem;
-  line-height: 1.4;
+  margin: 0 0 0.25rem;
+  line-height: 1.35;
 }
 
 .qs-team-card__credentials {
-  font-size: 0.75rem;
+  font-size: 0.625rem;
   color: #64748b;
-  margin: 0 0 0.5rem;
-  line-height: 1.4;
+  margin: 0 0 0.35rem;
+  line-height: 1.35;
 }
 
 .qs-team-card__email {
-  font-size: 0.75rem;
+  font-size: 0.625rem;
   color: #0b4f6c;
   font-weight: 600;
   word-break: break-all;
@@ -820,6 +1269,14 @@ const toggle = (index) => {
 
 .qs-team-card__email:hover {
   text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qs-team-card,
+  .qs-team-card:hover {
+    transition: none;
+    transform: none;
+  }
 }
 
 /* Políticas */
@@ -875,31 +1332,24 @@ a.qs-policy-card:hover {
 }
 
 .qs-contact-card {
-  background: linear-gradient(145deg, #0b4f6c, #2c8c99);
-  color: #fff;
-  padding: 1.5rem;
-  border-radius: 16px;
-  text-align: center;
-}
-
-.qs-contact-card__icon {
-  font-size: 1.75rem;
-  display: block;
-  margin-bottom: 0.5rem;
+  background: #f8f9fa;
+  color: #1a1a1a;
+  padding: 1.25rem 1.5rem;
+  border-left: 3px solid #005674;
 }
 
 .qs-contact-card h3 {
   font-size: 1rem;
   font-weight: 700;
-  color: #C4A140;
-  margin: 0 0 0.75rem;
+  color: #0b4f6c;
+  margin: 0 0 0.5rem;
 }
 
 .qs-contact-card p {
   margin: 0;
   font-size: 0.9rem;
-  line-height: 1.6;
+  line-height: 1.65;
   white-space: pre-line;
-  opacity: 0.95;
+  color: #475569;
 }
 </style>

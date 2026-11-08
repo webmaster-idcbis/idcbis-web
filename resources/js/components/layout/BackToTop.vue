@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLongPage" class="back-to-top">
+  <div v-if="isLongPage && !hideOnThisPage" class="back-to-top">
     <button
       type="button"
       class="back-to-top__button"
@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { ChevronUp } from 'lucide-vue-next'
 import { useI18n } from '../../i18n'
@@ -25,6 +25,7 @@ const LONG_PAGE_MIN_RATIO = 1.7
 const route = useRoute()
 const { t } = useI18n()
 const isLongPage = ref(false)
+const hideOnThisPage = computed(() => route.path === '/investigacion-terapias-avanzadas')
 
 let resizeObserver = null
 let measureTimer = null

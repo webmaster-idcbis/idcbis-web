@@ -90,9 +90,23 @@
         @move="movePrinciple"
       >
         <template #default="{ item }">
-          <div class="grid grid-cols-[3rem_1fr] gap-2">
-            <input v-model="item.icon" type="text" class="editor-field-input text-center" placeholder="Emoji o ruta SVG" title="Icono">
-            <input v-model="item.title" type="text" class="editor-field-input" placeholder="Nombre del principio">
+          <div class="space-y-2">
+            <div class="grid grid-cols-[3rem_1fr] gap-2">
+              <input v-model="item.icon" type="text" class="editor-field-input text-center" placeholder="Emoji o ruta SVG" title="Icono">
+              <input v-model="item.title" type="text" class="editor-field-input" placeholder="Nombre del principio">
+            </div>
+            <input
+              v-model="item.image"
+              type="text"
+              class="editor-field-input"
+              placeholder="Imagen (URL) — ej. /img/principios/excelencia.jpg"
+            >
+            <input
+              v-model="item.imageAlt"
+              type="text"
+              class="editor-field-input"
+              placeholder="Texto alternativo de la imagen"
+            >
           </div>
         </template>
       </PropertyRepeater>
@@ -168,11 +182,17 @@
             </select>
           </div>
 
-          <!-- Lista / fundadores -->
-          <div v-if="section.layout === 'list' || section.layout === 'founders'" class="qs-props__nested">
-            <p class="text-xs font-semibold text-gray-700 mb-2">
-              {{ section.layout === 'founders' ? 'Nombres' : 'Ítems de la lista' }}
-            </p>
+          <!-- Organigrama -->
+          <div v-if="section.layout === 'organigrama'" class="qs-props__nested space-y-2">
+            <textarea v-model="section.description" rows="2" placeholder="Descripción breve" class="editor-field-input" />
+            <input v-model="section.image" type="text" placeholder="Imagen (URL) — /img/Organigrama-2021.png" class="editor-field-input">
+            <input v-model="section.imageAlt" type="text" placeholder="Texto alternativo" class="editor-field-input">
+            <input v-model="section.caption" type="text" placeholder="Pie de imagen (opcional)" class="editor-field-input">
+          </div>
+
+          <!-- Lista -->
+          <div v-else-if="section.layout === 'list'" class="qs-props__nested">
+            <p class="text-xs font-semibold text-gray-700 mb-2">Ítems de la lista</p>
             <div v-for="(line, li) in section.items" :key="li" class="flex gap-2 items-start mb-2">
               <textarea
                 v-model="section.items[li]"
@@ -183,6 +203,22 @@
               <button type="button" class="props-mini-btn props-mini-btn--danger shrink-0" @click="section.items.splice(li, 1)">✕</button>
             </div>
             <button type="button" class="editor-add-btn" @click="section.items.push('')">+ Agregar ítem</button>
+          </div>
+
+          <!-- Fundadores -->
+          <div v-else-if="section.layout === 'founders'" class="qs-props__nested">
+            <p class="text-xs font-semibold text-gray-700 mb-2">Entidades fundadoras</p>
+            <div v-for="(founder, fi) in section.items" :key="fi" class="space-y-2 mb-3 p-2 rounded-lg border border-gray-200 bg-gray-50">
+              <input v-model="founder.name" type="text" placeholder="Nombre de la entidad" class="editor-field-input">
+              <input v-model="founder.logo" type="text" placeholder="Logo (URL)" class="editor-field-input">
+              <input v-model="founder.url" type="url" placeholder="Sitio web (https://…)" class="editor-field-input">
+              <label class="flex items-center gap-2 text-xs text-gray-700">
+                <input v-model="founder.logoOnDark" type="checkbox" class="rounded">
+                Logo claro (fondo oscuro)
+              </label>
+              <button type="button" class="props-mini-btn props-mini-btn--danger" @click="section.items.splice(fi, 1)">Eliminar</button>
+            </div>
+            <button type="button" class="editor-add-btn" @click="section.items.push(createFounderItem())">+ Agregar entidad</button>
           </div>
 
           <!-- Equipo -->
@@ -269,6 +305,7 @@ import {
   QUIENES_SOMOS_LAYOUTS,
   createPrinciple,
   createTeamMember,
+  createFounderItem,
   createPolicyItem,
   createContactBlock,
   createQuienesSomosSection,
